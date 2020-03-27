@@ -50,5 +50,5 @@ pairs(meuse[,3:6], col="red", pch=18, cex=2)
 
 ggpairs(meuse[,3:6])
 
-
+#per esercitarsi usare library (swirl)
 
