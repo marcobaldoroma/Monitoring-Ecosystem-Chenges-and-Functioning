@@ -12,7 +12,7 @@ plot(meuse)
 spplot(meuse, "zinc", main = "zinc concentrations (ppm)")
 
 # Exercise: Plot Copper as a spplot
-
+spplot(meuse, "copper", main= "copper concentration (ppm)")
     
 #### Spatial plots
              
@@ -22,6 +22,9 @@ bubble(meuse, "zinc", col="blue", main = "zinc concentrations (ppm)")
 
 # EXERCISE: bubble copper in red
 
+bubble(meuse, "copper")
+
+bubble(meuse, "copper", col="red", main = "zinc concentrations (ppm)")
 
 ################ covid data
 # https://services.arcgis.com/5T5nSi527N4F7luB/arcgis/rest/services/COVID_19_HistoricCasesByCountry(pt)View/FeatureServer
