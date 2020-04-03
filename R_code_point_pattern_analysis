@@ -1,0 +1,18 @@
+#point_pattern_analysis: Density map
+
+install.packages("spatstat")
+library(spatstat)
+
+attach(covid)
+head(covid)
+
+covids <- ppp(lon, lat, c(-180,180), c(-90,90)) # c it used to clastering all the variables/numeber together. i.g. dead <- 12,34,55,66,77,88,89 for the lat and lon we used min and max
+
+#without attaching the covid set
+#covid<- ppp(covid$lon, covid$lat, c(-180,180), c(-90,90))
+
+d <- density(covids)
+plot (d)
+
+points(covids)
+points(covids)
