@@ -1,0 +1,81 @@
+#R code first spatial view of points package sp already downloaded
+
+library(sp)
+
+data(meuse)
+
+head(meuse)
+
+# coordinates
+
+coordinates(meuse) = ~x+y  #alt 126  sp function is a R old package
+
+plot(meuse)
+
+spplot(meuse, "zinc") # simple plot is graph of point and vectors, using ssplot you can use a variable as function and graph the function i.g. concentration 
+
+#exercise spplot of copper
+
+spplot(meuse, "copper")
+
+spplot(meuse, "copper", main= "Copper concentration ")
+
+
+#just to have a size directly related at the concentration
+
+bubble(meuse,"zinc", main= "Zinc concentration")
+
+# exercise: bubble for copper in red
+
+bubble(meuse, "copper", col= "red", main= "Copper concetration")
+
+
+# We create an exel file covid-19 aggregate of dataset to insert in the R console and work with our dataset for the first time. remember lab folder without capital letter always
+
+setwd("C:/lab/")
+
+covid <- read.table ("covid_agg.csv", head= T) #T=TRUE head= header
+
+head(covid)
+
+attach(covid)
+plot(country, cases)
+
+#plot (country$country,covid$cases) if you don't attached the covid cases
+
+plot(country, cases, las=1) #horizzontal labels
+
+plot(country, cases, las=2) #perpendicolar labels
+
+plot(country, cases, las=0) #parellel labels
+
+plot(country, cases, las=3) #vertical labels
+
+plot(country, cases, las=3, cex.axis=0.5) #parellel labels + esageration cex
+
+plot(country, cases, las=3, cex.axis=0.7) #parellel labels
+
+# let's make the spatial plot, ggplot: book, elegant graph, suggest to get it!!
+
+# ggplot is a library very usefull for graph
+
+# ggplot to make one you need 3  component first data, 2' aestetic mappings 3'tipe of symbol i.g. point
+
+# let's install.packages ggplot2
+
+
+
+install.packages("ggplot2")
+
+library(ggplot2)  # require ggplot2
+
+#Simone, you can try: install.packages("devtools") 
+#-devtools::install_github("tidyverse/ggplot2")
+
+#to save work shop. save the .RData under the menu File
+
+#.RData
+
+q() # to save
+
+
