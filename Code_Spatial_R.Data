@@ -78,4 +78,33 @@ library(ggplot2)  # require ggplot2
 
 q() # to save
 
+##########################################
+
+setwd ("~/lab")
+
+load("spatial.RData")
+
+ls()
+#covid
+
+install.packages("ggplot2")
+library(ggplot2) #require ggplot2
+
+data(mpg)
+head(mpg)
+
+#key component: data, aes, geometry
+ggplot(mpg, aes(x=displ, y=hwy)) + geom_poit()
+# for plot with line
+ggplot(mpg, aes(x=displ, y=hwy)) + geom_line()
+#poligones
+ggplot(mpg, aes(x=displ, y=hwy)) + geom_poligones()
+
+head(covid)
+ggplot(covid, aes(x=lon, y=lat, size=cases)) + geom_point()
+
+
+
+
+
 
