@@ -16,3 +16,6 @@ plot (d)
 
 points(covids)
 points(covids)
+
+#covid: point pattern
+#d:
