@@ -1,4 +1,9 @@
 #R code first spatial view of points package sp already downloaded
+#instal this two packages for spatial analysis
+
+install.packages("raster")
+
+install.packages("rgdal")
 
 library(sp)
 
@@ -8,31 +13,47 @@ head(meuse)
 
 # coordinates
 
-coordinates(meuse) = ~x+y  #alt 126  sp function is a R old package
+coordinates(meuse) = ~x+y  #alt 126 for the tilde in windows / "sp" function is a R old package
 
 plot(meuse)
 
 spplot(meuse, "zinc") # simple plot is graph of point and vectors, using ssplot you can use a variable as function and graph the function i.g. concentration 
 
-#exercise spplot of copper
+# Exercise: plot the spatial amount of copper
+spplot(meuse, "copper", main="Copper concentration")
 
 spplot(meuse, "copper")
 
 spplot(meuse, "copper", main= "Copper concentration ")
 
 
-#just to have a size directly related at the concentration
+#just to have a size directly related at the concentration we can use function bubble 
 
 bubble(meuse,"zinc", main= "Zinc concentration")
 
-# exercise: bubble for copper in red
+# Exercise: bubble copper in red
+bubble(meuse, "copper", main="Copoer concentration", col="red")
 
 bubble(meuse, "copper", col= "red", main= "Copper concetration")
 
 
 # We create an exel file covid-19 aggregate of dataset to insert in the R console and work with our dataset for the first time. remember lab folder without capital letter always
+# these are the steps 
+#### Importing new data
+
+# download covid_agg.csv from our teaching site and build a folder called lab into C: 
+# put the covid_agg.csv file into the folder lab
+
+# setting the working directory: lab
+# Windows
+# setwd("C:/lab/")
+# Mac users
+# setwd("/Users/yourname/lab/")
+# Linux users setwd("~/lab")
 
 setwd("C:/lab/")
+
+# recalling our data that I need for the graphs
 
 covid <- read.table ("covid_agg.csv", head= T) #T=TRUE head= header
 
@@ -53,15 +74,15 @@ plot(country, cases, las=3) #vertical labels
 
 plot(country, cases, las=3, cex.axis=0.5) #parellel labels + esageration cex
 
-plot(country, cases, las=3, cex.axis=0.7) #parellel labels
+plot(country, cases, las=3, cex.axis=0.7) #parellel labels very good size balance for our graph
 
 # let's make the spatial plot, ggplot: book, elegant graph, suggest to get it!!
 
-# ggplot is a library very usefull for graph
+# ggplot is a library very usefull for graphs
 
-# ggplot to make one you need 3  component first data, 2' aestetic mappings 3'tipe of symbol i.g. point
+# ggplot to make a good graph you need 3 component: 1' data, 2' aestetic mappings, 3'tipe of symbol i.g. point
 
-# let's install.packages ggplot2
+# let's install.packages ggplot2, you need installed packages "sp"
 
 
 
@@ -69,21 +90,38 @@ install.packages("ggplot2")
 
 library(ggplot2)  # require ggplot2
 
-#Simone, you can try: install.packages("devtools") 
-#-devtools::install_github("tidyverse/ggplot2")
+# install.packages("devtools")
+# devtools::install_github("tidyverse/ggplot2")
+
+# save the .RData under the menu File
+# for Windows users: save as "yourprefferredname.RData"
 
 #to save work shop. save the .RData under the menu File
 
 #.RData
 
-q() # to save
+# q()  to save in alternative way
 
-##########################################
+###########################################
 
-setwd ("~/lab")
+# load the previously saved .RData
 
-load("spatial.RData")
+# setting the working directory: lab
+# Windows
+# setwd("C:/lab/")
+# Mac users
+# setwd("/Users/yourname/lab/")
+# Linux users setwd("~/lab")
 
+# we can start 
+
+setwd ("c:/lab/")
+
+# load the previews script "R_code_spatial_first"
+
+load("R_code_spatial_first.RData")
+
+#have a look on the data loaded
 ls()
 #covid
 
@@ -103,7 +141,8 @@ ggplot(mpg, aes(x=displ, y=hwy)) + geom_poligones()
 head(covid)
 ggplot(covid, aes(x=lon, y=lat, size=cases)) + geom_point()
 
-
+#save script and graphs/ plots
+..........................................................................................
 
 
 
