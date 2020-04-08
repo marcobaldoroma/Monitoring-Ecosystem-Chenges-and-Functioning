@@ -14,16 +14,19 @@ attach(meuse)
 # There are two ways to se the names of the variables:
 names(meuse)
 head(meuse)
-plot(cadmium,zinc,pch=15,col="red",cex=2)
+# plot(cadmium,zinc,pch=15,col="red",cex=2)
 
 # Exercise: make all the possible paiwis plots of the dataset
-# plot(x,cadmium)
-# plot(x,zinc)
-# plot....
+ plot(x,cadmium)
+ plot(x,zinc)
+ plot(x,lead)
+ plot(x,copper)
+# plot(cadmium,zinc,pch=15,col="red",cex=2) an amateur exercise to prettify plots
 # plot is not a good idea!
 pairs(meuse)
 
-# in case you receive the error "the sizze is too large" reshape with the mouse the graph window and relaunch the code
+# in case you receive the error "the size is too large" reshape with the mouse the graph window and relaunch the code
+#before build the grids after we put the real dataset
 
 pairs(~ cadmium + copper + lead + zinc, data=meuse)
 
@@ -32,8 +35,9 @@ pairs(meuse[,3:6])
 # Exercise: prettify this graph
 pairs(meuse[,3:6], col="red", pch=18, cex=1.5)
 
+
 # GGally package will prettify the graph
 ggpairs(meuse[,3:6])
 
-#per esercitarsi usare library (swirl)
+#per esercitarsi puoi usare library (swirl)
 
