@@ -1,25 +1,32 @@
 #R code first spatial view of points package sp already downloaded
 #instal this two packages for spatial analysis
+## R code for spatial view of points
+install.packages("sp")
 
-install.packages("raster")
+#install.packages("raster")
 
-install.packages("rgdal")
+#install.packages("rgdal")
 
+# call the library sp
 library(sp)
 
+#preparing the data meuse
 data(meuse)
 
+# the top lines of the data base
 head(meuse)
 
 # coordinates
 
 coordinates(meuse) = ~x+y  #alt 126 for the tilde in windows / "sp" function is a R old package
 
+#plot object meuse
 plot(meuse)
 
+#simple plot
 spplot(meuse, "zinc") # simple plot is graph of point and vectors, using ssplot you can use a variable as function and graph the function i.g. concentration 
 
-# Exercise: plot the spatial amount of copper
+# Exercise: plot the spatial amount of copper using simple plot
 spplot(meuse, "copper", main="Copper concentration")
 
 spplot(meuse, "copper")
@@ -60,6 +67,12 @@ covid <- read.table ("covid_agg.csv", head= T) #T=TRUE head= header
 head(covid)
 
 attach(covid)
+
+## The following objects are masked from covid (pos = 3):
+####    cases, cat, country, lat, lon
+## The following objects are masked from covid (pos = 5):
+####    cases, cat, country, lat, lon
+
 plot(country, cases)
 
 #plot (country$country,covid$cases) if you don't attached the covid cases
@@ -102,7 +115,7 @@ library(ggplot2)  # require ggplot2
 
 # q()  to save in alternative way
 
-###########################################
+########################################### second part
 
 # load the previously saved .RData
 
@@ -122,6 +135,7 @@ setwd ("c:/lab/")
 load("R_code_spatial_first.RData")
 
 #have a look on the data loaded
+
 ls()
 #covid
 
