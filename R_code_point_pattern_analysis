@@ -1,18 +1,141 @@
 #point_pattern_analysis: Density map
 
 install.packages("spatstat")
+
+# set the working directory
+setwd("C:/lab/")
+
+# call spatstat library
 library(spatstat)
 
+# inport and read covid data base
+covid <- read.table("covid_agg.csv", head=T)
+ 
 attach(covid)
 head(covid)
 
+# set the coordinates of the vectors in covids in relation to the global map
 covids <- ppp(lon, lat, c(-180,180), c(-90,90)) # c it used to clastering all the variables/numeber together. i.g. dead <- 12,34,55,66,77,88,89 for the lat and lon we used min and max
 
-#without attaching the covid set
-#covid<- ppp(covid$lon, covid$lat, c(-180,180), c(-90,90))
+# same scope without attaching the covid data set
+# covids <- ppp(covid$lon, covid$lat, c(-180,180), c(-90,90))
 
+#create a variable names d = density
 d <- density(covids)
+#plot this new variable
 plot (d)
+# add points at the density plot
+points(covids)
 
+
+#################################################### second part
+## to open last work
+
+setwd("C:/lab/")
+
+load("point_pattern_analysis.RData")
+
+#to use vector format in coastline
+install.packages("rgdal")
+
+# call libraries
+
+library(spatstat)
+library(rgdal)
+
+ls() #list of objects I have 
+
+#plot density + points in covids
+plot(d)
 points(covids)
+
+# import in lab and in R ne_10m_coastline.shp"
+# to use vector format in coastline
+# let’s input vector lines (x0y0, x1y1, x2y2..)
+
+#install additional packages, alternative way to plot the coastline at the density plot
+#install.packages("rnaturalearth")
+#coastlines <- rnaturalearth::ne_download(scale = 10, type = 'coastline', category = 'physical')
+
+coastlines <- readOGR("ne_10m_coastline.shp")
+
+## OGR data source with driver: ESRI Shapefile
+## Source: "c:/lab/ne_10m_coastline.shp", layer: "ne_10m_coastline"
+## with 4133 features
+## It has 3 fields
+## Integer64 fields read as strings:  scalerank
+
+plot(d)
 points(covids)
+
+# plot density + coastline of the world for covid-19 num. of cases
+plot(coastlines, add=T)
+
+# change the colour and make the graph beautiful
+# build a new object names "cl"
+cl <-colorRampPalette(c("yellow","orange","red")) (100)
+
+#plot the new object with density and name of the label
+plot(d, col=cl, main="Densities of covid-19")
+points(covids)
+plot(coastlines, add=T)
+
+#export your Densities of covid-19 plot in Pdf
+pdf("covid_density.pdf")
+
+## number of colours: abrupt change of colours!!! make an example
+cll <- colorRampPalette(c("light green", "yellow","orange","violet")) (5)
+plot(d, col=cll, main="Densities of covid-19")
+points(covids)
+plot(coastlines, add=T)
+
+# Exercise: new colour ramp palette
+clr <-colorRampPalette(c("light green", "yellow","orange","violet")) (100)
+plot(d, col=clr, main="Densities of covid-19")
+points(covids)
+plot(coastlines, add=T)
+
+pdf("covid_density2.pdf")
+
+# higher number of intermediate colours (1000)
+clrr <-colorRampPalette(c("light green", "yellow","orange","violet")) (1000)
+plot(d, col=clrr, main="Densities of covid-19")
+points(covids)
+plot(coastlines, add=T)
+pdf("covid_density3.pdf")
+
+# This package is a wrapper for the pdf function.
+dev.off()
+
+ 
+# or export in png
+
+ 
+png("covid_density.png")
+
+ 
+clr <- colorRampPalette(c("light green", "yellow","orange","violet")) (100)
+
+ 
+plot(d, col=clr, main="Densities of covid-19")
+
+ 
+points(covids)
+
+ 
+plot(coastlines, add=T)
+
+ 
+dev.off()
+
+
+
+
+
+
+
+
+
+
+
+
