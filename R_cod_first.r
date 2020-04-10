@@ -16,6 +16,6 @@ plot(zinc,copper)
 plot(zinc,copper,col="green")
 #riempimento
 plot(zinc,copper,col="green",pch=19)
-#big plot mod, cex caracter exageration= 2, if you put 0-1 to have less size
+#big plot mod, cex caracter exageration= 2, you put 0<x<1 to have less size
 plot(zinc,copper,col="green",pch=19,cex=2)
 
