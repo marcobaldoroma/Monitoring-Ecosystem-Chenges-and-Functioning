@@ -1,20 +1,24 @@
-### Multipanel in R: the second lecture of monitoring Ecosystems
+### Multipanel in R: the second lecture of monitoring Ecosystems Changes and Functioning
 
 install.packages("sp")
-install.packages("GGally") # this is used for the function ggpairs()
+install.packages("GGally") # this is required to use the function ggpairs() we would graphy
 
-library(sp) # require(sp) will also do the job
+#require those library
+library(sp)
 library(GGally)
 
 data(meuse) # there is a dataset available named meuse
 
+#to fix the data set
 attach(meuse)
 
 # Exercise: see the names of the variables and plot cadmium versus zinc
 # There are two ways to se the names of the variables:
 names(meuse)
 head(meuse)
-# plot(cadmium,zinc,pch=15,col="red",cex=2)
+
+#plot my variables
+plot(cadmium,zinc,pch=15,col="red",cex=2)
 
 # Exercise: make all the possible paiwis plots of the dataset
  plot(x,cadmium)
@@ -39,5 +43,5 @@ pairs(meuse[,3:6], col="red", pch=18, cex=1.5)
 # GGally package will prettify the graph
 ggpairs(meuse[,3:6])
 
-#per esercitarsi puoi usare library (swirl)
+
 
