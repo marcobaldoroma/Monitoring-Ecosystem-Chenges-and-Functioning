@@ -139,6 +139,9 @@ load("R_code_spatial_first.RData")
 ls()
 #covid
 
+# install.packages("devtools")
+# devtools::install_github("tidyverse/ggplot2") before then ggplot2
+
 install.packages("ggplot2")
 library(ggplot2) #require ggplot2
 
