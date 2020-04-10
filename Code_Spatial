@@ -1,7 +1,9 @@
 #R code first spatial view of points package sp already downloaded
 #instal this two packages for spatial analysis
 ## R code for spatial view of points
-install.packages("sp")
+#install.packages("sp")
+
+#install.packages("GGally")
 
 #install.packages("raster")
 
