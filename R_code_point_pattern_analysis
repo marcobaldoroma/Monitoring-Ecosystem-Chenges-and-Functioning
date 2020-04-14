@@ -104,7 +104,7 @@ points(covids)
 plot(coastlines, add=T)
 pdf("covid_density3.pdf")
 
-# This package is a wrapper for the pdf function.
+# This command is a wrapper for the pdf function.
 dev.off()
 
  
