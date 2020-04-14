@@ -105,6 +105,7 @@ install.packages("ggplot2")
 
 library(ggplot2)  # require ggplot2
 
+#if ggplot2 doesn't work follow this alternative installation
 # install.packages("devtools")
 # devtools::install_github("tidyverse/ggplot2")
 
