@@ -48,7 +48,8 @@ ordiellipse (multivar, type, col = 1:4, kind = "ehull", lwd = 3)
 ordispider(multivar, type, col=1:4, label = T)
 
 #dev_off ()
-#save ()
+#save.image("C:\\lab\\R_code_multivar")
+
 
 
 
