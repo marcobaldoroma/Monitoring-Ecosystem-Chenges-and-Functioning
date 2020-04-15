@@ -9,8 +9,14 @@
 
 #install.packages("rgdal")
 
-# call the library sp
+# call the libraries
 library(sp)
+
+library(GGally)
+
+library(raster)
+
+library(rgdal)
 
 #preparing the data meuse
 data(meuse)
@@ -29,10 +35,9 @@ plot(meuse)
 spplot(meuse, "zinc") # simple plot is graph of point and vectors, using ssplot you can use a variable as function and graph the function i.g. concentration 
 
 # Exercise: plot the spatial amount of copper using simple plot
-spplot(meuse, "copper", main="Copper concentration")
-
 spplot(meuse, "copper")
 
+# add the label
 spplot(meuse, "copper", main= "Copper concentration ")
 
 
@@ -40,10 +45,10 @@ spplot(meuse, "copper", main= "Copper concentration ")
 
 bubble(meuse,"zinc", main= "Zinc concentration")
 
-# Exercise: bubble copper in red
-bubble(meuse, "copper", main="Copoer concentration", col="red")
-
-bubble(meuse, "copper", col= "red", main= "Copper concetration")
+# Exercise: bubble copper, lead, cadmium in red
+bubble(meuse, "copper", main="Copper concentration", col="red")
+bubble(meuse, "lead", main="Lead concentration", col="red")
+bubble(meuse, "cadmium", main="Cadmium concentration", col="red")
 
 
 # We create an exel file covid-19 aggregate of dataset to insert in the R console and work with our dataset for the first time. remember lab folder without capital letter always
@@ -70,8 +75,6 @@ head(covid)
 
 attach(covid)
 
-## The following objects are masked from covid (pos = 3):
-####    cases, cat, country, lat, lon
 ## The following objects are masked from covid (pos = 5):
 ####    cases, cat, country, lat, lon
 
@@ -87,7 +90,7 @@ plot(country, cases, las=0) #parellel labels
 
 plot(country, cases, las=3) #vertical labels
 
-plot(country, cases, las=3, cex.axis=0.5) #parellel labels + esageration cex
+plot(country, cases, las=3, cex.axis=0.5) #parellel labels + exaggeration cex
 
 plot(country, cases, las=3, cex.axis=0.7) #parellel labels very good size balance for our graph
 
@@ -152,14 +155,16 @@ data(mpg)
 head(mpg)
 
 #key component: data, aes, geometry
-ggplot(mpg, aes(x=displ, y=hwy)) + geom_poit()
+ggplot(mpg, aes(x=displ, y=hwy)) + geom_point()
 # for plot with line
 ggplot(mpg, aes(x=displ, y=hwy)) + geom_line()
 #poligones
-ggplot(mpg, aes(x=displ, y=hwy)) + geom_poligones()
+ggplot(mpg, aes(x=displ, y=hwy)) + geom_polygon()
 
+# let's graphy covid, putting lat and lon in funcion of the cases variable, geom_point
 head(covid)
 ggplot(covid, aes(x=lon, y=lat, size=cases)) + geom_point()
+ggplot(covid, aes(x=lon, y=lat, size=cases, col= "red")) + geom_point()
 
 #save script and graphs/ plots
 ..........................................................................................
