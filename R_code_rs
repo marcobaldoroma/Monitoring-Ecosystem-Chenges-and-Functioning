@@ -1,0 +1,8 @@
+# R code for  remote sensing data
+#raster
+install.packages("raster")
+#packages to make our analysis, the book that the Prof. wrote.
+install.packages("RStoolbox")
+
+#to be faster in the istallation of pkgs
+#install.packages(c("raster", "RStoolbox")
