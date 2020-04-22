@@ -1,8 +1,151 @@
-# R code for  remote sensing data
+# R code for  Remote Sensing #later you can find info about George Steinmetz very well done air pictures dear prof.
+#set my working directory
+setwd ("C:/lab/")
+
 #raster
 install.packages("raster")
-#packages to make our analysis, the book that the Prof. wrote.
+library (raster)
+
+#packages to make our analysis, the book that the Prof. wrote is about the algorith of this R function create by him
 install.packages("RStoolbox")
 
 #to be faster in the istallation of pkgs
 #install.packages(c("raster", "RStoolbox")
+
+library (RStoolbox)
+
+#load biomes_types and biomes data
+load("C:\\lab\\biomes_types.csv")
+load("C:\\lab\\biomes.csv")
+
+#load images from the lab folder
+p224r63_2011 <- brick ("p224r63_2011_masked.grd")
+
+#plot it
+plot(p224r63_2011)
+
+# Bands of Landsat
+# B1: blue
+# B2: green
+# B3: red
+# B4: near infrared (nir) 
+# B5: medium infrared
+# B6: thermal infrared
+# B7: medium infrared
+ls()
+
+# changing our scaled colors for graphs (gray)
+cl <- colorRampPalette(c('black','grey','light grey'))(100)
+
+# Exercise: plot the image with scale color ramp palette built
+plot(p224r63_2011, col=cl) 
+
+# grey scaled low amount of colours #look the num 5
+cllow <- colorRampPalette(c('black','grey','light grey'))(5)  
+plot(p224r63_2011, col=cllow)
+
+names(p224r63_2011)
+# [1] "B1_sre" "B2_sre" "B3_sre" "B4_sre" "B5_sre" "B6_bt"  "B7_sre"
+
+############################################################## to ask R names of colors: .... colors () 
+
+# changing our scaled colors for graphs (blue)
+
+clb <- colorRampPalette(c('dark blue','blue','light blue'))(100) # 
+
+# attch(dataframe) doesn't work with "raster" packages 
+# simbol that link the collum (band) at the dataset (satellite image): $
+
+plot(p224r63_2011$B1_sre, col=clb)
+  
+# Exercise: plot the near infrared band with:
+# colorRampPalette color that go from red, to orange, until yellow
+
+clnir <- colorRampPalette(c('red','orange','yellow'))(100) # 
+plot(p224r63_2011$B4_sre, col=clnir)
+
+dev.off ()
+
+# multiframe to plot more graphs together, we say at the console how many row and collums we want in the Plot Space: par(mfrow=c(2,2)) 
+par(mfrow=c(2,2)) 
+
+# B1 blue band, we want set colors intensity in blue
+# func. par, multivariateframe  =  col = c finally names the colors you would 
+#plot the immages with colors calls clb
+#dev.off to close all the windows if I need
+
+clb <- colorRampPalette(c('dark blue','blue','light blue'))(100)
+plot(p224r63_2011$B1_sre, col=clb)
+
+# Exercise: do the same for the B2_sre green band
+clg <- colorRampPalette(c('dark green','green','light green'))(100)
+plot(p224r63_2011$B1_sre, col=clg)
+
+#B3_sre red band
+clr <- colorRampPalette(c('dark red','red','pink'))(100)
+plot(p224r63_2011$B1_sre, col=clr)
+
+#B4_sre near infrared band
+cln <- colorRampPalette(c('red','orange','yellow'))(100)
+plot(p224r63_2011$B1_sre, col=cln)
+
+####change the lay out of our graph in 4 rows and 1 collum and to make it different and stretched, could be really usefull for data analysis
+
+dev.off ()
+par(mfrow=c(4,1))
+
+# B1: blue
+clb <- colorRampPalette(c('dark blue','blue','light blue'))(100) 
+plot(p224r63_2011$B1_sre, col=clb)
+
+ 
+
+# B2 green
+# Exercise: do the same for the green band B2_sre
+clg <- colorRampPalette(c('dark green','green','light green'))(100) 
+plot(p224r63_2011$B2_sre, col=clg)
+
+ 
+
+# B3 red
+clr <- colorRampPalette(c('dark red','red','pink'))(100) 
+plot(p224r63_2011$B3_sre, col=clr)
+
+ 
+
+# B4 NIR
+cln <- colorRampPalette(c('red','orange','yellow'))(100) 
+plot(p224r63_2011$B4_sre, col=cln)
+
+
+############### computer use to color immages three component R:G:B RGB system of the computer to show the pictures
+# R3...G2...B1... our component
+# natural colours
+# 3 components: R G B
+# 3 bands: R = red band, G = green band, B = blue band
+# plotRGB(p224r63_2011,r=3,g=2,b=1)
+
+# B1: blue - 1
+# B2: green - 2
+# B3: red - 3
+# B4: near infrared (nir) - 4 
+
+dev.off () # close others plots
+
+# plotRGB function # plotrgb: no!
+
+plotRGB (p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+# stretching as much possible the colors
+
+# substitute red component with our NIR # in this way you can discriminete better the vegetation in the images, dark green is the forest, red and pink in general the pitch 
+plotRGB (p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+
+# EX. NIR on top of the G component # NIR false colours
+plotRGB (p224r63_2011, r=3, g=4, b=2, stretch="Lin")
+# dark forest is forest with high ammount of water
+
+# yellow area are bare in this way of set the colors
+plotRGB (p224r63_2011, r=3, g=2, b=4, stretch="Lin")
+
+
+
