@@ -14,8 +14,8 @@ head(meuse)
 attach(meuse)
 plot(zinc,copper)
 plot(zinc,copper,col="green")
-#riempimento
+#colorfull
 plot(zinc,copper,col="green",pch=19)
-#big plot mod, cex caracter exageration= 2, you put 0<x<1 to have less size
+#big plot mod, cex caracter exageration= 2, you put 0<x<1 to have less size or x>1 to make bigger
 plot(zinc,copper,col="green",pch=19,cex=2)
 
