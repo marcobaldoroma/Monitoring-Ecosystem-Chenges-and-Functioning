@@ -98,7 +98,7 @@ plot(country, cases, las=3, cex.axis=0.7) #parellel labels very good size balanc
 
 # ggplot is a library very usefull for graphs
 
-# ggplot to make a good graph you need 3 component: 1' data, 2' aestetic mappings, 3'tipe of symbol i.g. point
+# ggplot to make a good graph you need 3 component: 1' data, 2' aestetic mappings, 3' tipe of symbol i.g. point
 
 # let's install.packages ggplot2, you need installed packages "sp"
 
@@ -113,11 +113,6 @@ library(ggplot2)  # require ggplot2
 # devtools::install_github("tidyverse/ggplot2")
 
 # save the .RData under the menu File
-# for Windows users: save as "yourprefferredname.RData"
-
-#to save work shop. save the .RData under the menu File
-
-#.RData
 
 # q()  to save in alternative way
 
@@ -131,8 +126,6 @@ library(ggplot2)  # require ggplot2
 # Mac users
 # setwd("/Users/yourname/lab/")
 # Linux users setwd("~/lab")
-
-# we can start 
 
 setwd ("c:/lab/")
 
