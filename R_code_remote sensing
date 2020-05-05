@@ -1,8 +1,9 @@
-# R code for  Remote Sensing #later you can find info about George Steinmetz very well done air pictures dear prof.
+# R code for  Remote Sensing 
 #set my working directory
+
 setwd ("C:/lab/")
 
-#raster
+#install raster packages
 install.packages("raster")
 library (raster)
 
