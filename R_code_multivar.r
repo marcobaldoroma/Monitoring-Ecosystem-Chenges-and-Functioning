@@ -49,23 +49,3 @@ ordispider(multivar, type, col=1:4, label = T)
 
 #dev_off ()
 #save.image("C:\\lab\\R_code_multivar")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
