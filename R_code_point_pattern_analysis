@@ -19,20 +19,21 @@ covids <- ppp(lon, lat, c(-180,180), c(-90,90)) # c it used to clastering all th
 
 # same scope without attaching the covid data set
 # covids <- ppp(covid$lon, covid$lat, c(-180,180), c(-90,90))
-
 #create a variable names d = density
 d <- density(covids)
+
 #plot this new variable
 plot (d)
+
 # add points at the density plot
 points(covids)
 
 
 #################################################### second part
-## to open last work
 
 setwd("C:/lab/")
 
+## open previus script
 load("point_pattern_analysis.RData")
 
 #to use vector format in coastline
@@ -101,31 +102,21 @@ pdf("covid_density2.pdf")
 clrr <-colorRampPalette(c("light green", "yellow","orange","violet")) (1000)
 plot(d, col=clrr, main="Densities of covid-19")
 points(covids)
+
 plot(coastlines, add=T)
 pdf("covid_density3.pdf")
 
 # This command is a wrapper for the pdf function.
 dev.off()
 
- 
 # or export in png
-
- 
 png("covid_density.png")
 
- 
 clr <- colorRampPalette(c("light green", "yellow","orange","violet")) (100)
-
- 
 plot(d, col=clr, main="Densities of covid-19")
 
- 
 points(covids)
-
- 
 plot(coastlines, add=T)
-
- 
 dev.off()
 
 
