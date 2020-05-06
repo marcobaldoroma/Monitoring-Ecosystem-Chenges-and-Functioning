@@ -25,7 +25,7 @@ p224r63_2011 <- brick ("p224r63_2011_masked.grd")
 #plot it
 plot(p224r63_2011)
 
-# Bands of Landsat
+#landsat resolution of 30m (each pixel)...B1 blu, B2 green, B3 red, B4 NIR ecc
 # B1: blue
 # B2: green
 # B3: red
@@ -47,14 +47,10 @@ plot(p224r63_2011, col=cllow)
 
 names(p224r63_2011)
 # [1] "B1_sre" "B2_sre" "B3_sre" "B4_sre" "B5_sre" "B6_bt"  "B7_sre"
-
-############################################################## to ask R names of colors: .... colors () 
-
 # changing our scaled colors for graphs (blue)
 
 clb <- colorRampPalette(c('dark blue','blue','light blue'))(100) # 
 
-# attch(dataframe) doesn't work with "raster" packages 
 # simbol that link the collum (band) at the dataset (satellite image): $
 
 plot(p224r63_2011$B1_sre, col=clb)
@@ -99,28 +95,19 @@ par(mfrow=c(4,1))
 clb <- colorRampPalette(c('dark blue','blue','light blue'))(100) 
 plot(p224r63_2011$B1_sre, col=clb)
 
- 
-
 # B2 green
 # Exercise: do the same for the green band B2_sre
 clg <- colorRampPalette(c('dark green','green','light green'))(100) 
 plot(p224r63_2011$B2_sre, col=clg)
 
- 
-
 # B3 red
 clr <- colorRampPalette(c('dark red','red','pink'))(100) 
 plot(p224r63_2011$B3_sre, col=clr)
-
- 
 
 # B4 NIR
 cln <- colorRampPalette(c('red','orange','yellow'))(100) 
 plot(p224r63_2011$B4_sre, col=cln)
 
-
-############### computer use to color immages three component R:G:B RGB system of the computer to show the pictures
-# R3...G2...B1... our component
 # natural colours
 # 3 components: R G B
 # 3 bands: R = red band, G = green band, B = blue band
@@ -145,7 +132,7 @@ plotRGB (p224r63_2011, r=4, g=3, b=2, stretch="Lin")
 plotRGB (p224r63_2011, r=3, g=4, b=2, stretch="Lin")
 # dark forest is forest with high ammount of water
 
-# yellow area are bare in this way of set the colors
+# yellow area are bare in this way to set the colors
 plotRGB (p224r63_2011, r=3, g=2, b=4, stretch="Lin")
 
 ################ day 2
@@ -157,7 +144,7 @@ setwd("~/lab/") # linux
 # setwd("C:/lab/") # windows
 # setwd("/Users/nome/Desktop/lab") # mac
 
-load("teleril.RData")
+load("remote_sensing.RData")
 
 # list
 ls()
@@ -178,12 +165,12 @@ par(mfrow=c(2,1))
   plotRGB(p224r63_1988, r=3, g=2, b=1, stretch="Lin")
   plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
   
-  # plot delle due immagini 1988 e 2011
+# plot together two images, 1988 e 2011
 par(mfrow=c(2,1))
 plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin", main="1988")
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin", main="2011")
 
- # plot it in the way to see water, so with different colors relate at the NIR= water= 0
+# plot it in the way to see water, so with different colors relate at the NIR= water= 0
 par(mfrow=c(2,1))
 plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
@@ -239,38 +226,6 @@ plotRGB(p224r63_2011res, r=4, g=3, b=2, stretch="Lin")
 plotRGB(p224r63_2011res100, r=4, g=3, b=2, stretch="Lin") 
 
 #information about image p224r63_2011
-p224r63_2011
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+p224r63_201
 
 
