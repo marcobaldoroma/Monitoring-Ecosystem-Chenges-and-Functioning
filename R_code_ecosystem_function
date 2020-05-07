@@ -64,4 +64,6 @@ difdvi <- dvi1 - dvi2                                                           
 cld <- colorRampPalette(c('blue','white','red'))(100) 
 
 plot(difdvi, col=cld)                                                                   # to see the loss of ecosystem services
-hist(difdvi)                                                                            # high loss in primary production ecosystem services
+hist(difdvi)                                                                            # high loss in primary production ecosystem services: hist=histogram
+
+sessionInfo ()                                                                          # R session information, matrix, packages
