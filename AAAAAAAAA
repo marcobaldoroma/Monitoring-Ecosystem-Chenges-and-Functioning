@@ -1,0 +1,13 @@
+#point pattern analysis
+
+#install library packages for density analysis
+
+install.packages("spatstat")
+
+attach(covid)
+
+head(covid)
+
+covid <- ppp(long, lat, c(-180, 180), c(-90, 90))
+
+d <- density (covids)
