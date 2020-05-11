@@ -21,12 +21,11 @@ plot (d)                                                               # plot th
 
 points(covids)                                                         # add points at the density plot
 
-q()
                                                                        #################################################### second part
 
 setwd("C:/lab/")                                                       # set work directory
 
-load("point_pattern_analysis.RData")                                   ## load previus script
+load("point_pattern_analysis.RData")                                   ## load previus work
 
 install.packages("rgdal")                                              #to use vector format in coastline
 
