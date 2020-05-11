@@ -21,10 +21,10 @@ head(meuse)
 plot(cadmium,zinc,pch=15,col="red",cex=2)
 
 # Exercise: make all the possible paiwis plots of the dataset
- plot(x,cadmium)
- plot(x,zinc)
- plot(x,lead)
- plot(x,copper)
+plot(x,cadmium)
+plot(x,zinc)
+plot(x,lead)
+plot(x,copper)
 # plot(cadmium,zinc,pch=15,col="red",cex=2) an amateur exercise to prettify plots
 # plot is not a good idea!
 pairs(meuse)
