@@ -101,7 +101,7 @@ setwd ("c:/lab/")
 
                                                             # load the previews script "R_code_spatial_first.RData"
 
-load("R_code_spatial_first.RData")
+load("C:/lab/R_code_spatial_first.RData")
 
                                                             # have a look on the data loaded
 
