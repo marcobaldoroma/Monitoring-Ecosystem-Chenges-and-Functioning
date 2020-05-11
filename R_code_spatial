@@ -3,20 +3,8 @@
 ## R code for spatial view of points
 #install.packages("sp")
 
-#install.packages("GGally")
-
-install.packages("raster")
-
-install.packages("rgdal")
-
-                                                         # call the libraries
+                                                          # call the library sp
 library(sp)
-
-library(GGally)
-
-library(raster)
-
-library(rgdal)
 
                                                           # preparing the data meuse
 data(meuse)
@@ -123,7 +111,6 @@ ls()
                                                             # install.packages("devtools")
                                                             # devtools::install_github("tidyverse/ggplot2") before then ggplot2
 
-install.packages("ggplot2")
 library(ggplot2)                                            # require ggplot2
 
 data(mpg)
@@ -140,10 +127,6 @@ ggplot(mpg, aes(x=displ, y=hwy)) + geom_polygon()
 head(covid)
 ggplot(covid, aes(x=lon, y=lat, size=cases)) + geom_point()
 ggplot(covid, aes(x=lon, y=lat, size=cases, col= "red")) + geom_point()
-
-#save script and graphs/ plots
-..........................................................................................
-
 
 
 
