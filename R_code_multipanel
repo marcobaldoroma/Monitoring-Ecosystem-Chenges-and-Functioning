@@ -1,47 +1,41 @@
 ### Multipanel in R: seeing correlation amoung ecological variable
 
 install.packages("sp")
-install.packages("GGally") # this is required to use the function ggpairs() we would graphy
+install.packages("GGally")                       # this is required to use the function ggpairs() we would graphy
 
-#require those library
+                                                 #require those library
 library(sp)
 library(GGally)
 
-data(meuse) # there is a dataset available named meuse
+data(meuse)                                      # there is a dataset available named meuse
 
-#to fix the data set
+                                                 #to fix the data set
 attach(meuse)
 
-# Exercise: see the names of the variables and plot cadmium versus zinc
-# There are two ways to se the names of the variables:
+                                                 # Exercise: see the names of the variables and plot cadmium versus zinc
+                                                 # There are two ways to se the names of the variables:
 names(meuse)
 head(meuse)
 
-#plot my variables
+                                                 #plot my variables
 plot(cadmium,zinc,pch=15,col="red",cex=2)
 
-# Exercise: make all the possible paiwis plots of the dataset
+                                                 # Exercise: make all the possible pairs plots of the dataset
 plot(x,cadmium)
 plot(x,zinc)
 plot(x,lead)
 plot(x,copper)
-# plot(cadmium,zinc,pch=15,col="red",cex=2) an amateur exercise to prettify plots
-# plot is not a good idea!
+                                                 # plot(cadmium,zinc,pch=15,col="red",cex=2) an amateur exercise to prettify plots
+                                                 # plot is not a good idea sometimes
 pairs(meuse)
-
-# in case you receive the error "the size is too large" reshape with the mouse the graph window and relaunch the code
-#before build the grids after we put the real dataset
-
+                                                 #selection of variables we want to plot together
 pairs(~ cadmium + copper + lead + zinc, data=meuse)
 
 pairs(meuse[,3:6])
 
-# Exercise: prettify this graph
+                                                 # Exercise: prettify this graph
 pairs(meuse[,3:6], col="red", pch=18, cex=1.5)
 
 
-# GGally package will prettify the graph
-ggpairs(meuse[,3:6])
-
-
-
+                                                 # GGally package will show infographic even better
+pairs(meuse[,3:6])
