@@ -14,8 +14,7 @@ head(meuse)
 attach(meuse)
 plot(zinc,copper)
 plot(zinc,copper,col="green")
-#colorfull
+#pch to change plot symbols
 plot(zinc,copper,col="green",pch=19)
-#big plot mod, cex caracter exageration= 2, you put 0<x<1 to have less size or x>1 to make bigger
+#big plot mod, cex caracter exageration= 2, you put 0<x<1 to have less plot symbol size or x>1 to make bigger
 plot(zinc,copper,col="green",pch=19,cex=2)
-
