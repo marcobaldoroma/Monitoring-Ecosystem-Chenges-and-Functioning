@@ -26,7 +26,10 @@ plot (multivar)
 
 # we can see in the R macchine the percentage of the reality in 2 dimentions. our algorithm give us the 82% of our data just in 2 dimantion, this is not bad 
 multivar    
-# (52 + 30) % of real dataset of 20 dimentions in 2, x,y . we can see it trought calling our new variable #multivar, and having a look at Eigenvalues = DCA1 0.5117 #the x axis and  DCA2 0.3036 # the y axis, our second axis   
+#               DCA1   DCA2    DCA3    DCA4
+Eigenvalues     0.5117 0.3036 0.12125 0.14267
+Decorana values 0.5360 0.2869 0.08136 0.04814
+Axis lengths    3.7004 3.1166 1.30055 1.47888
 
 #let liked every same biomes per plot
 #biomes_types, codify for R the new data set
