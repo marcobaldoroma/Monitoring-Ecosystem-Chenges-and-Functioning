@@ -25,7 +25,8 @@ plot (multivar, cex=1.2)
 plot (multivar)
 
 # we can see in the R macchine the percentage of the reality in 2 dimentions. our algorithm give us the 82% of our data just in 2 dimantion, this is not bad 
-multivar    
+multivar 
+
 #               DCA1   DCA2    DCA3    DCA4
 Eigenvalues     0.5117 0.3036 0.12125 0.14267
 Decorana values 0.5360 0.2869 0.08136 0.04814
