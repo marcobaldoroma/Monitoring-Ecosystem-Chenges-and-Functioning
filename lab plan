@@ -29,3 +29,27 @@ Lab plan:
 7. Species Distribution Modelling
 
 [Species distribution modelling: modelling the main drivers shaping species distributions]
+
+install.packages ("sp")
+install.packages ("GGally")
+install.packages ("raster")
+install.packages ("rgdal")
+install.packages ("ggplot2")
+install.packages ("spatstat")
+install.packages ("rnaturalearth")
+install.packages ("vegan")
+install.packages ("RStoolbox")
+install.packages ("rasterdiv")
+install.packages ("rasterVis")
+
+library("sp")
+library ("GGally")
+library ("raster")
+library ("rgdal")
+library("ggplot2")
+library ("spatstat")
+library("rnaturalearth")
+library ("vegan")
+library ("RStoolbox")
+library ("rasterdiv")
+library ("rasterVis")
