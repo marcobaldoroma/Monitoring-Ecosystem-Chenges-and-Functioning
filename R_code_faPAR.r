@@ -1,4 +1,4 @@
-#how to look energy flow and CO2 cycle from satellite: faPAR fraction of absorbed photosynthetically active radiation
+# how to look energy flow and CO2 cycle from satellite: faPAR fraction of absorbed photosynthetically active radiation
 
 library(raster)                                           # install.packages("raster")
 library(rasterVis)                                        # for levelplot
@@ -22,3 +22,19 @@ dev.off()
 pdf("faPAR.pdf")
 levelplot(faPAR10)
 dev.off()
+
+
+                                                            ######################################### second part 
+
+setwd("C./lab/")
+
+load("faPAR.RData")
+                                                             # the original faPAR from copernicus is 2gb
+                                                             # let's see how much space is for 8bits
+library(raster)
+library(rasterdiv)
+library(rasterVis)
+
+writeRaster(copNDVI, "copNDVI.tif")
+levelplot (writeRaster)                                      #5.3MB
+                                                             # EX.levelplot this set
