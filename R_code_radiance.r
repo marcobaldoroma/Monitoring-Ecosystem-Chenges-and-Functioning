@@ -36,6 +36,35 @@ plot(toy8bits)
 text(toy8bits, digits=2)                              
                                 
                                 
-par(mfrow=c(1,4))                           
+par(mfrow=c(1,4))  
+
+### second exercise 
+
+setwd("C:/lab/")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                 
                                 
