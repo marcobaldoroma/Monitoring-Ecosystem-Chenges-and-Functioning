@@ -4,15 +4,15 @@ setwd ("C:/lab/")
 
 library (raster)
 
-install.packages("RStoolbox")                                #packages to make our analysis, the book that the Prof. wrote is about the algorith of this R function create by him
+install.packages("RStoolbox")                                            #packages to make our analysis, the book that the Prof. wrote is about the algorith of this R function create by him
 
 
-library (RStoolbox)                                          #to be faster in the istallation of pkgs: install.packages(c("raster", "RStoolbox")
+library (RStoolbox)                                                      #to be faster in the istallation of pkgs: install.packages(c("raster", "RStoolbox")
 
-load("C:\\lab\\biomes_types.csv")                            #load biomes_types and biomes data set
+load("C:\\lab\\biomes_types.csv")                                        #load biomes_types and biomes data set
 load("C:\\lab\\biomes.csv")
 
-                                                             #load images from the lab folder
+                                                                         #load images from the lab folder
 p224r63_2011 <- brick ("p224r63_2011_masked.grd")
 plot(p224r63_2011)
 
@@ -27,46 +27,46 @@ plot(p224r63_2011)
 
 ls()
 
-cl <- colorRampPalette(c('black','grey','light grey'))(100)   #changing our scaled colors for graphs (gray)
+cl <- colorRampPalette(c('black','grey','light grey'))(100)               #changing our scaled colors for graphs (gray)
 
-plot(p224r63_2011, col=cl)                                    #Exercise: plot the image with scale color ramp palette built
+plot(p224r63_2011, col=cl)                                                #Exercise: plot the image with scale color ramp palette built
 
                                      
-cllow <- colorRampPalette(c('black','grey','light grey'))(5)  # grey scaled low amount of colours
+cllow <- colorRampPalette(c('black','grey','light grey'))(5)              # grey scaled low amount of colours
 plot(p224r63_2011, col=cllow)
 
-names(p224r63_2011)                                           # [1] "B1_sre" "B2_sre" "B3_sre" "B4_sre" "B5_sre" "B6_bt"  "B7_sre"
+names(p224r63_2011)                                                       # [1] "B1_sre" "B2_sre" "B3_sre" "B4_sre" "B5_sre" "B6_bt"  "B7_sre"
 
-clb <- colorRampPalette(c('dark blue','blue','light blue'))(100) ##changing our scaled colors for graphs (blue)
-plot(p224r63_2011$B1_sre, col=clb)                               #symble $ links together collum with the data I want  
+clb <- colorRampPalette(c('dark blue','blue','light blue'))(100)          ##changing our scaled colors for graphs (blue)
+plot(p224r63_2011$B1_sre, col=clb)                                        #symble $ links together collum with the data I want  
 
-clnir <- colorRampPalette(c('red','orange','yellow'))(100)    # Exercise: plot the near infrared band with:
-plot(p224r63_2011$B4_sre, col=clnir)                          #colorRampPalette color that go from red, to orange, until yellow
+clnir <- colorRampPalette(c('red','orange','yellow'))(100)                # Exercise: plot the near infrared band with:
+plot(p224r63_2011$B4_sre, col=clnir)                                      #colorRampPalette color that go from red, to orange, until yellow
 
 dev.off ()
 
-                                                              # multiframe to plot more graphs together, we say at the console how many row and collums we want in the Plot Space: par(mfrow=c(2,2)) 
+                                                                          # multiframe to plot more graphs together, we say at the console how many row and collums we want in the Plot Space: par(mfrow=c(2,2)) 
 par(mfrow=c(2,2)) 
 
-                                                                         # B1 blue band, we want set colors intensity in blue
+                                                                          # B1 blue band, we want set colors intensity in blue
 clb <- colorRampPalette(c('dark blue','blue','light blue'))(100)
-plot(p224r63_2011$B1_sre, col=clb)                                       # func. par, multivariateframe  =  col = c finally names the colors you would 
-                                                                         # plot the immages with colors calls clb 
-                                                                         #dev.off to close all the windows if I need
+plot(p224r63_2011$B1_sre, col=clb)                                        # func. par, multivariateframe  =  col = c finally names the colors you would 
+                                                                          # plot the immages with colors calls clb 
+                                                                          #dev.off to close all the windows if I need
 
-                                                                         # Exercise: do the same for the B2_sre green band
+                                                                          # Exercise: do the same for the B2_sre green band
 clg <- colorRampPalette(c('dark green','green','light green'))(100)
 plot(p224r63_2011$B1_sre, col=clg)
 
-                                                                         #B3_sre red band
+                                                                          #B3_sre red band
 clr <- colorRampPalette(c('dark red','red','pink'))(100)
 plot(p224r63_2011$B1_sre, col=clr)
 
-                                                                         #B4_sre near infrared band
+                                                                          #B4_sre near infrared band
 cln <- colorRampPalette(c('red','orange','yellow'))(100)
 plot(p224r63_2011$B1_sre, col=cln)
 
-####change the lay out of our graph in 4 rows and 1 collum and to make it different and stretched, could be really usefull for data analysis
+                                                                          #change the lay out of our graph in 4 rows and 1 collum and to make it different and stretched, could be really usefull for data analysis
 
 dev.off ()
 par(mfrow=c(4,1))
@@ -159,8 +159,8 @@ plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="hist")
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="hist")
 
 
-                                                              # spectral indices
-                                                              # dvi1988 = nir1988-red1988
+                                                                          # spectral indices
+                                                                          # dvi1988 = nir1988-red1988
 
 dvi1988 <- p224r63_1988$B4_sre - p224r63_1988$B3_sre
 plot(dvi1988)
