@@ -26,15 +26,26 @@ dev.off()
 
                                                             ######################################### second part 
 
-setwd("C./lab/")
+setwd("C:/lab/")
 
 load("faPAR.RData")
                                                              # the original faPAR from copernicus is 2gb
-                                                             # let's see how much space is for 8bits
+                                                             # let's see how much space needs for 8-bits image
 library(raster)
 library(rasterdiv)
 library(rasterVis)
 
-writeRaster(copNDVI, "copNDVI.tif")
-levelplot (writeRaster)                                      #5.3MB
-                                                             # EX.levelplot this set
+ls() #lookin for faPAR10
+faPAR10
+
+writeRaster(copNDVI, "copNDVI.tif")                         # write the data copNDVI in .tif, 5.3MB
+
+faPAR <- stretch(faPAR10,minv=0,maxv=250)                   # faPAR10 in in bits from 0 to 0.93. Change from 0 to 255
+
+writeRaster(faPAR, "faPAR.tif")
+faPAR
+
+                                                            # EX. make a levelplot for this set
+
+
+ 
