@@ -1,4 +1,4 @@
-how to look energy flow and CO2 cycle from satellite: faPAR fraction of absorbed photosynthetically active radiation
+#how to look energy flow and CO2 cycle from satellite: faPAR fraction of absorbed photosynthetically active radiation
 
 library(raster)                                           # install.packages("raster")
 library(rasterVis)                                        # for levelplot
