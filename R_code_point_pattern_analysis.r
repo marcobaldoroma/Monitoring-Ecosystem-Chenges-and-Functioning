@@ -27,7 +27,7 @@ setwd("C:/lab/")                                                       # set wor
 
 load("point_pattern_analysis.RData")                                   ## load previus work
 
-install.packages("rgdal")                                              #to use vector format in coastline
+                                                                       #to use vector format in coastline
 
 library(spatstat)                                                      # call libraries requested
 library(rgdal)
