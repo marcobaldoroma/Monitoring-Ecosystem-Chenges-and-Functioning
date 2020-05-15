@@ -9,9 +9,6 @@ install.packages("RStoolbox")                                            #packag
 
 library (RStoolbox)                                                      #to be faster in the istallation of pkgs: install.packages(c("raster", "RStoolbox")
 
-load("C:\\lab\\biomes_types.csv")                                        #load biomes_types and biomes data set
-load("C:\\lab\\biomes.csv")
-
                                                                          #load images from the lab folder
 p224r63_2011 <- brick ("p224r63_2011_masked.grd")
 plot(p224r63_2011)
@@ -121,9 +118,11 @@ plotRGB (p224r63_2011, r=3, g=2, b=4, stretch="Lin")
 setwd("C:/lab/") # windows
 # setwd("/Users/nome/Desktop/lab") # mac
 
-load("remote_sensing.RData")
+load("R_code_remote_sensing.RData")
 
-                                                               # list
+library(raster)                                                               # list
+library (RStoolbox)
+
 ls()
 
 p224r63_1988 <- brick("p224r63_1988_masked.grd")
