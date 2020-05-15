@@ -2,6 +2,7 @@
 
 setwd ("C:/lab/")
 
+install.packages("vegan")
 library (vegan)                                                          #packages for vegetation analysis installed
 
 biomes <- read.table ("biomes.csv", header=TRUE, sep = ",")              #give a name, linkage, give the command to read exel or grid dataset files, give the header name "first line" of the collums "intestazione", in the end the separator of the collums = comma
