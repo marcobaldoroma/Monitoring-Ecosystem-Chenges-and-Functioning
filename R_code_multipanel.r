@@ -1,6 +1,6 @@
 ### Multipanel in R: seeing correlation amoung ecological variable
 
-install.packages("sp")
+                                                 # install.packages("sp")
 install.packages("GGally")                       # this is required to use the function ggpairs() we would graphy
 
                                                  #require those library
