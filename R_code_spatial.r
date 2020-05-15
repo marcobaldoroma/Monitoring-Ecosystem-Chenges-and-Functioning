@@ -1,7 +1,8 @@
 #R code first spatial view of points package sp already downloaded
-#instal this two packages for spatial analysis
+#instal this two packages for spatial analysis "raster" "rgdal"
 ## R code for spatial view of points
-#install.packages("sp")
+install.packages("raster")
+install.packages("rgdal")
 
                                                           # call the library sp
 library(sp)
