@@ -30,9 +30,6 @@ setwd("C:/lab/")
 load("faPAR.RData")
                                                              # the original faPAR from copernicus is 2gb
                                                              # let's see how much space needs for 8-bits image
-library(raster)
-library(rasterdiv)
-library(rasterVis)
 
 ls()                                                         #lookin for faPAR10
 faPAR10
