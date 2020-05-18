@@ -2,9 +2,9 @@
 
 setwd ("C:/lab/")
 
-library (raster)
+library (raster)                                                         # install.packages ("raster")
 
-install.packages("RStoolbox")                                            #packages to make our analysis, the book that the Prof. wrote is about the algorith of this R function create by him
+install.packages("RStoolbox")                                            #packages to make our analysis, the book that the Prof. wrote is about the algorith of this R function that he created
 
 
 library (RStoolbox)                                                      #to be faster in the istallation of pkgs: install.packages(c("raster", "RStoolbox")
@@ -63,7 +63,7 @@ plot(p224r63_2011$B1_sre, col=clr)
 cln <- colorRampPalette(c('red','orange','yellow'))(100)
 plot(p224r63_2011$B1_sre, col=cln)
 
-                                                                          #change the lay out of our graph in 4 rows and 1 collum and to make it different and stretched, could be really usefull for data analysis
+                                                                          #change the layout of our graph in 4 rows and 1 collum and to make it different and stretched, could be really usefull for data analysis
 
 dev.off ()
 par(mfrow=c(4,1))
@@ -107,7 +107,7 @@ plotRGB (p224r63_2011, r=4, g=3, b=2, stretch="Lin")
 
                                                               # EX. NIR on top of the G component # NIR false colours
 plotRGB (p224r63_2011, r=3, g=4, b=2, stretch="Lin")
-                                                              # dark forest is forest with high ammount of water
+                                                              # dark forest is forest with high amount of water
 
                                                               # yellow area are bare in this way to set the colors
 plotRGB (p224r63_2011, r=3, g=2, b=4, stretch="Lin")
@@ -131,8 +131,7 @@ plot(p224r63_1988)
 
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
 
-ls()
-
+plot(p22r63_2011)
                                                                # Exercise: plot the image using the nir on the "r" component in the RGB space
 plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")
 
@@ -156,8 +155,6 @@ plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
 par(mfrow=c(2,1))
 plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="hist")
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="hist")
-
-
                                                                           # spectral indices
                                                                           # dvi1988 = nir1988-red1988
 
@@ -166,42 +163,52 @@ plot(dvi1988)
 
                                                                            # Exercise: calculate dvi for 2011
 dvi2011 <- p224r63_2011$B4_sre - p224r63_2011$B3_sre
-
-                                                                           #giving colors at the div
-cl <- colorRampPalette(c('"darkorchid3"','light blue','lightpink4'))(100) 
 plot(dvi2011)
+
+dev.off()
+
+                                                                           #giving colors at the div looking for the best grafic information
+cl <- colorRampPalette(c("darkorchid3","light blue","lightpink4"))(100) 
+plot(dvi2011, col=cl)
 
 #or
 
-cldvi <- colorRampPalette(c('light blue','light green','green'))(100) # 
+cldvi <- colorRampPalette(c("light blue","light green","green"))(100)      # not the best for my purpose
 plot(dvi2011, col=cldvi)
 
 #or
 
-cl2 <- colorRampPalette(c('"yellow"','light blue','lightpink4'))(100)
+cl2 <- colorRampPalette(c("yellow",'light blue','lightpink4'))(100)
 plot(dvi2011,col=cl2)
 
                                                                            # Exercise: dvi for 1988
-dvi1988 <- p224r63_1988$B4_sre - p224r63_1988$B3_sre
 
-cl3 <- colorRampPalette(c('darkorchid3','light blue','lightpink4'))(100)
-plot(dvi1988,col=cl3)
+par(mfrow= c(2,1))
+plot(dvi1988, col=cl, ylab="1988")
+plot(dvi2011, col=cl, ylab="2011")
 
+
+par(mfrow= c(2,1))
                                                                             #differances between 1988-2011 
+plot(dvi1988,col=cl3)
+plot(dvi2011, col=cl)
+
+dev.off()
+
 diff <- dvi2011 - dvi1988
-plot diff
+plot (diff)
 
                                                                             #aggregate 
-                                                                            #changing the grain and resampling with factor=10
+                                                                            #changing the grain and resampling with factor=10 and 100 to minimize the weight
+p224r63_2011res10 <- aggregate(p224r63_2011, fact=10)
 p224r63_2011res100 <- aggregate(p224r63_2011, fact=100)
- 
                                                                             #EX. plot all together images with diff grain
 par(mfrow=c(3,1))
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
-plotRGB(p224r63_2011res, r=4, g=3, b=2, stretch="Lin")
+plotRGB(p224r63_2011res10, r=4, g=3, b=2, stretch="Lin")
 plotRGB(p224r63_2011res100, r=4, g=3, b=2, stretch="Lin") 
 
                                                                              #information about image p224r63_2011
-p224r63_201
+p224r63_2011
 
 
