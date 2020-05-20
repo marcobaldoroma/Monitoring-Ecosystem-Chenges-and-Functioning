@@ -9,7 +9,7 @@ install.packages("rasterdiv")                                                   
 library(rasterdiv)
 install.packages("rasterVis")                                                          # raster visualisation
 library (rasterVis)                                                                    ## Loading required package:  raster 
-                                                                                       ## Loading required package:  sp
+library(ratser)                                                                        ## Loading required package:  sp
                                                                                        ## Loading required package:  lattice
                                                                                        ## Loading required package:  latticeExtra
 
@@ -38,7 +38,7 @@ labs(x="Longitude",y="Latitude", fill="")+
 # +
 # ggtitle("NDVI")
 
-
+                                                                                        ## deforestation project
 setwd("C:/lab/")
 defor1 <- brick("defor1_.jpg")                                                          #to import images and link them with bands
 defor2 <- brick("defor2_.jpg")                                                          # band1: NIR, defor1_.1# band2: red, defor1_.2# band3: green
@@ -51,12 +51,12 @@ par(mfrow=c(1,2))
 plotRGB(defor1, r=1, g=2, b=3, stretch="Lin")
 plotRGB(defor2, r=1, g=2, b=3, stretch="Lin")
 
-                                                                                        #calculate the DVI for both images
+                                                                                        #classify the DVI for both images in different class
 
 dvi1 <- defor1$defor1_.1 - defor1$defor1_.2
 dvi2 <- defor2$defor2_.1 - defor2$defor2_.2                                             # to plot NDVI score on the map, very impressive map
 cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100)
-par(mfrow=c(1,2))
+par(mfrow=c(2,2))
 plot(dvi1, col=cl)
 plot(dvi2, col=cl)
 
