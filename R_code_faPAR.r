@@ -43,71 +43,62 @@ faPAR
 
 levelplot(faPAR)                                             # EX. make a levelplot for this set
 
+
+
 #### third part
-## regression model between faPAR and NDVI
+                                                             ## regression model between faPAR and NDVI
+                                                             ## make before a general example with erosion and heavy metal.
 
 erosion <- c(12,14,16,24,26, 40,55,67)
 
-# heavy metal in ppm
+                                                             # heavy metal in ppm
 hm <- c(30, 100, 150, 200, 260, 340, 460, 600)
 
 plot(erosion, hm, col="red", pch=19, xlab = "Erosion", ylab= "Heavy Metal")   
-#point character is just the symble pch=19 
-
+                                                             #point character is just the symble pch=19 
 #linear model function
 model1 <- lm(hm ~ erosion)
-summary(model1)  #
-
-# the line describe by the ab ( slope and intercept)
+summary(model1)
+                                                             # the line describe by the ab ( slope and intercept)
 abline(model1)
 
-# we want the same analysis for faPAR and NDVI
+                                                             # make the linear model for the relationship between biomass and ecosystem function # we want the same analysis for faPAR and NDVI
 library (raster)
 library(rasterdiv)
 
 setwd("C:/lab/")
 
-faPAR10 <- raster("C:/lab/faPAR10.tif")
-faPAR10 # 56M of points/cells
-
+faPAR10 <- raster("faPAR10.tif")
+faPAR10                                                      # 56M of points/cells
 plot(faPAR10)
-
 plot(copNDVI)
 
 copNDVI <- reclassify(copNDVI, cbind(253:255, NA), right=TRUE)
 
-install.packages("sf")
-library(sf)                                           # to call st_* functions 
-                                                      # random point we will cal our new function
-random.points <- function(raster,n)
+install.packages ("sf")
+library (sf)                                                 # to call st_* functions 
+                                                             # random point we will cal our new function
+random.points <- function(raster,n)                          # algorithm to select the point on our raster image randomly
 {
 lin <- rasterToContour(is.na(raster))
 pol <- as(st_union(st_polygonize(st_as_sf(lin))), 'Spatial') # st_union to dissolve geometries
 pts <- spsample(pol[1,], n, type = 'random')
 }
 
-# one command is faPAR dataset, then select 1000 points randomly
+                                                             # then select 1000 points randomly from faPAR10 rasters
 pts <- random.points(faPAR10, 1000)
 plot(faPAR10$pts)
 
 
 copNDVIp <- extract(copNDVI, pts)
 faPAR10p <- extract(faPAR10, pts)
-
-# photosynthesis vs biomass
+                                                             # photosynthesis vs biomass
 model2 <- lm(faPAR10p ~ copNDVIp)
-
-summary(model2)
+summary(model2)                                              # having a look of the correlation of the two variables
 
 plot(copNDVIp, faPAR10p, col="green", xlab="biomass", ylab="photosynthesis")
 abline(model2, col="red")
 
 levelplot(copNDVI)
 levelplot(faPAR10)
-
-
-
-
-
-
 
