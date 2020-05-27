@@ -1,4 +1,4 @@
-### diversity measurement
+### Enviroment biodiversity variation measurement
 window <- matrix(1, nrow = 3, ncol = 3)
 window
 std_sntr <- focal(snt_r$prova5_.4, w=window, fun=sd)
@@ -112,10 +112,53 @@ plotRGB(snt,4,3,2, stretch="lin", main="original image")
 plot(sd_snt, col=cl, main="diversity")
 
 
+#############  Day 2  R_code_EBVs.r second part on cladonia_stellaris_calaita
 
+setwd("C:/lab/")
 
+library (raster) # we need for use brick and raster function
 
+library(RStoolbox) # we use for the PCA of the image
 
+# we use brick function to import all the layers of our image
+clad <- brick ("cladonia_stellaris_calaita.JPG")
+
+# first blue, second green, third red
+plotRGB(clad, 1,2,3, stretch = "lin")
+
+# we have to decide our moving window, to calculate the SD and report the SD on our pixel. 1 is to set the value of the moving window pixel
+window <- matrix(1, nrow= 3, ncol= 3)
+window
+
+# focal function have the capacity to make the calcolation of SD
+cladpca <- rasterPCA(clad)
+cladpca  # we can see the output(informations) for cladpca
+
+summary(cladpca$model)
+# 98% of the images informations is showing from my model
+
+# inside the clad pca the is the map of pca component, so link the pca with map with PC1 # calcolate focal
+sd_clad <- focal(cladpca$map$PC1, w=window, fun=sd)
+
+# we want aggregate the image for make the sd analysis faster and make the focal of our aggregation
+
+PC1_agg <- aggregate(cladpca$map$PC1, fact=10)
+sd_clad_agg <- focal(PC1_agg, w=window, fun=sd)
+
+# make the powerful col for our function and use par to plot a frame 
+# plot the calculation both sd and sd agg
+
+par(mfrow=c(1,2))
+cl <- colorRampPalette(c('yellow','violet','black'))(100) #
+plot(sd_clad, col=cl)
+plot(sd_clad_agg, col=cl)
+
+# we want see the original image and secon the variability of the image. to see the variability of each individual, so the inner variation with sd calculation
+
+par(mfrow=c(1,2))
+cl <- colorRampPalette(c('yellow','violet','black'))(100) #
+plotRGB(clad, 1,2,3, stretch = "lin")
+plot(sd_clad, col=cl)
 
 
 
