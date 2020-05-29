@@ -1,0 +1,130 @@
+# R_code_snow.r
+
+setwd("~/lab/")
+# setwd("/Users/utente/lab") #mac
+# setwd("C:/lab/") # windows
+
+# install.packages("ncdf4") # new library to read a different format data files
+library(ncdf4)
+library(raster)
+
+snowmay <- raster("c_gls_SCE500_202005180000_CEURO_MODIS_V1.0.1.nc")  #giving the name for visualization process, we get 
+cl <- colorRampPalette(c('darkblue','blue','light blue'))(100)        # we make a colorramppalette for snow changes blue to white
+
+# Exercise: plot snow cover with the cl palette
+plot(snowmay,col=cl)  
+
+##### import snow data # for several layers all together in one time # he aggregate and clumped several pixel to make the image less heavy
+# import data <- you can create a new folder i.e. Snow
+# Slow manner to import set
+# new working directory 
+setwd("~/lab/snow")
+# setwd("/Users/utente/lab/snow") #mac
+# setwd("C:/lab/snow") # windows
+
+snow2000 <- raster("snow2000r.tif")  # for example snow in 2000 and with raster you can select the layer of interest, and you can import all together
+snow2005 <- raster("snow2005r.tif")
+snow2010 <- raster("snow2010r.tif")
+snow2015 <- raster("snow2015r.tif")
+snow2020 <- raster("snow2020r.tif")
+
+par(mfrow=c(2,3))   # we want plot all images together 
+plot(snow2000, col=cl)
+plot(snow2005, col=cl)
+plot(snow2010, col=cl)
+plot(snow2015, col=cl)
+plot(snow2020, col=cl)
+
+# fast version to import the set in faster way
+#lapply you can repet the same fuction more times
+# you can list files of the all contain. i.e. snow 2000, snow 2005, ..... snow 2020
+
+rlist <- list.files(pattern="snow")   # lapply function for all my list.file
+rlist
+
+import <- lapply(rlist, raster)   
+# we import for all the single files the function raster to import 
+# this way of work is call stack or raster stack
+
+# stack of all the dataset that we import 
+snow.multitemp <- stack(import)
+ 
+plot(snow.multitemp, col=cl)    # it is important to make several analysis all together to be analyse during the time 
+
+# make a prediction of snow cover, making a graph with time(x) and snow cover %(y)
+# with a regression functions we can fit our set to predict snow cover for the next 5 years using the trend of the last 20 years
+# Big Data structure of complex data, we want see how make the importation of data.
+# lets look at the function "prediction"
+
+## let make a prediction
+
+source("prediction.r")  # with source function you can select a file like a R script and it will work by themself for all my analysis.
+
+
+require(raster)
+require(rgdal)
+
+# define the extent
+ext <- c(-180, 180, -90, 90)
+extension <- crop(snow.multitemp, ext)
+    
+# make a time variable (to be used in regression)
+time <- 1:nlayers(snow.multitemp)
+
+# run the regression
+fun <- function(x) {if (is.na(x[1])){ NA } else {lm(x ~ time)$coefficients[2] }} 
+predicted.snow.2025 <- calc(extension, fun) # time consuming: make a pause!
+predicted.snow.2025.norm <- predicted.snow.2025*255/53.90828
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# rlist=list.files(pattern=".png", full.names=T) function 
+
+##save raster into list
+##con lappy
+# list_rast=lapply(rlist, raster)
+# EN <- stack(list_rast)
+# plot(EN)
+
+rlist <- list.files(pattern="snow20")
+rlist 
+
+#save raster into list
+#con lappy
+list_rast <- lapply(rlist, raster)
+snow.multitemp <- stack(list_rast)
+plot(snow.multitemp,col=cl)
+
+par(mfrow=c(1,2))
+plot(snow.multitemp$snow2000r, col=cl)
+plot(snow.multitemp$snow2020r, col=cl)
+
+par(mfrow=c(1,2))
+plot(snow.multitemp$snow2000r, col=cl, zlim=c(0,250))
+plot(snow.multitemp$snow2020r, col=cl, zlim=c(0,250))
+
+difsnow = snow.multitemp$snow2020r - snow.multitemp$snow2000r
+cldiff <- colorRampPalette(c('blue','white','red'))(100) 
+plot(difsnow, col=cldiff)
+
+# prediction
+# go to IOL and downloand prediction.r into the folder snow
+# source("prediction.r")
+# plot(predicted.snow.2025.norm, col=cl)
+# since the code needs time, you can ddownload predicted.snow.2025.norm.tif from iol in the Data
+
+predicted.snow.2025.norm <- raster("predicted.snow.2025.norm.tif")
+plot(predicted.snow.2025.norm, col=cl)
+
+
