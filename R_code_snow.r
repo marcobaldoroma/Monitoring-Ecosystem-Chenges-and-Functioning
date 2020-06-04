@@ -121,7 +121,6 @@ plot(final.stack, col=cl)
 # export the R graph for a thesis in pdf format
 
 pdf("my_final_exciting_graph.pdf")
-pdf("my_final_exciting_graph.pdf")
 plot(final.stack, col=cl)
 dev.off()
 
