@@ -5,8 +5,8 @@
 
 # 1. R code first.r
 # 2. R_code_multipanel.r
-# 3. R_code_point_pattern_analysis.r 
-# 4. R code spatial.r
+# 3. R code spatial.r 
+# 4. R_code_point_pattern_analysis.r 
 # 5. R_code_multivar.r
 # 6. R_code_remote_sensing.r
 # 7. R_code_ecosystem_function.r
