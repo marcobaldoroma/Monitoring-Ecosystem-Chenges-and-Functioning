@@ -60,53 +60,47 @@ plot(zinc,copper,col="green",pch=19,cex=2)
 
 # 2. R_code_multipanel.r
 
-### Multipanel in R: seeing correlation amoung ecological variable
+### Multipanel in R: seeing correlation amoung ecological variables
 
                                                  # install.packages("sp")
-install.packages("GGally")                       # this is required to use the function ggpairs() we would graphy
+install.packages("GGally")                       # the 'GGally' extends 'ggplot2'(R package 'ggplot2' is a plotting system based on the grammar of graphics) by adding several functions to reduce the complexity of combining geometric objects with transformed data. Some of these functions include a pairwise plot matrix, a two group pairwise plot matrix, a parallel coordinates plot, a survival plot, and several functions to plot networks. It is required to use the function ggpairs() we would graphy
 
-                                                 #require those library
+                                                 # calling required libraries with library command/function
 library(sp)
+library(GGally)
 
-data(meuse)                                      # there is a dataset available named meuse
+data(meuse)                                      # load a data set. There is a dataset available named meuse in sp
 
-                                                 #to fix the data set
+                                                 # attach function to fix the data set in R environment for the plot analysis
 attach(meuse)
 
-                                                 # Exercise: see the names of the variables and plot cadmium versus zinc
-                                                 # There are two ways to se the names of the variables:
-names(meuse)
+                                                 # Exercise: see the names of the variables. Second plot cadmium versus zinc
+                                                 # There are two ways to look the names of the variables:
+names(meuse)                                     # names functions to get or set the names of an object. Names is a generic accessor function, and names<- is a generic replacement function. The default methods get and set the "names" attribute of a vector (including a list) or pairlist
 head(meuse)
 
-                                                 #plot my variables
+meuse                                            # to see all the variables
+                                                 # plot cadmium and zinc with symbol 15 of R plot symbol set, character exaggeration to make the size of the symbles more visible
 plot(cadmium,zinc,pch=15,col="red",cex=2)
 
-                                                 # Exercise: make all the possible pairs plots of the dataset
-plot(x,cadmium)
-plot(x,zinc)
-plot(x,lead)
-plot(x,copper)
-                                                 # plot(cadmium,zinc,pch=15,col="red",cex=2) an amateur exercise to prettify plots
-                                                 # plot is not a good idea sometimes
-pairs(meuse)
-                                                 # selection of variables we want to plot together
+                                                 # Exercise: make all the possible pairs plots of the dataset. to be faster I wrote a generic code where x = copper,lead, zinc, cadmium that changing averytimes depending on the other viriable present
+# plot(x,cadmium)
+# plot(x,zinc)
+# plot(x,lead)
+# plot(x,copper)
+                                                 # sometimes plot is not a good idea. For example in the pairs analysis
+pairs(meuse)                                     # The pairs R function returns a plot matrix, consisting of scatterplots for each variable-combination of a data frame. Pairs is a function stored in GGally and ggplot2. 
+                                                 # selection of variables that we want to plot all together from a data set (meuse in our case)
 pairs(~ cadmium + copper + lead + zinc, data=meuse)
-
-pairs(meuse[,3:6])
+                                                 # the alternative way could be select a number of rows and collumns from the data set 
+pairs(meuse[,3:6])                               # all rows and collumn from 3(cadmium) to 6(zinc)
 
                                                  # Exercise: prettify this graph
 pairs(meuse[,3:6], col="red", pch=18, cex=1.5)
 
+pairs(meuse[,3:6], pch=19)
 
-                                                 
-pairs(meuse[,3:6])
-
-                                                 # from 3(cadmium) to 6(zinc)
-                                                 # 16 and 15 are the same function!
-
-pairs(meuse[,3:6],pch=19)
-
-library(GGally)                                  # GGally package will show infographic even better
+                                                 # GGally packages necessary to use ggpairs function. It will show infographic even better of pairs function
 ggpairs(meuse[,3:6])
 
 ############################################################################################################################
@@ -114,17 +108,18 @@ ggpairs(meuse[,3:6])
 
 # 3. R code spatial
 
-#R code first spatial view of points package sp already downloaded
-#install this two packages for spatial analysis "raster" "rgdal"
-## R code for spatial view of points
+# first spatial analysis and view of spatial data set
+# install this two packages for spatial analysis "raster" "rgdal"
+## R code for spatial analysis and views of data set
 
-install.packages("raster")
+install.packages("raster")                                # Reading, writing, manipulating, analyzing and modeling of gridded spa-tial data. The package implements basic and high-level functions. Process-ing of very large files is supported. There is a also support for vector data operations such as in-tersections
 install.packages("rgdal")
 
-                                                          # call the library sp
+                                                          # call the required libraries sp, raster, rgdal
 library(sp)
+library(raster)
+library(rgdal)                                            # preparing the data meuse
 
-                                                          # preparing the data meuse
 data(meuse)
 
                                                           # the top lines of the data base
