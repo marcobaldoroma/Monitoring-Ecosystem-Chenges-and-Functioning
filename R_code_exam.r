@@ -34,6 +34,7 @@ install.packages("sp")
 library(sp)
 
 # data function: Loads specified data sets, or list the available data sets. Load meuse that is a data set inside the sp packages
+# meuse dataset: this data set gives locations and topsoil heavy metal concentrations, along with a number of soil and landscape variables at the observation locations, collected in a flood plain of the river Meuse, near the village of Stein (NL). Heavy metal concentrations are from composite samples of an area of approximately 15 m x 15 m
 data(meuse)                
 
 # Let's see how meuse dataset is structure:
@@ -48,11 +49,11 @@ attach(meuse)
 # let's see if the zin concentration is realate to the copper concentration
 # let's plot the variables together, zinc in the x axis and copper in the y axis
 plot(zinc,copper)
-# col= "green" to give a colour at the symbols and characters of the plot
+# col= "green" to give a colour at the objects and symbols of the plot
 plot(zinc,copper,col="green")
 # pch function is used to change symbols associated at the variables rappresentated (i.g. pch=19 octagon)
 plot(zinc,copper,col="green",pch=19)
-# cex= character exageration to change the trait of symbols, labels and lines, you put 0<x<1 to have less trait size or x>1 to have a bigger trait size
+# cex= character exaggeration: a function number indicating the amount by which plotting text and symbols should be scaled relative to the default. 1=default, 1.5 is 50% larger, 0.5 is 50% smaller, etc. to change the size of symbols, you can put 0<x<1 to have a smaller symbol size or x>1 to have a bigger symbol size of the rappresented variables position.
 plot(zinc,copper,col="green",pch=19,cex=2)
 
 ############################################################################################################################
@@ -71,7 +72,7 @@ library(GGally)
 
 data(meuse)                                      # load a data set. There is a dataset available named meuse in sp
 
-                                                 # attach function to fix the data set in R environment for the plot analysis
+                                                 # attach sp function: The database is attached to the R search path. This means that the database is searched by R when evaluating a variable, so objects in the database can be accessed by simply giving their names. Attach function to fix the data set in R environment for the plot analysis
 attach(meuse)
 
                                                  # Exercise: see the names of the variables. Second plot cadmium versus zinc
@@ -108,138 +109,109 @@ ggpairs(meuse[,3:6])
 
 # 3. R code spatial
 
-# first spatial analysis and view of spatial data set
+# first real spatial analysis and view of spatial data set gave by us
 # install this two packages for spatial analysis "raster" "rgdal"
 ## R code for spatial analysis and views of data set
 
-install.packages("raster")                                # Reading, writing, manipulating, analyzing and modeling of gridded spa-tial data. The package implements basic and high-level functions. Process-ing of very large files is supported. There is a also support for vector data operations such as in-tersections
-install.packages("rgdal")
-
-                                                          # call the required libraries sp, raster, rgdal
+install.packages("raster")                                # raster package: reading, writing, manipulating, analyzing and modeling of gridded spa-tial data. The package implements basic and high-level functions. Process-ing of very large files is supported. There is a also support for vector data operations such as in-tersections
+install.packages("rgdal")                                 # rgdal package: provides bindings to the 'Geospatial' Data Abstraction Library ('GDAL') and access to projection/transformation operations from the 'PROJ' library. Use is made of classes defined in the 'sp' package. Raster and vector map data can be imported into R, and raster and vector 'sp' objects exported
+                                                          # to call the required libraries (sp, raster, rgdal)
 library(sp)
 library(raster)
-library(rgdal)                                            # preparing the data meuse
+library(rgdal)                                            # to load the data set meuse
 
 data(meuse)
-
-                                                          # the top lines of the data base
+                                                          # to have a look at the top lines of the data set
 head(meuse)
+                                                          # coordinates is the function to sets, converts the objects into sp classes, and sets coordinate reference system to the variables
 
-                                                          # coordinates
-
-coordinates(meuse) = ~x+y                                 # alt 126 for the tilde in windows / "sp" function is a R old package
-
-                                                          # plot object meuse
+coordinates(meuse) = ~x+y                                 # alt 126 for the tilde in windows / "sp" function is a R old package. Tilde Operator is used to separate the left- and right-hand sides in a model formula
+                                                          # to plot meuse objects
 plot(meuse)
-
-                                                          # simple plot, spp
-spplot(meuse, "zinc")                                     # simple plot graphs point and vectors, using spplot you can use a variable as function and graph the function i.g. concentration 
-
+                                                          # sp package, spplot function: a wrapper function around spplot (sp package). With spplot it is easy to map several layers with a single legend for all maps. ssplot is itself a wrapper around the levelplot function in the lattice package, and see the help for these functions for additional options
+spplot(meuse, "zinc")                                     # simple plot graphs point and vectors, using spplot you can use a variables as functions and graphy the function instead of the variables i.g. concentration 
+                                                          # spplot give different colours at the points, ordering the values of the variable in different classes of values
                                                           # Exercise: plot the spatial amount of copper using simple plot
 spplot(meuse, "copper")
 
-                                                          # add the label
+                                                          # main function: add a label at the graphic
 spplot(meuse, "copper", main= "Copper concentration ")
-
-
-                                                          #just to have a size directly related at the concentration we can use function bubble 
-
+                                                          # just to have a points size directly proportionated at the concentration (variable or object of our analysis) we can use the sp bubble function
+                                                          # bubble function: create a bubble plot of spatial data, with options for bicolour residual plots (xyplot wrapper)
 bubble(meuse,"zinc", main= "Zinc concentration")          # the bubble function is going to make the different size of points positive relate at the variable
 
-                                                          # Exercise: use bubble f. for copper, lead, cadmium in red
+                                                          # Exercise: use bubble funct. for copper, lead and cadmium, in red, blue, gray, rispectively
 bubble(meuse, "copper", main="Copper concentration", col="red")
 bubble(meuse, "lead", main="Lead concentration", col="blue")
 bubble(meuse, "cadmium", main="Cadmium concentration", col="gray")
 
 
-# We create an exel file covid-19 aggregate of dataset to insert in the R console and work with our dataset for the first time. remember lab folder without capital letter always:
-# these are the steps:  1#### Importing new data 2# download covid_agg.csv from our teaching site and build a folder called lab into C: 3#put the covid_agg.csv file into the folder lab
-# setting the working directory: lab
-# Windows users: setwd("C:/lab/") # Mac users: setwd("/Users/yourname/lab/") # Linux users: setwd("~/lab")
+# We create an excel file covid-19 aggregated in a data. we inserted our data set in the R console and work with our dataset for the first time
+# there are three steps to do:  1# download covid_agg.csv from our IOL site from MECF course. 2# create a folder called lab into C:(hard disk) 3# put the covid_agg.csv files into the lab folder
+# setting the working directory: lab. remember lab folder without capital letter, R is case sensitive
+# setwd function= set the working directory. for Windows users: setwd("C:/lab/") # Mac users: setwd("/Users/yourname/lab/") # Linux users: setwd("~/lab")
 
 setwd("C:/lab/")
+                                                           # recalling from lab folder our data set aggregated covid_agg.csv
+                                                           # read.table function: reads a file in table format and creates a data frame from it, with cases corresponding to lines and variables to fields in the file
+covid <- read.table ("covid_agg.csv", head= T)             # vector name = covid, read.table sp function, covid_agg.csv excel data frame csv is the data format, head= header T=TRUE is true that the first line is the header
 
-                                                           # recalling our data that I need for the graphs
+head(covid)                                                # have a look at the data frame variables, category, country, cases, lat, lon
 
-covid <- read.table ("covid_agg.csv", head= T)             #T=TRUE head= header
+attach(covid)                                              # attach covid to the R search path                                    
+                                                          
+plot(country, cases)                                       # plot only the pair variables country and cases
+                                                           # plot (country$country,covid$cases) if you don't attached the covid data set. $ is a good idea when you need to likage objects
+                                                           # $ Operators acting on vectors, matrices, arrays and lists to extract or replace parts
+                                                           # las sp package: a package providing classes and methods for spatial data: points, lines, polygons and grids. This package provides S4 classes for importing, manipulating and exporting spatial data in R, and for methods including print/show, plot, subset, [, [[, \$, names, dim, summary, and a number of methods specific to spatial data handling
+plot(country, cases, las=1)                                # horizzontal labels: las=1
 
-head(covid)
+plot(country, cases, las=2)                                # perpendicolar labels: las=2
 
-attach(covid)
+plot(country, cases, las=0)                                # parellel labels: las=0
 
-                                                            ## The following objects are masked from covid (pos = 5):
-                                                            ####    cases, cat, country, lat, lon
+plot(country, cases, las=3)                                # vertical labels: las=3
 
-plot(country, cases)
+plot(country, cases, las=3, cex.axis=0.5)                  # parellel labels + exaggeration cex.axis to make the trait size (number or names) smaller in axis printed variables
 
-                                                            #plot (country$country,covid$cases) if you don't attached the covid cases
-
-plot(country, cases, las=1)                                 #horizzontal labels
-
-plot(country, cases, las=2)                                 #perpendicolar labels
-
-plot(country, cases, las=0)                                 #parellel labels
-
-plot(country, cases, las=3)                                 #vertical labels
-
-plot(country, cases, las=3, cex.axis=0.5)                   #parellel labels + exaggeration cex
-
-plot(country, cases, las=3, cex.axis=0.7)                   #parellel labels very good size balance for our graph
-
-                                                            # let's make the spatial plot, ggplot: book, elegant graph, suggest to get it!!
-                                                            # ggplot is a library very usefull for graphs
-
-                                                            # ggplot to make a good graph you need 3 component: 1' data, 2' aestetic mappings, 3' tipe of symbol i.g. point
-
-                                                            # let's install.packages ggplot2, you need installed packages "sp"
+plot(country, cases, las=3, cex.axis=0.7)                  # parellel labels with cex= 0.7 very well balanced trait size for our graphic
+                                                           # let's make the spatial plot with ggplot2 packages: ggplot2 book, suggest book for elegant graphics maker in R
+                                                           # ggplot2 is a library very usefull for graphs. Create Elegant Data Visualisations Using the Grammar of Graphics
+                                                           # ggplot2 packages: Description: A system for 'declaratively' creating graphics, based on "The Grammar of Graphics". You provide the data, tell 'ggplot2' how to map variables to aesthetics, what graphical primitives to use,and it takes care of the details.
+                                                           # ggplot2: to make a good graph you need 3 component: 1' the data set, 2' aestetic mapping, 3' tipe of symbol i.g. point
+                                                           # let's install.packages ggplot2, you need installed packages "sp"
 install.packages("ggplot2")
 
 library(ggplot2)                                            # require ggplot2
-
-                                                            #if ggplot2 doesn't work follow this alternative installation
+                                                            # if ggplot2 not work, you cannot add the coastline at the covid map, following this alternative installation
                                                             # install.packages("devtools")
                                                             # devtools::install_github("tidyverse/ggplot2")
+                                                            # save the .RData under the menu file, save with name. In alternative save(list = ls(all.names = TRUE), file = ".RData", envir = .GlobalEnv). It is also what happens with q("yes")
+q()                                                         # the function quit or its alias q terminate the current R session
 
-                                                            # save the .RData under the menu File
-
-                                                            # q()  to save in alternative way
-
-#### second part
-
-                                                            # load the previously saved .RData
-
-                                                            # setting the working directory: lab
-
+###################### Second Part of R_code_spatial
+                                                            # load function: Reload datasets written with the function save. Load the previously saved R work R_code_spatial.RData
+                                                            # setting the working directory in lab
 setwd ("c:/lab/")
-
-                                                            # load the previews script "R_code_spatial_first.RData"
-
-load("C:/lab/R_code_spatial_first.RData")
-
-                                                            # have a look on the data loaded
-
-ls()
-                                                            # covid
-                                                            # if ggplot2 not work
-                                                            # install.packages("devtools")
-                                                            # devtools::install_github("tidyverse/ggplot2") before then ggplot2
-
-library(ggplot2)                                            # require ggplot2
-
+                                                            # load the previews script "R_code_spatial.RData" to recreate the previusly R global environment with all the objects
+load("C:/lab/R_code_spatial.RData")
+                                                            # have a look of the list of the data sets in my R environment after the loading
+ls                                                          # covid
+                                                            # if ggplot2 not work, you cannot add the coastline at the covid map, following this alternative installation # install.packages("devtools") # devtools::install_github("tidyverse/ggplot2")
+library(ggplot2)                                            # required ggplot2
+                                                            # load data set "mpg" present in ggplot2 packages: Fuel economy data from 1999 to 2008 for 38 popular models of cars. This dataset contains a subset of the fuel economy data that the EPA makes available on http://fueleconomy.gov. It contains only models which had a new release every year between 1999 and 2008 - this was used as a proxy for the popularity of the car
 data(mpg)
-head(mpg)
-
-                                                            # key component: data, aes, geometry
-ggplot(mpg, aes(x=displ, y=hwy)) + geom_point()
-                                                            # for plot with line
-ggplot(mpg, aes(x=displ, y=hwy)) + geom_line()
-                                                            # poligones
+head(mpg)                                                   # ggplot function: ggplot() initializes a ggplot object. It can be used to declare the input data frame for a graphic and to specify the set of plot aesthetics intended to be common throughout all subsequent layers unless specifically overridden
+                                                            # key component: data, aesthetic map, geometry. ggplot function
+ggplot(mpg, aes(x=displ, y=hwy)) + geom_point()             # ggplot funct., aesthetic mapping x= displ(engine displacement, in litres) y= hwy (highway miles per gallon), geometry of the graph= points
+                                                            # plot with points data rappresentation
+ggplot(mpg, aes(x=displ, y=hwy)) + geom_line()              # plot with lines data rappresentation
+                                                            # plot with poligones data rappresentation
 ggplot(mpg, aes(x=displ, y=hwy)) + geom_polygon()
-
-                                                            # let's graphy covid, putting lat and lon in funcion of the cases variable, geom_point
+                                                            # let's graphy covid(dataset) with the ggplot function, putting x=lat and y=lon in funcion of the variable cases and country(aes), and the geom_point(geometry) = plot with points data rappresentation
 head(covid)
 ggplot(covid, aes(x=lon, y=lat, size=cases)) + geom_point()
-ggplot(covid, aes(x=lon, y=lat, size=cases, col= "red")) + geom_point()
+ggplot(covid, aes(x=lon, y=lat, size=cases, col= "red")) + geom_point() # giving a different colour= "red" at the objects(points) in my plot
 
 ############################################################################################################################
 ############################################################################################################################
