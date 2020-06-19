@@ -3,7 +3,7 @@
 #############################################################################################################################
 #############################################################################################################################
 
-# 1. R code first.r
+# 1. R_code_first.r
 # 2. R_code_multipanel.r
 # 3. R code spatial.r 
 # 4. R_code_point_pattern_analysis.r 
@@ -22,27 +22,37 @@
 
 #############################################################################################################################
 #############################################################################################################################
-# 1. R code first
 
-install.packages("sp")
+# 1. R_code_first.r
+# first test to start to use functions and codes necessary to work in R environment
+# sp is a package providing classes and methods for spatial data: points, lines, polygons and grids
+# the quotes marks are used to call objects and packages from outside R environment or to delimite them
+# Single and double quotes delimit character constants. They can be used interchangeably but double quotes are preferred (and character constants are printed using double quotes), so single quotes are normally only used to delimit character constants containing double quotes
+install.packages("sp") 
 
+# call the required and installed packages in our work environment
 library(sp)
-data(meuse)
+
+# data function: Loads specified data sets, or list the available data sets. Load meuse that is a data set inside the sp packages
+data(meuse)                
 
 # Let's see how meuse dataset is structure:
 meuse
 
-# let's look at the firsts row of the set
+# let's look at the first rows of the data set, head of the data set
 head(meuse)
 
-#let's lot two variables
-#let's see if the zin concentration is realate to that  copper
+# attach function: the database is attached to the R search path. This means that the database is searched by R when evaluating a variable, so objects in the database can be accessed by simply giving their names
+# attach meuse dataset
 attach(meuse)
+# let's see if the zin concentration is realate to the copper concentration
+# let's plot the variables together, zinc in the x axis and copper in the y axis
 plot(zinc,copper)
+# col= "green" to give a colour at the symbols and characters of the plot
 plot(zinc,copper,col="green")
-#pch to change plot symbols
+# pch function is used to change symbols associated at the variables rappresentated (i.g. pch=19 octagon)
 plot(zinc,copper,col="green",pch=19)
-#big plot mod, cex caracter exageration= 2, you put 0<x<1 to have less plot symbol size or x>1 to make bigger
+# cex= character exageration to change the trait of symbols, labels and lines, you put 0<x<1 to have less trait size or x>1 to have a bigger trait size
 plot(zinc,copper,col="green",pch=19,cex=2)
 
 ############################################################################################################################
