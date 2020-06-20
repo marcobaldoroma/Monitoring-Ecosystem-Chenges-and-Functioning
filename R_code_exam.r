@@ -486,7 +486,7 @@ plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")
 
                                                                             # Exrecise: plot in visible RGB space r=3 g=2 b=1, both images
 par(mfrow=c(2,1))
-plotRGB(p224r63_1988, r=3, g=2, b=1, stretch="Lin")                         # multiframe with par function of 2 parallel plots, 1988 image vs 2011 image, to have a clear evidence of eventual land cover modifications
+plotRGB(p224r63_1988, r=3, g=2, b=1, stretch="Lin")                         # multiframe par function of 2 parallel plots, 1988 image vs 2011 image, to have a clear evidence of eventual land cover modifications
 plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
   
 # plot together two images, 1988 e 2011                                     # making the same multiframe analysis, with the plotRGB function, primary colours, RGB space but putting the Near InfraRed band layer over the Red band layer and the Red over the Green band layer
@@ -500,23 +500,26 @@ plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")                         # we
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
 
 
-# enhance the noise!              SONO RIMASTO QUII
-#par(mfrow=c(2,1))
+                                                                           # enhance the noise, probably high ammount of water in the air, stretching these images with histogram equalization of band information result to lose the images quality               
+#par(mfrow=c(2,1))                                                         # hist: calcutation of the area under the integral that describes the shock of enhancing the colour
 plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="hist")                       # same multiframe and RGB order of layers. 
-plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="hist")                       # stretch="hist": character. Option to stretch the values to increase the contrast of the image: "lin" or "hist"
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="hist")                       # stretch="hist": character. Option to stretch the values to increase the contrast of the image: "lin" or "hist". Linear equalization or Histogram equalization.
                                                                            # spectral indices
-                                                                           
+dev.off()
 
-dvi1988 <- p224r63_1988$B4_sre - p224r63_1988$B3_sre                       # dvi1988 = nir1988-red1988
-plot(dvi1988)                                                              # plot the different vegetation index (DVI) values derivated from the previous band NIR-Red analysis
-
-                                                                           # Exercise: calculate dvi for 2011
+# to calculate DVI of 1988                                                 # NDVI: Calculation of the Normalized Difference Vegetation Index (NDVI). Chlorophyll (a health indicator) strongly absorbs visible light, and the cellular structure of the leaves strongly reflect near-infrared light. When the plant becomes dehydrated, sick, afflicted with disease, etc., the spongy layer deteriorates, and the plant absorbs more of the near-infrared light, rather than reflecting it. Thus, observing how NIR changes compared to red light provides an accurate indication of the presence of chlorophyll, which correlates with plant health
+dvi1988 <- p224r63_1988$B4_sre - p224r63_1988$B3_sre                       # mesuring the NDVI: Normalized Difference Vegetation Index. In Landsat 4-7, NDVI = (Band 4 – Band 3) / (Band 4 + Band 3). I.G. DVI1988 = (nir1988-red1988)/(nir1988+red1988). Higher the index and healthier should be the vegetation
+plot(dvi1988)                                                              # plot the normalized difference vegetation index (NDVI) values derivated from the previous band NIR-Red analysis
+                                                                           # we linked together image with the band interested for our function. In this way we isolated values of the 1988 image for the NIR and Red wavelenght bands, neccessary for the DVI equation
+# to calculate DVI of 2011                                                 # Exercise: calculate the DVI in 2011 image
 dvi2011 <- p224r63_2011$B4_sre - p224r63_2011$B3_sre
 plot(dvi2011)
 
-dev.off()
+diff <- dvi2011 - dvi1988                                                  # consider the difference between DVI2011 and DVI1988                             
+plot (diff)
 
-                                                                           # giving colors at the div looking for the best grafic information
+dev.off()
+                                                                           # trying to give colours contrast and gradation scale at the DVI images, looking for the best grafic information
 cl <- colorRampPalette(c("darkorchid3","light blue","lightpink4"))(100) 
 plot(dvi2011, col=cl)
 
@@ -527,43 +530,116 @@ plot(dvi2011, col=cldvi)
 
 #or
 
-cl2 <- colorRampPalette(c("yellow",'light blue','lightpink4'))(100)
+cl2 <- colorRampPalette(c("yellow",'light blue','red'))(100)              # well balanced colorRampPalette colours vector
 plot(dvi2011,col=cl2)
 
-                                                                           # Exercise: dvi for 1988
+                                                                          # making two final comparisons in a multiframe of 2x1 plot space
 
 par(mfrow= c(2,1))
 plot(dvi1988, col=cl, ylab="1988")
 plot(dvi2011, col=cl, ylab="2011")
 
 
-par(mfrow= c(2,1))
-                                                                           # differances between 1988-2011 
-plot(dvi1988,col=cl3)
-plot(dvi2011, col=cl)
+par(mfrow= c(2,1))                                                        # differances between 1988-2011 without labels. Yellow enhance bad vegetation health or cover, or high ammount of water (rivers)
+plot(dvi1988,col=cl2)
+plot(dvi2011, col=cl2)
 
 dev.off()
-
-diff <- dvi2011 - dvi1988
-plot (diff)
-
-                                                                            # aggregate pixels 
-                                                                            # changing the grain and resampling with factor=10 and 100 to minimize the weight
+                                                                          # aggregation of pixels. "aggregate" sp function: spatial aggregation of thematic information in spatial objects
+                                                                          # changing the grains (dimention of pixel), aggregating them with factor=10 and =100. 1 grain that rappresent 10 or 100 pixels instead than 1. In this way you can obtain a file lighter
 p224r63_2011res10 <- aggregate(p224r63_2011, fact=10)
 p224r63_2011res100 <- aggregate(p224r63_2011, fact=100)
-                                                                            #EX. plot all together images with diff grain
-par(mfrow=c(3,1))
+                                                                          # Exercise plot all together images with diff. grains aggregation. In this way you will understand positive and negative aspects of using this procedure
+par(mfrow=c(3,1))                           
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
-plotRGB(p224r63_2011res10, r=4, g=3, b=2, stretch="Lin")
-plotRGB(p224r63_2011res100, r=4, g=3, b=2, stretch="Lin") 
+plotRGB(p224r63_2011res10, r=4, g=3, b=2, stretch="Lin")                  # sometime is a good idea reduce the resolution.     DOI: 10.1007/s10531-008-9479-0
+plotRGB(p224r63_2011res100, r=4, g=3, b=2, stretch="Lin")                 # we lost a lot the quality of the image
 
-                                                                            #information about image p224r63_2011
+                                                                          # information about image p224r63_2011
 p224r63_2011
 
 ############################################################################################################################
 ############################################################################################################################
 
-# 6. R_code_PCA_remote_sensing
+# 7. R_code_ecosystem_functions.r
+
+# R_code_ecosystem_functions.r
+
+# R code to view biomass over the world and calculate changes in ecosystem functions
+# energy
+# chemical cycling
+# proxies
+                                                                                       # rasterdiv packages: Diversity Indices for Numerical Matrices: Rasterdiv basics. Derive indices of diversity from NDVI.Providing functions to calculate indices of diversity on numerical matrices based on information theory. The rationale behind the package is described in Rocchini, Marcantonio and Ricotta (2017) doi:10.1016/j.ecolind.2016.07.039
+install.packages("rasterdiv")                                                          # packages to assess Rao variations in different ecosystems
+library(rasterdiv)
+install.packages("rasterVis")                                                          # rasterVis packages: Visualization Methods for Raster Data: Methods for enhanced visualization and interaction with raster data. It implements visual-ization methods for quantitative data and categorical data, both for univariate and multivari-ate rasters. It also provides methods to display spatiotemporal rasters, and vec-tor fields. See the website for examples
+library (rasterVis)                                                                    ## Loading required package:  raster 
+library(ratser)                                                                        ## Loading required package:  sp
+                                                                                       ## Loading required package:  lattice
+                                                                                       ## Loading required package:  latticeExtra
+
+data(copNDVI)                                                                          # load copNDVI dataset (inside rasterdiv library): a RasterLayer (EPSG: 4326) of the global average NDVI value per pixel for the 21st of June over the period 1999-2017
+plot(copNDVI)
+
+copNDVI <- reclassify(copNDVI, cbind(253, 255, NA), right=TRUE)                        # removing water pixels using cbind argument for 253,254, 255 values= Not Assigned
+levelplot(copNDVI)                                                                     # plot the same image with pixels aggregation of factors=10 and factors=100
+                                                                                       # reclassify function: Reclassify values of a Raster* object. The function (re)classifies groups of values to other values. For example, all values between 1 and 10 become 1, and all values between 11 and 15 become 2 
+copNDVI10 <- aggregate(copNDVI, fact=10)                                               # levelplot function: Level plots and contour plots. Draws false color level plots and contour plots
+levelplot(copNDVI10)
+
+copNDVI100 <- aggregate(copNDVI, fact=100)                                             # sometimes is better aggregate pixels for the raster analysis. High resolution satellite imagery for tropical biodiversity studies: The devil is in the detail  DOI: 10.1007/s10531-008-9479-0
+levelplot(copNDVI100)
+
+library(ggplot2)
+library (RStoolbox)
+
+myPalette <- colorRampPalette(c('white','green','dark green'))                         # scale_colour_gradientn: gradient colour scales: 
+sc <- scale_colour_gradientn(colours = myPalette(100), limits=c(1, 8))                 # to plot NDVI score on the map, very impressive map
+
+ggR(copNDVI, geom_raster = TRUE)+
+scale_fill_gradientn(name = "NDVI", colours = myPalette(100))+
+labs(x="Longitude",y="Latitude", fill="")+
+theme(legend.position = "bottom") +
+  NULL +
+ggtitle("NDVI")
+
+## deforestation project
+
+setwd("C:/lab/")
+defor1 <- brick("defor1_.jpg")                                                          # to import images and link them with bands
+defor2 <- brick("defor2_.jpg")                                                          # band1=NIR, Band2=red, band3=green defor1_.1 or defor2_.1 (band1)
+
+                                                                                        # plotRGB: plot using RGB colours: Make a Red-Green-Blue plot based on three layers (in a RasterBrick or RasterStack). Three layers (sometimes referred to as "bands" because they may represent different bandwidths in the electromagnetic spectrum) are combined such that they represent the red, green and blue channel. This function can be used to make 'true (or false) color images' from Landsat and other multi-band satellite images 
+plotRGB(defor1, r=1, g=2, b=3, stretch="Lin")                                           # par function to make a multiframe plot to compare the same image in two different years 1x2
+plotRGB(defor2, r=1, g=2, b=3, stretch="Lin")                                           # default association of RGB colours
+
+
+par(mfrow=c(1,2))
+plotRGB(defor1, r=1, g=2, b=3, stretch="Lin")
+plotRGB(defor2, r=1, g=2, b=3, stretch="Lin")
+
+                                                                                        # calculating the DVI for both images NIR-Red bands of the associated at the two images
+                                                                                        # $ symbol to link the layers at the image, each layer rappresents a band
+dvi1 <- defor1$defor1_.1 - defor1$defor1_.2                                             
+dvi2 <- defor2$defor2_.1 - defor2$defor2_.2                                             # to plot NDVI score on the map, very impressive map, we resampled the colorRampPalette coloration
+cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100)
+par(mfrow=c(2,2))                                                                       # multiframe of plot matrix 4x4 to have a visive comparation of the two image(same place different time), adding difference in NDVI index, graphically and through an histogram (diff. DVI)
+plot(dvi1, col=cl)
+plot(dvi2, col=cl)
+                                                                                        # make a difference between DVI of 1' image and 2' image
+difdvi <- dvi1 - dvi2                                                                   # Warning in dvi1 - dvi2:  Raster objects have different extents.  Result for their intersectionis returned
+cld <- colorRampPalette(c('blue','white','red'))(100) 
+
+plot(difdvi, col=cld)                                                                   # to see the lost of ecosystem services, related at the lost of the vegetation. Healthness of the vegetation in the area is lower= DVI is lower
+hist(difdvi)                                                                            # high lost in primary production ecosystem services and biomass production
+                                                                                        # hist=histogram: function: The generic function hist computes a histogram of the given data values. If plot = TRUE, the resulting object of class "histogram" is plotted by plot.histogram, before it is returned. Have a look also of hist.im: Histogram of Pixel Values in an Image
+sessionInfo ()                                                                          # R session information, matrix, packages
+
+############################################################################################################################
+############################################################################################################################
+
+
+# . R_code_PCA_remote_sensing
 
 setwd("C:/lab/")
 
