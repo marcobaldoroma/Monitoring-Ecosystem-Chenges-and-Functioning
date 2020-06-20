@@ -183,7 +183,7 @@ plot(country, cases, las=3, cex.axis=0.7)                  # parellel labels wit
 install.packages("ggplot2")
 
 library(ggplot2)                                            # require ggplot2
-                                                            # if ggplot2 not work, you cannot add the coastline at the covid map, following this alternative installation
+                                                            # if ggplot2 not work, you can try to install the required packages ggplo2 in the following way: 
                                                             # install.packages("devtools")
                                                             # devtools::install_github("tidyverse/ggplot2")
                                                             # save the .RData under the menu file, save with name. In alternative save(list = ls(all.names = TRUE), file = ".RData", envir = .GlobalEnv). It is also what happens with q("yes")
@@ -197,7 +197,7 @@ setwd ("c:/lab/")
 load("C:/lab/R_code_spatial.RData")
                                                             # have a look of the list of the data sets in my R environment after the loading
 ls                                                          # covid
-                                                            # if ggplot2 not work, you cannot add the coastline at the covid map, following this alternative installation # install.packages("devtools") # devtools::install_github("tidyverse/ggplot2")
+                                                            # if ggplot2 not work, you can try to install the required packages ggplo2 in the following way: # install.packages("devtools") # devtools::install_github("tidyverse/ggplot2")
 library(ggplot2)                                            # required ggplot2
                                                             # load data set "mpg" present in ggplot2 packages: Fuel economy data from 1999 to 2008 for 38 popular models of cars. This dataset contains a subset of the fuel economy data that the EPA makes available on http://fueleconomy.gov. It contains only models which had a new release every year between 1999 and 2008 - this was used as a proxy for the popularity of the car
 data(mpg)
@@ -216,7 +216,102 @@ ggplot(covid, aes(x=lon, y=lat, size=cases, col= "red")) + geom_point() # giving
 ############################################################################################################################
 ############################################################################################################################
 
-# 4. R_code_multivar.r
+# 4. R_code_point_pattern_analysis.r 
+
+# R_code_point_pattern_analysis: Density analysis using covid-19 number of cases per nation
+
+install.packages("spatstat")                                          # spatstat packages: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests: 
+library(spatstat)                                                     # spatstat pack. description: Comprehensive open-source toolbox for analysing Spatial Point Patterns. Focused mainly on two-dimensional point patterns, including multitype/marked points, in any spatial region. Also supports three-dimensional point patterns, space-time point patterns in any number of dimensions, point patterns on a linear network, and patterns of other geometrical objects. Supports spatial covariate data such as pixel images. Contains over 2000 functions for plotting spatial data, exploratory data analysis, model-fitting, simulation, spatial sampling, model diagnostics, and formal inference 
+
+setwd("C:/lab/")
+
+covid <- read.table("covid_agg.csv", head=T)                          # import and read covid data set
+ 
+attach(covid)
+head(covid)
+                                                                       # set the coordinates of the vectors in covid in relation to the coordinate reference system of the global map. For the lat and lon we used min and max values range
+covids <- ppp(lon, lat, c(-180,180), c(-90,90))                        # "c" is used to clastering all the variables/numeber together. i.g. dead <- 12,34,55,66,77,88,89. This is a generic function which combines its arguments. The default method combines its arguments to form a vector. All arguments are coerced to a common type which is the type of the returned value, and all attributes except names are removed
+                                                                       # ppp means panel point pattern. The general form is ppp(x.coordinates, y.coordinates, x.range, y.range) it creates a point pattern dataset in the two-dimensional plane for the range of values of lat and long.
+                                                                       # attach covid at the coordinate : covids <- ppp(covid$lon, covid$lat, c(-180,180), c(-90,90)) alternative way without attach covid dataset to the R search path
+d <- density(covids)                                                   # create a variable names d = density
+                                                                       # density function: compute a kernel smoothed intensity function from a point pattern
+plot (d)                                                               # plot this density map
+
+points(covids)                                                         # add points at the density map plot
+
+#################################################### second part
+
+setwd("C:/lab/")                                                       # set work directory
+
+load("point_pattern_analysis.RData")                                   # load previously saved work from the lab folder ("point_pattern_analysis.RData")
+
+library(spatstat)                                                      # call libraries requested
+library(rgdal)                                                         # costline cannot uploaded without rgdal library
+
+ls()                                                                   # list of objects I have in my R environment
+                                                                       # plot density + adding points georeferantiated for the covids vector
+plot(d)
+points(covids)
+                                                                       # import in lab folder and then in R "ne_10m_coastline.shp" image. shp is a data format named shape file format
+                                                                       # readORG rgdal packages function: read OGR vector maps into Spatial objects. the function reads an OGR data source and layer into a suitable Spatial vector object. It can only handle layers with conformable geometry features (not mixtures of points, lines, or polygons in a single layer). It will set the spatial reference system if the layer has such metadata
+                                                                       # let’s input vector lines (x0y0, x1y1, x2y2..)
+coastlines <- readOGR("ne_10m_coastline.shp")                          # reading the shape file and giving a vector to the global coastlines image necessary to be added at the plot of the covid density map
+                                                                       # install additional packages, alternative way to plot the coastlines at the covid density map
+                                                                       # install.packages("rnaturalearth")
+                                                                       # coastlines <- rnaturalearth::ne_download(scale = 10, type = 'coastline', category = 'physical')
+plot(d)
+points(covids)
+                                                                       # plot density maps (covid-19 num. of cases per country) + add=TRUE the world coastlines map at the plot of density map and covids points
+plot(coastlines, add=T)
+                                                                       # colour interpolation: we can create a vector for our colour scale. 
+cl <-colorRampPalette(c("yellow","orange","red")) (100)                # change the colour scale and make the graph more elegant with colorRampPalette func. We build a new object names "cl". (100) are the intermediate number of colours
+                                                                       # colorRampPalette function: These functions return functions that interpolate a set of given colors to create new color palettes and color ramps, functions that map the interval [0, 1] to colors (like grey)
+                                                                       
+plot(d, col=cl, main="Densities of covid-19")                          # plot the density map with the new colours scale and add at the plot a label
+points(covids)
+plot(coastlines, add=T)                                                # add=T means that is true that we are adding the coastlines vector at the plot
+
+                                                                       # export your Density map of covid-19 plot in pdf. pdf function: pdf starts the graphics device driver for producing PDF graphics
+pdf("covid_density.pdf")
+
+                                                                       # number of colours: abrupt change of colours!!! making just an example
+cll <- colorRampPalette(c("light green", "yellow","orange","violet")) (5)
+plot(d, col=cll, main="Densities of covid-19")
+points(covids)
+plot(coastlines, add=T)
+
+                                                                       # Exercise: create a new colourRampPalette colours scale for the same density map and analysis
+clr <-colorRampPalette(c("light green", "yellow","orange","violet")) (100)
+plot(d, col=clr, main="Densities of covid-19")
+points(covids)
+plot(coastlines, add=T)
+
+pdf("covid_density2.pdf")
+
+                                                                        # higher number of intermediate colours (1000) to have more colours quality. The best option is a balance between the heavyness of the file and the quality of the colours
+clrr <-colorRampPalette(c("light green", "yellow","orange","violet")) (1000)
+plot(d, col=clrr, main="Densities of covid-19")
+points(covids)
+plot(coastlines, add=T)
+
+pdf("covid_density3.pdf")                                               # this command is a wrapper for the pdf function
+
+png("covid_density.png")                                                
+                                                                        # or export in png data format. png function: graphics devices for BMP, JPEG, PNG and TIFF format bitmap files
+
+dev.off()                                                               # dev.off function: Control Multiple Devices: these functions provide control over multiple graphics devices, with the command off, we say at the console to close all the plots in my environment
+
+clr <- colorRampPalette(c("light green", "yellow","orange","violet")) (100)
+plot(d, col=clr, main="Densities of covid-19")
+points(covids)
+plot(coastlines, add=T)
+
+dev.off()# to close all plots
+
+############################################################################################################################
+############################################################################################################################
+
+# 5. R_code_multivar.r
 
 # R code for multivariate analysis
 
