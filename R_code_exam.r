@@ -7,18 +7,19 @@
 # 2. R_code_multipanel.r
 # 3. R code spatial.r 
 # 4. R_code_point_pattern_analysis.r 
-# 5. R_code_multivar.r
+# 5. R_code_multivariate_analysis.r
 # 6. R_code_remote_sensing.r
 # 7. R_code_ecosystem_function.r
-# 8. R_code_PCA_remote_sensing.r   vedi multivariate analysis remote sensing su iol
-# 8. R_code_reflectance.r
-# 9. R_code_faPAR.r
-# 10. R_code_EBVs.r
-# 11. R_code_snow.r
-# 12. R_code_NO2.r
-# 13. R_code_crop_image.r
-# 14. R_code_interpolation.r
-# 15. R_code_sdm.r
+# 8. R_code_remote_sensing_multivariate_analysis.r   vedi multivariate analysis remote sensing su iol
+# 9. R_code_ecosystem's_reflectance.r
+# 10. R_code_faPAR.r
+# 11. R_code_EBVs.r
+# 12. R_code_snow.r
+# 13. R_code_monitoring_air_pollution_no2.r
+# 14. R_code_crop_image.r
+# 15. R_code_interpolation.r
+# 16. R_code_sdm.r
+# 17. R_code_myproject_exam.r
 
 #############################################################################################################################
 #############################################################################################################################
@@ -306,7 +307,7 @@ plot(d, col=clr, main="Densities of covid-19")
 points(covids)
 plot(coastlines, add=T)
 
-dev.off()# to close all plots
+dev.off()                                                                # to close all open plots
 
 ############################################################################################################################
 ############################################################################################################################
@@ -316,47 +317,42 @@ dev.off()# to close all plots
 # R code for multivariate analysis
 
 setwd ("C:/lab/")
+                                                                         # vegan packages: Community Ecology Package: Ordination, Diversity and Dissimilarities: the vegan package provides tools for descriptive community ecology. It has most basic functions of diversity analysis, community ordination and dissimilarity analysis. Most of its multivariate tools can be used for other data types as well
+install.packages ("vegan")                                               # packages for vegetation analysis installed
+library (vegan)                                                           
 
-install.packages("vegan")
-library (vegan)                                                          #packages for vegetation analysis installed
+biomes <- read.table ("biomes.csv", header=TRUE, sep = ",")              # give a name at the new vector,    linkage it with data set,     command necessary to read excel or grid data files,   tell at the console that the "first line" is the "header" of the data frame,      separator of the collums = comma
+                                                                         # biomes                            <-                            read.table (biomes.csv) csv=tipe of the data file     header = T #first line is the header                                              sep = ","          
+head (biomes)                                                            # have a look at the head of the dataset biomes
 
-biomes <- read.table ("biomes.csv", header=TRUE, sep = ",")              #give a name, linkage, give the command to read exel or grid dataset files, give the header name "first line" of the collums "intestazione", in the end the separator of the collums = comma
-                                                                         #biomes   <- read.table     biomes.csv csv #tipe of the data file   header = T #first line of my table                                  sep = ","          
-head (biomes)                                                            #have a look at the dataset
-
-                                                                         #for multivariate analysis in many programs is a little difficult built multivariate function, in R scientist already create a function to facilities it, names DECORANA
-                                                                         #DEtreanded COrrespondence ANAlysis = DECORANA
-multivar <- decorana (biomes)
+                                                                         # multivariate statistic analysis in many softwares could be a difficult task. To build a multivariate function in a  script could be really complex, for those reasons in R, scientist created a function to facilities the multivariate analysis. The name of M.A. function in R vegan packages is DECORANA
+                                                                         # DEtreanded COrrespondence ANAlysis = DECORANA. Detrended Correspondence Analysis and Basic Reciprocal Averaging. Performs detrended correspondence analysis and basic reciprocal averaging or orthogonal correspondence analysis.
+multivar <- decorana (biomes)                                            # for multivariate stat. analysis of biomes data set, we need just to process biomes with DECORANA vegan pkgs function.
 
 plot (multivar)
-
-                                                                         #plot with exageration
+                                                                         # plot multivariate analysis with a little exageration
 plot (multivar, cex=1.2)
 
-plot(multivar)
-
-multivar                                                                 #we can see in the R macchine the percentage of the reality in 2 dimentions. our algorithm give us the 82% of our data just in 2 dimantion, this is not bad 
-
+multivar                                                                 # we can see in the R macchine the percentage of the reality in 2 dimentions. Our algorithm give us the 82% of our data set rappresented just in 2 dimantion. This is a good rappresentation of the real data set information reducing as much as I can the real dimentions, loosing only the 18 % of our initial information
 #               DCA1   DCA2    DCA3    DCA4
 #Eigenvalues     0.5117 0.3036 0.12125 0.14267
 #Decorana values 0.5360 0.2869 0.08136 0.04814
 #Axis lengths    3.7004 3.1166 1.30055 1.47888
 
-                                                                         #let to link same biomes for the next plot
-biomes_types <- read.table ("biomes_types.csv", header=TRUE, sep = ",")
-head ("biomes_types")                                                    #biomes_types= new data set
-                                                                         #attach the dataset 
-
+                                                                         # let to link same biomes types together to see correlations among the species distribution in my multivariate analysis rappresentation 
+biomes_types <- read.table ("biomes_types.csv", header=TRUE, sep = ",")  # import a new data set with bioms_types. type= temperate, tropical, conifer forest, boreal
+head ("biomes_types")                                                    # biomes_types = new data set
+                                                                         # attach the dataset at the R search path
 attach (biomes_types)
 
-ordiellipse (multivar, type, col = 1:4, kind = "ehull", lwd = 3)         #to order inside an ellipse our biomes, the variables, collum: types, color from 1 to 4,form of the shape "ehull",  size of the line: 3
-
-ordispider(multivar, type, col=1:4, label = T)                           #we use ordispider to connect the species at the ellipse, this can be a way to add a dimention at our graph
+ordiellipse (multivar, type, col = 1:4, kind = "ehull", lwd = 3)         # to order inside an ellipse our biomes, the variables = names of the species associated at the biomes(multivar), collum interested as second data set = types = second variable biomes types, colours from 1 to 4, form of the shape "ehull",  size of the line: 3
+                                                                         # ordiellipse and ordispider function: Display Groups or Factor Levels in Ordination Diagrams. description: functions to add convex hulls, “spider” graphs, ellipses or cluster dendrogram to ordination diagrams. The ordination diagrams can be produced by vegan plot.cca, plot.decorana or ordiplot.
+ordispider (multivar, type, col=1:4, label = T)                          # we use ordispider to connect the species at the ellipse, this can be a way to add a rappresentation of another dimention at our graphical analysis
 
 ############################################################################################################################
 ############################################################################################################################
 
-# 5. R_code_remote sensing.r
+# 6. R_code_remote sensing.r
 
 # R code for  Remote Sensing 
 
