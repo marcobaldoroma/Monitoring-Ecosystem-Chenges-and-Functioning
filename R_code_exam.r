@@ -10,7 +10,7 @@
 # 5. R_code_multivariate_analysis.r
 # 6. R_code_remote_sensing.r
 # 7. R_code_ecosystem_function.r
-# 8. R_code_remote_sensing_multivariate_analysis.r   vedi multivariate analysis remote sensing su iol
+# 8. R_code_remote_sensing_multivariate_analysis.r
 # 9. R_code_ecosystem's_reflectance.r
 # 10. R_code_faPAR.r
 # 11. R_code_EBVs.r
@@ -639,7 +639,8 @@ sessionInfo ()                                                                  
 ############################################################################################################################
 
 
-# . R_code_PCA_remote_sensing
+# 8. R_code_remote_sensing_multivariate_analysis.r
+# Principal Component Analysis (PCA) in Remote Sensing
 
 setwd("C:/lab/")
 
@@ -656,34 +657,37 @@ library (raster)
 library (RStoolbox)
 library (ggplot2)
 
-p224r63_2011 <- brick("p224r63_2011_masked.grd")                    # brick import all the data of satellite image. the extantion is grd file, graphicic file
-plotRGB(p224r63_2011, r=5, g=4, b=3, stretch="Lin")
-ggRGB (p224r63_2011, 5, 4, 3)                                       #show the data with ggplot2
+p224r63_2011 <- brick("p224r63_2011_masked.grd")                    # brick to import all the data of satellite image (rasterlayers related at the bands). the extantion is grd file format, graphic files
+plotRGB(p224r63_2011, r=5, g=4, b=3, stretch="Lin")                 # in the RGB layers space with resampled the bands related at r=5= NIR(over 1.55 µm),  g=4= NIR(lower 0.90 µm),  b=3=Red
+ggRGB (p224r63_2011, 5, 4, 3)                                       # ggRGB function in ggplot2 packages: create ggplot2 Raster Plots with RGB colours from 3 RasterLayers: calculates RGB color composite raster for plotting with ggplot2. Optional values for clipping and and stretching can be used to enhance the imagery
 
 
-p224r63_1988 <- brick("p224r63_1988_masked.grd")                    # EX do the same, with 1988 image!
+p224r63_1988 <- brick("p224r63_1988_masked.grd")                    # Exercise do the same procedure and plot, with 1988 image
 plotRGB(p224r63_1988, r=5, g=4, b=3, stretch="Lin")
 ggRGB (p224r63_1988, 5, 4, 3)
 
-par(mfrow=c(1,2))
-plotRGB(p224r63_1988, r=5, g=4, b=3, stretch="Lin")
+par(mfrow=c(1,2))                                                   # plotting the two images together with par function(multiframe 1x2) with RGB focalized on NIR and Red bands
+plotRGB(p224r63_1988, r=5, g=4, b=3, stretch="Lin")                 # is quite impressive the discontinuity of the image 2011 in plant cover and reflectance
 plotRGB(p224r63_2011, r=5, g=4, b=3, stretch="Lin")
 
-names(p224r63_2011)
+names(p224r63_2011)                                                 # get the names of objects
 
-dev.off()                                                           # bet correlation between B1 and B3  # correlarion coefficient= R+= 1  Rneutral = 0  R-=-1
+dev.off()                                                           # betting the correlation between B1 and B3  # correlarion coefficient= R+= 1  Rneutral = 0  R-=-1
 
-
-plot(p224r63_2011$B1_sre, p224r63_2011$B3_sre)                      # in vegetation and in our example for 2011 img. B1 and B3 have R=0.9 so very high correlation
-
-                                                                    #PCA analysis!
-                                                                    # resolution
+                                                                    # PCA, multivariate analysis on the two wavelenght bands blue and red
+plot(p224r63_2011$B1_sre, p224r63_2011$B3_sre)                      # in vegetation and in our example for 2011 img. B1 and B3 have R=0.9 so very high positive correlation of the two bands values (Blue and Red wavelenght bands), this means that the information on reflectance comes from vegetation(assorbing in a good and close ratio B1 and B3 blue and red)                                                                  
+                                                                    # changing the resolution
 p224r63_2011_res <- aggregate(p224r63_2011, fact=10)
- 
-                                                                    # RStoolbox is now needed
-p224r63_2011_pca <- rasterPCA(p224r63_2011_res)
-plot(p224r63_2011_pca$map)                                          # plot img linked map
+                                                                    # RStoolbox is now needed: rasterPCA function: Principal Component Analysis for Rasters: calculates R-mode PCA for RasterBricks or RasterStacks and returns a RasterBrick with multiple layers of PCA scores
+p224r63_2011_pca <- rasterPCA(p224r63_2011_res)                     # PCA raster analysis of principal component
+plot(p224r63_2011_pca$map)                                          # plot img linked at the map
                                                                     # coovariance matrix analysis= how much one component is far from the other 
+
+
+
+SONO RIMASTO QUIIIIIIIIIIIIIIIIIIIIIII##############################################################
+
+
 
 cl <- colorRampPalette(c('dark grey','grey','light grey'))(100)     # good color for our graphic analysis
 plot (p224r63_2011_pca$map, col=cl)                                   # in Principal Component analysis we have three component parts= call, model, map with $ we can link imag at the function
