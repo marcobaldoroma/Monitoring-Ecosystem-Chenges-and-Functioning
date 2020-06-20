@@ -415,7 +415,7 @@ plot(p224r63_2011$B1_sre, col=cln)
 
 dev.off ()
 
-par(mfrow=c(4,1))                                                         # multiframe of 4x1 plot matrix so we will have 4 rows in a single collumn
+par(mfrow=c(4,1))                                                         # multiframe of 4x1 plots matrix so we could have 4 rows in a single collumn
 
 # B1: blue
 #clb <- colorRampPalette(c('dark blue','blue','light blue'))(100) 
@@ -434,9 +434,9 @@ plot(p224r63_2011$B3_sre, col=clr)
 #cln <- colorRampPalette(c('red','orange','yellow'))(100) 
 plot(p224r63_2011$B4_sre, col=cln)
 
-# natural colours
+# primary natural colours # Make a Red-Green-Blue plot based on three layers (in a RasterBrick or RasterStack). Three layers (sometimes referred to as "bands" because they may represent different bandwidths in the electromagnetic spectrum) are combined such that they represent the red, green and blue channel. This function can be used to make 'true (or false) color images' from Landsat and other multi-band satellite images
 # 3 components: R G B
-# 3 bands: R = red band, G = green band, B = blue band
+# 3 bands: R = red band, G = green band, B = blue band. r integer index of the Red channel, g integer index of the Green channel, b integer index of the Blue channel.
 # plotRGB(p224r63_2011,r=3,g=2,b=1)
 
 # B1: blue - 1
@@ -446,19 +446,19 @@ plot(p224r63_2011$B4_sre, col=cln)
 
 dev.off ()                                                                  # close plots
 
-                                                                            # RGB colours: The rgb() function describes a color giving the intensity of the 3 primary colors: red, green and blue.
+                                                                            # RGB colours: The RGB function describes a color giving the intensity of the 3 primary colors: red, green and blue. This function creates colors of class RGB
                                                                             # plotRGB raster packages function: Red-Green-Blue plot of a multi-layered Raster object: make a Red-Green-Blue plot based on three layers (in a RasterBrick or RasterStack). Three layers (sometimes referred to as "bands" because they may represent different bandwidths in the electromagnetic spectrum) are combined such that they represent the red, green and blue channel. This function can be used to make 'true (or false) color images' from Landsat and other multi-band satellite images
 plotRGB (p224r63_2011, r=3, g=2, b=1, stretch="Lin")                        # stretch function: Linear stretch of values in a Raster object. Provide the desired output range (minv and maxv) and the lower and upper bounds in the original data, either as quintiles (if minq=0 and maxq=1 you use the minimum and maximum cell values), or as actual values (smin and smax; e.g. precomputed quantile values). If smin and smax are both not NA, minq and maxq are ignored
-                                                                            # normal light band layers, r=3, g=2, blue= 1. stretch= stretching as much possible the colours
+                                                                            # normal band layers, red=3, green=2, blue= 1. stretch= stretching as much possible the colours
 
-                                                                            # substitute red component with our NIR # in this way you can discriminete better the vegetation in the images, dark green is the forest, red and pink in general the agriculture fields.
+                                                                            # substitute red component with our NIR band layer # in this way you can discriminete better the vegetation in the images, dark green is the forest, red and pink in general the agriculture fields.
 plotRGB (p224r63_2011, r=4, g=3, b=2, stretch="Lin")                        # putting NIR light band on top of the image layers, red at the place of green and green at the place of blue
 
                                                                             # EX. NIR on top of the G component # NIR false colours
 plotRGB (p224r63_2011, r=3, g=4, b=2, stretch="Lin")
-                                                                            # dark forest is forest with high amount of water. This time we put at the top layer the red light band reflectance, later the NIR and for the last the green light band
+                                                                            # dark forest is forest with high amount of water. This time we put at the top layer the red light band reflectance, later the NIR and for the last the green band
 
-                                                                            # yellow area are bare in this way to set the colours
+                                                                            # yellow areas are the not vegetated areas or poorly vegetated in this chromatic way to set the colours
 plotRGB (p224r63_2011, r=3, g=2, b=4, stretch="Lin")
 
 ################  second part 
@@ -467,7 +467,7 @@ plotRGB (p224r63_2011, r=3, g=2, b=4, stretch="Lin")
 setwd("C:/lab/") # windows
 # setwd("/Users/nome/Desktop/lab") # mac
 
-load("R_code_remote_sensing.RData")                                         # load the saved R_code_remote_sensing.RData"
+load("R_code_remote_sensing.RData")                                         # load the saved "R_code_remote_sensing.RData"
 
 library(raster)                                                             
 library (RStoolbox)
@@ -484,31 +484,31 @@ plot(p224r63_2011)
                                                                             # Exercise: plot the image using the "nir" on the "r" component in the RGB space
 plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")
 
-                                                                            # Exrecise: plot in visible RGB 321 both images
+                                                                            # Exrecise: plot in visible RGB space r=3 g=2 b=1, both images
 par(mfrow=c(2,1))
-plotRGB(p224r63_1988, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_1988, r=3, g=2, b=1, stretch="Lin")                         # multiframe with par function of 2 parallel plots, 1988 image vs 2011 image, to have a clear evidence of eventual land cover modifications
 plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
   
-# plot together two images, 1988 e 2011
-par(mfrow=c(2,1))
-plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin", main="1988")
+# plot together two images, 1988 e 2011                                     # making the same multiframe analysis, with the plotRGB function, primary colours, RGB space but putting the Near InfraRed band layer over the Red band layer and the Red over the Green band layer
+#par(mfrow=c(2,1))                                                          # putting the labels at both the plots
+plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin", main="1988")            # r=4=nir; g=3=red; b=2=green layers
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin", main="2011")
 
-# plot it in the way to see water, so with different colors relate at the NIR= water= 0
-par(mfrow=c(2,1))
-plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")
+# plot it in the way to see water, so with different colours relate at the NIR= water= 0 reflectance
+#par(mfrow=c(2,1))
+plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")                         # we want have the same graphical analysis and RGB layers order of the previous multiframe, but without labels to have the maximum image extention
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
 
 
-# enhance the noise!
-par(mfrow=c(2,1))
-plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="hist")
-plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="hist")
+# enhance the noise!              SONO RIMASTO QUII
+#par(mfrow=c(2,1))
+plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="hist")                       # same multiframe and RGB order of layers. 
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="hist")                       # stretch="hist": character. Option to stretch the values to increase the contrast of the image: "lin" or "hist"
                                                                            # spectral indices
-                                                                           # dvi1988 = nir1988-red1988
+                                                                           
 
-dvi1988 <- p224r63_1988$B4_sre - p224r63_1988$B3_sre
-plot(dvi1988)
+dvi1988 <- p224r63_1988$B4_sre - p224r63_1988$B3_sre                       # dvi1988 = nir1988-red1988
+plot(dvi1988)                                                              # plot the different vegetation index (DVI) values derivated from the previous band NIR-Red analysis
 
                                                                            # Exercise: calculate dvi for 2011
 dvi2011 <- p224r63_2011$B4_sre - p224r63_2011$B3_sre
@@ -516,7 +516,7 @@ plot(dvi2011)
 
 dev.off()
 
-                                                                           #giving colors at the div looking for the best grafic information
+                                                                           # giving colors at the div looking for the best grafic information
 cl <- colorRampPalette(c("darkorchid3","light blue","lightpink4"))(100) 
 plot(dvi2011, col=cl)
 
