@@ -197,7 +197,7 @@ setwd ("c:/lab/")
                                                             # load the previews script "R_code_spatial.RData" to recreate the previusly R global environment with all the objects
 load("C:/lab/R_code_spatial.RData")
                                                             # have a look of the list of the data sets in my R environment after the loading
-ls                                                          # covid
+ls()                                                        # ls function: list of objects in this case covid. ls and objects return a vector of character strings giving the names of the objects in the specified environment. When invoked with no argument at the top level prompt, ls shows what data sets and functions a user has defined. When invoked with no argument inside a function, ls returns the names of the function's local variables: this is useful in conjunction with browser
                                                             # if ggplot2 not work, you can try to install the required packages ggplo2 in the following way: # install.packages("devtools") # devtools::install_github("tidyverse/ggplot2")
 library(ggplot2)                                            # required ggplot2
                                                             # load data set "mpg" present in ggplot2 packages: Fuel economy data from 1999 to 2008 for 38 popular models of cars. This dataset contains a subset of the fuel economy data that the EPA makes available on http://fueleconomy.gov. It contains only models which had a new release every year between 1999 and 2008 - this was used as a proxy for the popularity of the car
@@ -352,21 +352,19 @@ ordispider (multivar, type, col=1:4, label = T)                          # we us
 ############################################################################################################################
 ############################################################################################################################
 
-# 6. R_code_remote sensing.r
+# 6. R_code_remote_sensing.r
 
 # R code for  Remote Sensing 
 
-setwd ("C:/lab/")
+setwd ("C:/lab/")                                                        # install.packages ("raster")
 
-library (raster)                                                         # install.packages ("raster")
+install.packages("RStoolbox")                                            # packages to make our analysis described into the professor's book. 
+                                                                         # RStoolbox packages: Tools for Remote Sensing Data Analysis: description: Toolbox for remote sensing image processing and analysis such as calculating spectral indices, principal component transformation, unsupervised and supervised classification or fractional cover analysis
+library (raster) 
+library (RStoolbox)                                                      # to be faster in the installation of pkgs: install.packages(c("raster", "RStoolbox")
 
-install.packages("RStoolbox")                                            #packages to make our analysis, the book that the Prof. wrote is about the algorith of this R function that he created
-
-
-library (RStoolbox)                                                      #to be faster in the istallation of pkgs: install.packages(c("raster", "RStoolbox")
-
-                                                                         #load images from the lab folder
-p224r63_2011 <- brick ("p224r63_2011_masked.grd")
+                                                                         # load image "p224r63_2011_masked.grd" from the lab folder
+p224r63_2011 <- brick ("p224r63_2011_masked.grd")                        # brick RStoolbox function: Create a RasterBrick object: a RasterBrick is a multi-layer raster object. They are typically created from a multi-layer (band) file; but they can also exist entirely in memory. They are similar to a RasterStack (that can be created with stack), but processing time should be shorter when using a RasterBrick. Yet they are less flexible as they can only point to a single file. A RasterBrick can be created from RasterLayer objects, from a RasterStack, or from a (multi-layer) file. The can also be created from SpatialPixels*, SpatialGrid*, and Extent objects, and from a three-dimensional array
 plot(p224r63_2011)
 
 #landsat resolution of 30m (each pixel)...B1 blu, B2 green, B3 red, B4 NIR ecc
@@ -378,67 +376,62 @@ plot(p224r63_2011)
 # B6: thermal infrared
 # B7: medium infrared
 
-ls()
+ls()                                                                      # list of objects
 
-cl <- colorRampPalette(c('black','grey','light grey'))(100)               #changing our scaled colors for graphs (gray)
+cl <- colorRampPalette(c('black','grey','light grey'))(100)               # changing our colours scale for the plot (gray)
 
-plot(p224r63_2011, col=cl)                                                #Exercise: plot the image with scale color ramp palette built
+plot(p224r63_2011, col=cl)                                                # Exercise: plot the image with colorRampPalette scale built = cl
 
                                      
-cllow <- colorRampPalette(c('black','grey','light grey'))(5)              # grey scaled low amount of colours
+cllow <- colorRampPalette(c('black','grey','light grey'))(5)              # grey scaled lower amount of intermediate colours = 5
 plot(p224r63_2011, col=cllow)
-
+                                                                          # names function: functions to get or set the names of an object
 names(p224r63_2011)                                                       # [1] "B1_sre" "B2_sre" "B3_sre" "B4_sre" "B5_sre" "B6_bt"  "B7_sre"
 
-clb <- colorRampPalette(c('dark blue','blue','light blue'))(100)          ##changing our scaled colors for graphs (blue)
-plot(p224r63_2011$B1_sre, col=clb)                                        #symble $ links together collum with the data I want  
-
+clb <- colorRampPalette(c('dark blue','blue','light blue'))(100)          # changing our colours scale for graphs in blue
+plot(p224r63_2011$B1_sre, col=clb)                                        # symbol $ links together collumns with the data set I want, in this case the light band 1 (blue)
+                                                                          # plot image with band layer that I decided to extract and focus on the image
 clnir <- colorRampPalette(c('red','orange','yellow'))(100)                # Exercise: plot the near infrared band with:
-plot(p224r63_2011$B4_sre, col=clnir)                                      #colorRampPalette color that go from red, to orange, until yellow
+plot(p224r63_2011$B4_sre, col=clnir)                                      # colorRampPalette colours that go from red, to orange, until yellow. symbol $ links together collumns with the data set I want, in this case the light band 4 (near infrared)
 
 dev.off ()
-
-                                                                          # multiframe to plot more graphs together, we say at the console how many row and collums we want in the Plot Space: par(mfrow=c(2,2)) 
-par(mfrow=c(2,2)) 
-
+                                                                          # multiframe to graphy more plots together, we say at the console how many rows and collums we want in the Plot Space: par(mfrow=c(2,2)) so 2x2 plots.
+par(mfrow=c(2,2))                                                         # par (parameters) function: Set or Query Graphical Parameters: par can be used to set or query graphical parameters. Parameters can be set by specifying them as arguments to par in tag = value form, or by passing them as a list of tagged values
                                                                           # B1 blue band, we want set colors intensity in blue
 clb <- colorRampPalette(c('dark blue','blue','light blue'))(100)
-plot(p224r63_2011$B1_sre, col=clb)                                        # func. par, multivariateframe  =  col = c finally names the colors you would 
+plot(p224r63_2011$B1_sre, col=clb)                                        # func. par, multivariateframe  =  col = clb finally names the colors you prefer
                                                                           # plot the immages with colors calls clb 
-                                                                          #dev.off to close all the windows if I need
 
-                                                                          # Exercise: do the same for the B2_sre green band
+                                                                          # Exercise: do the same for the B2_sre green light band
 clg <- colorRampPalette(c('dark green','green','light green'))(100)
 plot(p224r63_2011$B1_sre, col=clg)
-
-                                                                          #B3_sre red band
+                                                                          # B3_sre red light band
 clr <- colorRampPalette(c('dark red','red','pink'))(100)
 plot(p224r63_2011$B1_sre, col=clr)
-
-                                                                          #B4_sre near infrared band
+                                                                          # B4_sre near infrared light band
 cln <- colorRampPalette(c('red','orange','yellow'))(100)
 plot(p224r63_2011$B1_sre, col=cln)
-
-                                                                          #change the layout of our graph in 4 rows and 1 collum and to make it different and stretched, could be really usefull for data analysis
+                                                                          # change the layout of our graph in 4 rows and 1 collum, could be really usefull for data analysis have parallel plots
 
 dev.off ()
-par(mfrow=c(4,1))
+
+par(mfrow=c(4,1))                                                         # multiframe of 4x1 plot matrix so we will have 4 rows in a single collumn
 
 # B1: blue
-clb <- colorRampPalette(c('dark blue','blue','light blue'))(100) 
+#clb <- colorRampPalette(c('dark blue','blue','light blue'))(100) 
 plot(p224r63_2011$B1_sre, col=clb)
 
 # B2 green
 # Exercise: do the same for the green band B2_sre
-clg <- colorRampPalette(c('dark green','green','light green'))(100) 
+#clg <- colorRampPalette(c('dark green','green','light green'))(100) 
 plot(p224r63_2011$B2_sre, col=clg)
 
 # B3 red
-clr <- colorRampPalette(c('dark red','red','pink'))(100) 
+#clr <- colorRampPalette(c('dark red','red','pink'))(100) 
 plot(p224r63_2011$B3_sre, col=clr)
 
 # B4 NIR
-cln <- colorRampPalette(c('red','orange','yellow'))(100) 
+#cln <- colorRampPalette(c('red','orange','yellow'))(100) 
 plot(p224r63_2011$B4_sre, col=cln)
 
 # natural colours
@@ -451,50 +444,50 @@ plot(p224r63_2011$B4_sre, col=cln)
 # B3: red - 3
 # B4: near infrared (nir) - 4 
 
-dev.off ()                                                                  # close others plots
+dev.off ()                                                                  # close plots
 
-                                                                            # plotRGB function RGB colors
+                                                                            # RGB colours: The rgb() function describes a color giving the intensity of the 3 primary colors: red, green and blue.
+                                                                            # plotRGB raster packages function: Red-Green-Blue plot of a multi-layered Raster object: make a Red-Green-Blue plot based on three layers (in a RasterBrick or RasterStack). Three layers (sometimes referred to as "bands" because they may represent different bandwidths in the electromagnetic spectrum) are combined such that they represent the red, green and blue channel. This function can be used to make 'true (or false) color images' from Landsat and other multi-band satellite images
+plotRGB (p224r63_2011, r=3, g=2, b=1, stretch="Lin")                        # stretch function: Linear stretch of values in a Raster object. Provide the desired output range (minv and maxv) and the lower and upper bounds in the original data, either as quintiles (if minq=0 and maxq=1 you use the minimum and maximum cell values), or as actual values (smin and smax; e.g. precomputed quantile values). If smin and smax are both not NA, minq and maxq are ignored
+                                                                            # normal light band layers, r=3, g=2, blue= 1. stretch= stretching as much possible the colours
 
-plotRGB (p224r63_2011, r=3, g=2, b=1, stretch="Lin")
-                                                                            # stretching as much possible the colors
-
-                                                                            # substitute red component with our NIR # in this way you can discriminete better the vegetation in the images, dark green is the forest, red and pink in general the pitch 
-plotRGB (p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+                                                                            # substitute red component with our NIR # in this way you can discriminete better the vegetation in the images, dark green is the forest, red and pink in general the agriculture fields.
+plotRGB (p224r63_2011, r=4, g=3, b=2, stretch="Lin")                        # putting NIR light band on top of the image layers, red at the place of green and green at the place of blue
 
                                                                             # EX. NIR on top of the G component # NIR false colours
 plotRGB (p224r63_2011, r=3, g=4, b=2, stretch="Lin")
-                                                                            # dark forest is forest with high amount of water
+                                                                            # dark forest is forest with high amount of water. This time we put at the top layer the red light band reflectance, later the NIR and for the last the green light band
 
-                                                                            # yellow area are bare in this way to set the colors
+                                                                            # yellow area are bare in this way to set the colours
 plotRGB (p224r63_2011, r=3, g=2, b=4, stretch="Lin")
 
-################ day 2
+################  second part 
 
 #setwd("~/lab/") # linux
 setwd("C:/lab/") # windows
 # setwd("/Users/nome/Desktop/lab") # mac
 
-load("R_code_remote_sensing.RData")
+load("R_code_remote_sensing.RData")                                         # load the saved R_code_remote_sensing.RData"
 
-library(raster)                                                             # list
+library(raster)                                                             
 library (RStoolbox)
 
-ls()
+ls()                                                                        # list of objects
 
-p224r63_1988 <- brick("p224r63_1988_masked.grd")
+p224r63_1988 <- brick("p224r63_1988_masked.grd")                            # brick the image ("p224r63_1988_masked.grd") of the same place, but 20 years older 1988-2011
 
 plot(p224r63_1988)
 
-p224r63_2011 <- brick("p224r63_2011_masked.grd")
+p224r63_2011 <- brick("p224r63_2011_masked.grd")                            # making a comparation in the vegetated area in 1988 and in 2011 in a specific amazon forest locality
 
-plot(p22r63_2011)
-                                                                            # Exercise: plot the image using the nir on the "r" component in the RGB space
+plot(p224r63_2011)
+                                                                            # Exercise: plot the image using the "nir" on the "r" component in the RGB space
 plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")
 
                                                                             # Exrecise: plot in visible RGB 321 both images
 par(mfrow=c(2,1))
-  plotRGB(p224r63_1988, r=3, g=2, b=1, stretch="Lin")
-  plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_1988, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
   
 # plot together two images, 1988 e 2011
 par(mfrow=c(2,1))
