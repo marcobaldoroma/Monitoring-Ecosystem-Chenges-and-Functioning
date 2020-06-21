@@ -234,6 +234,7 @@ head(covid)
 covids <- ppp(lon, lat, c(-180,180), c(-90,90))                        # "c" is used to clastering all the variables/numeber together. i.g. dead <- 12,34,55,66,77,88,89. This is a generic function which combines its arguments. The default method combines its arguments to form a vector. All arguments are coerced to a common type which is the type of the returned value, and all attributes except names are removed
                                                                        # ppp means panel point pattern. The general form is ppp(x.coordinates, y.coordinates, x.range, y.range) it creates a point pattern dataset in the two-dimensional plane for the range of values of lat and long.
                                                                        # attach covid at the coordinate : covids <- ppp(covid$lon, covid$lat, c(-180,180), c(-90,90)) alternative way without attach covid dataset to the R search path
+
 d <- density(covids)                                                   # create a variable names d = density
                                                                        # density function: compute a kernel smoothed intensity function from a point pattern
 plot (d)                                                               # plot this density map
@@ -287,27 +288,24 @@ plot(d, col=clr, main="Densities of covid-19")
 points(covids)
 plot(coastlines, add=T)
 
-pdf("covid_density2.pdf")
-
-                                                                        # higher number of intermediate colours (1000) to have more colours quality. The best option is a balance between the heavyness of the file and the quality of the colours
+pdf("covid_density2.pdf")                                              # higher number of intermediate colours (1000) to have more colours quality. The best option is a balance between the heavyness of the file and the quality of the colours
 clrr <-colorRampPalette(c("light green", "yellow","orange","violet")) (1000)
 plot(d, col=clrr, main="Densities of covid-19")
 points(covids)
 plot(coastlines, add=T)
 
-pdf("covid_density3.pdf")                                               # this command is a wrapper for the pdf function
+dev.off()                                                              # dev.off function: Control Multiple Devices: these functions provide control over multiple graphics devices, with the command off, we say at the console to close all the plots in my plot environment
 
-png("covid_density.png")                                                
-                                                                        # or export in png data format. png function: graphics devices for BMP, JPEG, PNG and TIFF format bitmap files
+pdf("covid_density3.pdf")                                              # this command is a wrapper for the pdf function
 
-dev.off()                                                               # dev.off function: Control Multiple Devices: these functions provide control over multiple graphics devices, with the command off, we say at the console to close all the plots in my environment
+png("covid_density.png")                                               # or export in jpeg data format. png function: graphics devices for BMP, JPEG, PNG and TIF format bitmap files
 
 clr <- colorRampPalette(c("light green", "yellow","orange","violet")) (100)
 plot(d, col=clr, main="Densities of covid-19")
 points(covids)
 plot(coastlines, add=T)
 
-dev.off()                                                                # to close all open plots
+dev.off()                                                               # to close all open plots
 
 ############################################################################################################################
 ############################################################################################################################
@@ -745,7 +743,7 @@ storage.mode(toy8bits[]) = "integer"
 
 plot(toy8bits)
 text(toy8bits, digits=2)                
-                                                                       # par multiframe of 1 row and 4 columns, where i can plot all the 4 examples made in the R_code_reflectance                 
+                                                                       # par multiframe of 1 row and 4 columns, where i can plot all the 4 examples made in the R_code_ecosystem's_reflectance                 
 par(mfrow=c(1,4))  
 
 plot(toy)
@@ -760,53 +758,666 @@ text(toy8bits, digits=2)
 #############################################################################################################################
 #############################################################################################################################
 
+# 10. R_code_faPAR.r
+
+# how to look energy flow and CO2 cycle from satellite: faPAR fraction of absorbed photosynthetically active radiation. The faPAR vegetation index is really related at the biomass producted from the primary prodation of the vegetation. faPAR=ammount of photosynthesis.
+
+library(raster)                                             # install.packages("raster")
+library(rasterVis)                                          # needed for levelplot
+library(rasterdiv)
+
+                                                            # copDVI= copernicus DIV = World wide analysis DVI different variation index
+setwd("C:/lab/")
+plot(copNDVI)
+
+copNDVI <- reclassify(copNDVI, cbind(253:255, NA))          # reclissifaty coppenNDVI   remuving data from 255-255 and putting No assigned= NA. to remuve water values
+levelplot(copNDVI)                                          # levelplot: Draw Level Plots and Contour plots 
+                                                            # different vegetation index... you can make an avarage of the pixel variable value, very high NDVI are in primary equator forest and broad-laef and conifer northern forest
+
+faPAR10 <- raster("faPAR10.tif")                            # named faPAR10 because pixels aggregation factor of 10 ,   raster function that import one layer at time,  faPAR10= name of image
+levelplot(faPAR10)
+
+dev.off()
+
+pdf("copNDVI.pdf")                                          # make a pdf for NDVI and faPAR plot indicies
+levelplot(copNDVI)
+dev.off()
+
+pdf("faPAR.pdf")
+levelplot(faPAR10)
+
+dev.off()
+
+######################################### second part 
+
+setwd("C:/lab/")
+
+load("faPAR.RData")                                          # load the R_code_faPAR
+                                                             # the original faPAR image from copernicus is 2gigabits
+                                                             # let's see how much space needs for 8-bits image
+ls()                                                         # lookin for list of object in faPAR10
+faPAR10                                                      # have a look on the informations
+                                                             # writeRaster function in raster pkgs: Write raster data to a file. Write an entire Raster* object to a file, using one of the many supported formats. See writeValues for writing in chunks (e.g. by row)
+writeRaster(copNDVI, "copNDVI.tif")                          # write the data copNDVI in .tif, 5.3MB
+
+faPAR <- stretch(faPAR10,minv=0,maxv=250)                    # faPAR10 in bits from 0 to 0.93. Change from 0 to 255
+
+writeRaster (faPAR, "faPAR.tif")
+faPAR
+
+levelplot(faPAR)                                             # Exercise make a levelplot for this dataset
+
+#### third part
+
+setwd("C:/lab/")
+load("faPAR.RData")                                          # load the R_code_faPAR                                                             # regression model between faPAR and NDVI
+                                                             # make before a general example with erosion and heavy metal
+erosion <- c(12,14,16,24,26, 40,55,67)                       # to make a dataset of values. I.G. % of erosion or concentration of heavy metals
+                                                             # heavy metal in ppm => "hm"
+hm <- c(30, 100, 150, 200, 260, 340, 460, 600)
+
+plot(erosion, hm, col="red", pch=19, xlab = "Erosion", ylab= "Heavy Metal")   # xlabel, ylabel, make a specific axis label
+                                                                              # octagon character is the symble pch=19 
+                                                             
+model1 <- lm(hm ~ erosion)                                   # linear model function "lm", Fitting Linear Models: lm is used to fit linear models. It can be used to carry out regression, single stratum analysis of variance and analysis of covariance (although aov may provide a more convenient interface for these)
+summary(model1)
+                                                             # the line describe by the ab ( slope and intercept)
+abline(model1)                                               # abline function: Add Straight Lines to a Plot. This function adds one or more straight lines through the current plot
+                                                             # make the linear model for the relationship between biomass and ecosystem function # we want the same analysis for faPAR and NDVI vegetation indecies
+#### fourth part
+
+setwd("C:/lab/")
+
+faPAR10 <- raster("faPAR10.tif")                             # import faPAR10 agg. img raster layer
+faPAR10                                                      # 56 milions of pixels/cells
+plot(faPAR10)                                                # plot fapar and ndvi
+plot(copNDVI)
+
+copNDVI <- reclassify(copNDVI, cbind(253:255, NA), right=TRUE)   # use reclassify and cbind functions to exclude values of radiation between 253-255(water)
+
+install.packages ("sf")                                      # sf packages: Support for simple features, a standardized way to encode spatial vector data. Binds to 'GDAL' for reading and writing data, to 'GEOS' for geometrical operations, and to 'PROJ' for projection conversions and datum transformations.
+library (sf)                                                 # to call st_* functions you need sf packages
+                                                             # create a random point algorithm
+random.points <- function(x,n)                               # algorithm to select the point on our raster image randomly
+{
+lin <- rasterToContour(is.na(x))
+pol <- as(st_union(st_polygonize(st_as_sf(lin))), 'Spatial') # st_union function: to dissolve geometries: Combine several feature geometries into one, without unioning or resolving internal boundaries
+pts <- spsample(pol[1,], n, type = 'random')
+}
+pts <- random.points( faPAR10, 1000)                         # then select 1000 points randomly from faPAR10 image raster layer
+plot(faPAR10$pts)                                            # random.points is our new function/algorithm created
+                                                             # having a view of this 1000 points. we use 1000 points to rappresent the images
+copNDVIp <- extract(copNDVI, pts)                            # extract function: Operators acting on vectors, matrices, arrays and lists to extract or replace parts
+faPAR10p <- extract(faPAR10, pts)
+                                                             # photosinthesis vs biomass production
+model2 <- lm(faPAR10p ~ copNDVIp)
+summary(model2)                                              # having a look of the correlation of the two variables
+
+plot(copNDVIp, faPAR10p, col="green", xlab="biomass", ylab="photosynthesis")
+abline(model2, col="red")                                    # second linear model for my function, phot. and biom. are related                   
+
+levelplot(copNDVI)
+levelplot(faPAR10)          
+
+
+
+
+
+SOOOOOSOSOOSOSOSONNNNNOOOOO RRIRIRIRIRMMMAAAASSSSSSTTTTTOOOOO QUUUIIIIII
+
+#############################################################################################################################
+#############################################################################################################################
+
+# 11. R_code_EBVs.r
+
+# R code Essential Biodiversity Variable
+# Understanding Heterogeneity 
+
+setwd("C:/lab/")   # set always the working directory in lab folder!
+library (raster)
+
+# ratser function can import a single layer band.
+# brick func. can import all the layer bands of my file/image.
+snt <- brick("sentinel.tif")
+
+snt  # our new object
+
+# a bits theory remind
+# 2^8 # bits
+#[1] 256
+#> 2^12
+#[1] 4096
+#> 2^13
+#[1] 8192
+
+# Boa Vista Brazil (our location)
+# plot this images
+plot(snt)
+
+#B1 blue
+#B2 green
+#B3 red
+#B4 NIR
+
+# R G B
+plotRGB(snt,3,2,1, stretch="lin")
+plotRGB(snt,4,3,2, stretch="lin") #putting the nir band on the top layer
+
+# how the different layers(bands) are related... for a better understanding of PCA analysis
+# standard deviation is possible to calculate only in one layer at time.
+# we can do it with the multivariate analysis, in the way to have only 1 dimention instead than one PCA
+# have a look of the relationship of the bands
+pairs(snt)
+
+# PCA analysis
+
+# install.packages("RStoolbox")
+library(RStoolbox) # essential for the PCA
+
+sntpca <- rasterPCA(snt)  # to select the raster PCA in which we are interested
+sntpca
+
+# we want link the model at our images
+#information about the output of the model, we are looking for the percentage of variance related to the components
+summary(sntpca$model) 
+#Cumulative Proportion    0.7015076  means that we are using 70% of the original information
+
+plot(sntpca$map)
+
+plotRGB(sntpca$map, 1, 2, 3, stretch="lin")  # in this way we can have different coloration of the area based on the bands 
+
+# set the moving window, we projected 5x5 pixels at time (# create the moving window: it is a matrix), we need that because we are mesuring the standard deviation of window
+# all the values are set to 1, empty window
+
+window <- matrix(1, nrow= 5, ncol = 5)
+
+# focal function for sd, in this case, works only for RasterLayer
+
+# function focal is using for the calculation of our SD of the moving window, see the description on CRAN for Focal Function to know mathematic analysis that we can do with focal function.
+
+sd_snt <- focal(sntpca$map$PC1, w=window, fun=sd)
+
+
+cl <- colorRampPalette(c('dark blue','green','orange','red'))(100) # 
+plot(sd_snt, col=cl)
+
+# we want plot the two images
+
+par(mfrow= c(1,2))
+plotRGB(snt,4,3,2, stretch="lin", main="original image") 
+plot(sd_snt, col=cl, main="diversity")
+
+
+#############  Day 2  R_code_EBVs.r second part on cladonia_stellaris_calaita
+
+setwd("C:/lab/")
+
+library (raster) # we need for use brick and raster function
+
+library(RStoolbox) # we use for the PCA of the image
+
+# we use brick function to import all the layers of our image
+clad <- brick ("cladonia_stellaris_calaita.JPG")
+
+# first blue, second green, third red
+plotRGB(clad, 1,2,3, stretch = "lin")
+
+# we have to decide our moving window, to calculate the SD and report the SD on our pixel. 1 is to set the value of the moving window and it doesn't influence the calculation.
+window <- matrix(1, nrow= 3, ncol= 3)
+window
+
+# focal function have the capacity to make the calcolation of SD
+cladpca <- rasterPCA(clad)
+cladpca  # we can see the output(informations) for cladpca
+
+summary(cladpca$model)
+# 98% of the images informations is showing from the model
+
+# inside the clad pca there is the map of pca component, so link the pca with map with PC1 ##folcal function can be applied also to a image directly taken in field: cladonia.jpg
+sd_clad <- focal(cladpca$map$PC1, w=window, fun=sd)
+
+# we want aggregate the image for make the sd analysis faster the focal function of our image
+
+PC1_agg <- aggregate(cladpca$map$PC1, fact=10)
+sd_clad_agg <- focal(PC1_agg, w=window, fun=sd)
+
+# make the powerful color for our function and use par to plot a frame of plots
+# plot the calculation both sd and sd agg
+
+par(mfrow=c(1,2))
+cl <- colorRampPalette(c('yellow','violet','black'))(100) #
+plot(sd_clad, col=cl)
+plot(sd_clad_agg, col=cl)
+
+# we want see the original image and secon the variability of the image. to see the variability of each individual, so the inner variation with sd calculation
+
+par(mfrow=c(1,2))
+cl <- colorRampPalette(c('yellow','violet','black'))(100) #
+plotRGB(clad, 1,2,3, stretch = "lin")
+plot(sd_clad, col=cl)  # less accurancy
+
+#############################################################################################################################
+#############################################################################################################################
+
+# 12. R_code_snow.r
+
+# R_code_snow.r
+
+# setwd("~/lab/") #linux
+# setwd("/Users/utente/lab") #mac
+setwd("C:/lab/") 
+
+install.packages("ncdf4")                                             # new library to read a different format data files
+library(ncdf4)
+library(raster)
+
+snowmay <- raster("c_gls_SCE_202005260000_NHEMI_VIIRS_V1.0.1.NC")     #giving the name for visualization process, we get 
+cl <- colorRampPalette(c('darkblue','blue','light blue'))(100)        # we make a colorramppalette for snow changes blue to white
+
+# Exercise: plot snow cover with the cl palette
+plot(snowmay,col=cl)  
+
+                                                                      ##### import snow data # for several layers all together in one time 
+                                                                      # he aggregates and clumped several pixel to make the images less heavy
+                                                                      # you can create a new folder i.e. Snow
+                                                                      # Slow manner to import set
+                                                                      # new working directory setwd("C:/lab/snow")
+# setwd("~/lab/snow") #linux
+# setwd("/Users/utente/lab/snow") #mac
+
+setwd("C:/lab/snow") # windows
+
+snow2000 <- raster("snow2000r.tif")                                   # for example snow in 2000 and with raster you can select the layer of interest, and you can import all together
+snow2005 <- raster("snow2005r.tif")
+snow2010 <- raster("snow2010r.tif")
+snow2015 <- raster("snow2015r.tif")
+snow2020 <- raster("snow2020r.tif")
+
+par(mfrow=c(2,3))                                                     # we want plot all images together 
+plot(snow2000, col=cl)
+plot(snow2005, col=cl)
+plot(snow2010, col=cl)
+plot(snow2015, col=cl)
+plot(snow2020, col=cl)
+
+                                                                      # import the set in faster way
+                                                                      # lapply you can repet the same fuction for the whole set
+                                                                      # you can list files of the all folder. i.e. snow_2000, snow_2005, ..... snow_2020
+
+rlist <- list.files(pattern="snow")                                   # lapply function repet the raster fuction to import the interest layer of the all set snow
+rlist
+
+import <- lapply(rlist, raster)   
+                                                                      # we import the layer for all the single files with the function raster fuction repet for the whole set thanks at the lapply fuction
+                                                                      # this way of work is call stack or raster stack
+                                                                      # stack of all the dataset that we import 
+snow.multitemp <- stack(import)                                       # we give the proper name at the vector (snow multitemp, because we are analysing snow cover in a temporal scale
+ 
+plot(snow.multitemp, col=cl)                                          # it is important to make several analysis all together at the same time with much powerful information range and in faster way.
+
+#########################################################################################################################################
+# make a prediction of snow cover, making a graph with time(x) and snow cover %(y)
+# with a regression functions we can fit our set to predict snow cover for the next 5 years using the trend of the last 20 years
+# Big Data structure of complex data, we want see how make the importation of data.
+# lets look at the function "prediction"
+
+## let make a prediction of snow cover with a simple line code
+
+source("prediction.r")                                                # with source function you can select a file like a R script and it will work by themself for all my analysis.
+                                 
+############################################################ what there are inside the prediction function that we created?
+#require(raster)
+#require(rgdal)
+
+# define the extent
+#ext <- c(-180, 180, -90, 90)
+#extension <- crop(snow.multitemp, ext)
+    
+# make a time variable (to be used in regression)
+# time <- 1:nlayers(snow.multitemp)
+
+# run the regression
+#fun <- function(x) {if (is.na(x[1])){ NA } else {lm(x ~ time)$coefficients[2] }} 
+#predicted.snow.2025 <- calc(extension, fun) # time consuming: make a pause!
+#predicted.snow.2025.norm <- predicted.snow.2025*255/53.90828
+
+##################### day second
+
+setwd("C:/lab/snow/")                                                  # set working directory with snow folder
+
+library(raster)                                                        # to make our work with lapply function
+
+# Exercise: import all of the snow cover images all together (snow cover elaborated layer)
+
+rlist <- list.files(pattern="snow")
+rlist
+
+import <- lapply(rlist, raster)                                        # https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/lapply
+                                                                       # we import the layer for all the single files with the raster fuction repet for the whole set thanks at the lapply fuction
+                                                                       # this way of work is call stack or raster stack
+                                                                       # stack of all the dataset that we import 
+snow.multitemp <- stack(import)                                        # we give the proper name at the vector (snow multitemp, because we are analysing snow cover in a temporal scale
+                                                                       # stack do a job similar at par, but faster
+cl <- colorRampPalette(c('darkblue','blue','light blue'))(100)         # we make a colorramppalette for snow changes blue to white
+plot(snow.multitemp, col=cl)                                           # it is important to make several analysis all together at the same time with much powerful information range and in faster way.
+
+
+load("R_code_snow.r.RData")      # load preview work/script
+
+prediction <- raster("predicted.2025.norm.tif")
+plot(prediction, col=cl)
+
+# the idea is to make a regretion model to understand the future snow cover in continuity with the trend until nowaday
+
+
+# export the output
+# you made the calculation and you want to send the output to a collegue, you can use writeRaster func.
+
+writeRaster(prediction, "final.tif")  # is good func for transform images in tif, It create new data 1. we import data (5images), 2. we stack all that ims and added prediction, 3. with writeRaster
+# writeRaster is the oppost of Raster function!! that import data into R. at the opp. writeRaster you can export the image from R to your PC folder.
+# final stack (to see if the extent of the image is different)
+# https://gdal.org/ to have a look in which format will work my function
+
+
+final.stack <- stack(snow.multitemp, prediction)   # we are going to stack the all multitemp+ prediction of snow cover
+plot(final.stack, col=cl)
+# export the R graph for a thesis in pdf format
+
+pdf("my_final_exciting_graph.pdf")
+plot(final.stack, col=cl)
+dev.off()
+
+png("my_final_exciting_graph.png")
+plot(final.stack, col=cl)
+dev.off()
+
+#############################################################################################################################
+#############################################################################################################################
+
+# 13. R_code_monitoring_air_pollution_no2.r
+
+#R_code_NO2.r # create a new folder to make lapply and stack dataset for this new set of images relating at the  
+
+setwd("C:/lab/NO2/")  
+
+# R_code_no2.r
+library(raster)
+
+setwd("C:/lab/no2/")
+# create RasterStack
+rlist <- list.files(pattern="EN")
+import <- lapply(rlist, raster)
+EN <- stack(import)
+cl <- colorRampPalette(c('red','orange','yellow'))(100) #
+plot(EN, col=cl)
+
+par(mfrow=c(1,2)) # to see the change through time
+plot(EN$EN_0001, col=cl)
+plot(EN$EN_0013, col=cl)
+# 3 layers RGB image from EN. See where and when Europe was more affected by NO2 pollution
+plotRGB(EN, r=1, g=7, b=13, stretch="lin")
+#difference map between 2 situations
+dif <- EN$EN_0013 - EN$EN_0001
+cld <- colorRampPalette(c('blue','white','red'))(100) # 
+plot(dif, col=cld) 
+
+# Quantitative decrease of no2 
+boxplot(EN) # five-number summary is the minimum, first quartile, median, third quartile, and maximum. The first quartile is the median of the data points to the left of the median.
+boxplot(EN,outline=F)
+boxplot(EN,outline=F, horizontal=T)
+boxplot(EN,outline=F, horizontal=T, axes=T) 
+
+plot(EN$EN_0001, EN$EN_0013)
+abline(0,1,col="red") # to see if the values are under the line, this means a decrease in NO2 concentration!! 45 degree line dividing x and y plan in equal parts 
+
+# fast version of import and plot of many data for lazy people!
+rlist <- list.files(pattern="snow")
+import <- lapply(rlist, raster)
+snow.multitemp <- stack(import)
+plot(snow.multitemp$snow2010r, snow.multitemp$snow2020r)
+abline(0,1) # most of the value under the curve
+plot(snow.multitemp$snow2000r, snow.multitemp$snow2020r) # better change in time
+abline(0,1,col="red")
+
+
+#############################################################################################################################
+#############################################################################################################################
+
+# 14. R_code_crop_image.r
+
+library(raster)
+library(ncdf4)   #the library to read our pixels
+
+snow <- raster( "c_gls_SCE500_202005180000_CEURO_MODIS_V1.0.1.nc")
+
+cl <- colorRampPalette(c('darkblue','blue','light blue'))(100)        #colorRamp with the meanest colors
+
+plot(snow, )
+# making a crop of our images i.g. italy 
+
+ext <- c(0, 20, 35, 50)   # this is the extent in which we want to zoom on.
+   # we have to say 1 the image and second the extent 
+
+ zoom(snow, ext=ext)
+ 
+but we can also cutting the image that is calls crop the function 
+
+# in this case the extent is direct related at the previus
+# this is very useful to use the area of interest
+
+snowitaly <- crop(snow, ext)
+plot(snowitaly, col=cl)
+
+# you can drow one specific area in other way. drowing the extent
+# to give a geometry for example a rectangle
+# () this command to say we are working in the image as a vector 
+
+zoom(snow, ext=drawExtent())  # drop and zoom can be done from exent and with draw function
+
+
+setwd("~/lab")
+library(raster)
+library(ncdf4) 
+
+snow <- raster("c_gls_SCE500_202005180000_CEURO_MODIS_V1.0.1.nc")
+
+cl <- colorRampPalette(c('darkblue','blue','light blue'))(100) 
+plot(snow, col=cl)
+
+ext <- c(0, 20, 35, 50)
+zoom(snow, ext=ext)
+
+# crop and create a new image
+snowitaly <- crop(snow, ext) 
+plot(snowitaly, col=cl) 
+
+# zoom(snow, ext=drawExtent())
+# crop(snow, drawExtent())
+
+
+Interpolation of the data thanks spatstat library and species distribution modelling to understand the position and structure of the forest. 
+Another nice analysis is about diameter and height of the forest.
+
+
+## Interpolation: spatstat library
+# library(dbmss)
+library(spatstat)
+
+inp <- read.table("dati_plot55_LAST3.csv", sep=";", head=T)
+
+
+attach(inp)
+plot(X,Y)
+inppp <- ppp(x=X,y=Y,c(716000,718000),c(4859000,4861000))
+
+marks(inppp) <- Canopy.cov
+canopy <- Smooth(inppp)
+plot(canopy)
+
+marks(inppp) <- cop.lich.mean
+lichs <- Smooth(inppp)
+plot(lichs)
+points(inppp)
+
+par(mfrow=c(1,2))
+plot(s)
+points(inppp)
+plot(lichs)
+points(inppp)
+
+#########
+
+# Dati psammofile Giacomo
+inp.psam <- read.table("Dataset_psammofile_giacomo.csv", sep=";", head=T)
+
+attach(inp.psam)
+
+summary(inp.psam)
+
+plot(E,N)
+inp.psam.ppp <- ppp(x=E,y=N,c(356450,372240),c(5059800,5064150))
+
+marks(inp.psam.ppp) <- C_org
+C <- Smooth(inp.psam.ppp)
+plot(C)
+points(inp.psam.ppp)
+
+#############################################################################################################################
+#############################################################################################################################
+
+# 15. R_code_interpolation.r
+
+# R_code_interpolation.r
+# interpolation field data
+
+setwd("C:/lab/")
+library(spatstat)
+inp <- read.table("dati_plot55_LAST3.csv", sep=";", head=T)                 # import data, ";" is the separator of dataset and header of title is true
+head(inp)                                                                   # look the head of dataset
+attach(inp)                                                                 # attach the dataset
+
+                                                                            # estimate canopy cover
+
+plot(X,Y)                                                                   # Y west coordinates
+summary(inp)                                                                # let's see the minumum and maximum of X and Y, in order to give an extent to spatstat
+inppp <- ppp(x=X, y=Y, c(716000,718000),c(4859000,4861000))                 # range of min and max of X and Y, assign the coordinates to spatstat
+                                                                            # give information about the variable: lables
+names(inp)                                                                  # names of the variables 
+marks(inppp) <- Canopy.cov                                                  # mark the variable with coordinates
+                                                                            # Smooth function is an implementation of running median smoothers (algorithm proposed by Tukey).
+canopy <- Smooth(inppp)                                                     # visualize the data were they are not been measured in pixel
+                                                                            # list validation distance of value from the line that record the values: means measured the amount of error
+plot(canopy)                                                                # density of vegetation
+points(inppp, col="green")                                                  # adding points recorded on the map
+ 
+                                                                            # lichens for detecting the quality of air
+marks(inppp) <- cop.lich.mean
+lichs <- Smooth(inppp)                                                      # same procedure of canopy variable
+plot(lichs)
+points(inppp)                                                               # no congruence with canopy cover and lichens
+
+par(mfrow=c(1,2))                                                           # par plot function to have a look both canopy and lichens density distribution
+plot(canopy)
+points(inppp)                                                               # point refered at the inppp coordinates on canopy density graph
+plot(lichs)
+points(inppp)
+
+par(mfrow=c(1,3))
+plot(canopy)
+points(inppp)
+plot(lichs)
+points(inppp)
+plot(Canopy.cov, cop.lich.mean, col="red", pch=19, cex=2)                   # to see the negative correlation between canopy cover and lichens cover
+
+# Psammofile                                                                # interpolation analysis
+
+inp.psam <- read.table("dati_psammofile.csv", sep=";", head=T)
+attach(inp.psam)
+head(inp.psam)
+ 
+plot(E,N)                                                                  # clumped distribution North/East
+inp.psam.ppp <- ppp(x=E,y=N,c(356450,372240),c(5059800,5064150))           # giving coordinates
+marks(inp.psam.ppp) <- C_org                                               # ecological data
+C <- Smooth(inp.psam.ppp)                                                  # warning message:lower amount of data (or no point) for some part because of clumped set (Numerical underflow detected: sigma is probably too small)
+plot(C)
+points(inp.psam.ppp)                                                       # solution: mean value for each clumped zone or select the zone of the graph and zoom on the top of them: separation of the main graph in several graphs
+
+#############################################################################################################################
+#############################################################################################################################
+
+# 16. R_code_sdm.r
+
+# Species Distrubution Modelling
+
+install.packages("sdm")     # install our packages very useful for ecology and where we can find our dataset of species distribution.
+# install.packages("rgdal")
+library(sdm)
+library(raster)            # library to read the raster and to make use the raster dataset # raster packages are dependent from sp packages, you can solve the problem with " library( rgdal, "dependencies=T"
+library(rgdal)             # geodata astract library # use to import the packs of the species data spatial distrubution for this project
+
+# species :  we are looking for a certain species
+file <- system.file("external/species.shp", package="sdm")   # automatically importation of the external folder, insiede the folder external there is the species
+                                                             # system.file function need to import the file into the sdm package
+species <- shapefile(file)                                   # we can use the graphical part of the file using shapefile func., this type of files are very used today for graphical and mapping dataset
+
+species                                                      # looking at the estent and features that are the points in this case
+species$Occurrence                                           # let's see the occurence of species, present-absent model (200 features)
+plot(species)
+
+plot(species[species$Occurrence == 1,],col='blue',pch=16)   # making a condition inside the "[]" and to make it we need "==" command, we decided only the presence occurences = 1
+
+points(species[species$Occurrence == 0,],col='red',pch=16)  # making the oppost condition= absence with red points (blue points are blue)
+
+# environmental variables
+path <- system.file("external", package="sdm")             # making the path inside the external using the same function of before system.file. the folder is called external 
+
+lst <- list.files(path=path,pattern='asc$',full.names = T) # the extention of the file in this case is "asc" (other extention may be tif or png, ect), dollar can be avoided, but to be sure to carry out all data
+lst   # have a look of files into the list, into smd pkgs there is external folder, into external there are species and ecological and environmental variables
+
+preds <- stack(lst)                   # we are making a stack of dataset, elevation, temperature, precipitation, vegetation
+
+cl <- colorRampPalette(c('blue','orange','red','yellow')) (100)
+plot(preds, col=cl)                  # we can analyze the predictor informations  graphically, we fond that many occorences are at the bottom of the valley, in case of vegetation presence because Brachipodium rupestre love small elevation and grasslands
+
+plot(preds$elevation, col=cl)
+points(species[species$Occurrence == 1,], pch=16)
+
+plot(preds$temperature, col=cl)
+points(species[species$Occurrence == 1,], pch=16)  # Brachipodium rupestre love high temperature and low elevation
+
+plot(preds$precipitation, col=cl)                  # Brachipodium rupestre love medium to high precipitation, in the case medium precipitation
+points(species[species$Occurrence == 1,], pch=16)
+
+plot(preds$vegetation, col=cl)                     # vegetation index is giving from the red-nir index, Brachipodium rupestre love high ammount vegetation or not. this analysis is called exploration analysis. Brachipodium rupestre love medium vegetation
+points(species[species$Occurrence == 1,], pch=16)
+
+                                                   # making the model thanks all this information. one is train = species the other argument of the model is predictors= preds.
+
+d <- sdmData(train=species, predictors=preds)      # class = sdmData, n speci= 1, number or record 200, type of data= presence-absent, plot, abbundance of species but we are looking only prec. absen. is good for the velocity of the sampling efforce.
+d                                                  # there is a negative correlation of linear model between species occ. and elevation. In general we use a logistic model that reppresent better ecological functions
+
+m1 <- sdm(Occurrence ~ elevation + precipitation + temperature + vegetation, data=d, methods='glm') # occurence, ~ is equal symble, y~a+bx in this case x is negative related with y in case of elevation. model: y= a+ b elev. + c + temperature + d precipitation + e vegetation, for all the variable we are using a different curve.
+                                                   # finally the methods of our model (glm) : generalised linear model is the model that we are going to use.
+p1 <- predict(m1, newdata=preds)                   # final prediction, related at our predictors used
+
+plot(p1, col=cl)
+points(species[species$Occurrence == 1,], pch=16)  
+
+s1 <- stack(preds, p1)                            # stacking all the predictors together with the final layer added
+plot(s1, col=cl)
+
+
+#############################################################################################################################
+#############################################################################################################################
+
+# 17. R_code_myproject_exam.r
+
+
 
 #############################################################################################################################
 #############################################################################################################################
 
 
-#############################################################################################################################
-#############################################################################################################################
-
-
-#############################################################################################################################
-#############################################################################################################################
-
-
-#############################################################################################################################
-#############################################################################################################################
-
-
-
-#############################################################################################################################
-#############################################################################################################################
-
-
-
-#############################################################################################################################
-#############################################################################################################################
-
-
-
-#############################################################################################################################
-#############################################################################################################################
-
-
-
-
-#############################################################################################################################
-#############################################################################################################################
-
-
-
-
-#############################################################################################################################
-#############################################################################################################################
-
-
-
-#############################################################################################################################
-#############################################################################################################################
 
 
 
