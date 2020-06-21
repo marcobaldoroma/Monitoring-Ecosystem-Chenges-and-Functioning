@@ -679,41 +679,36 @@ plot(p224r63_2011$B1_sre, p224r63_2011$B3_sre)                      # in vegetat
                                                                     # changing the resolution
 p224r63_2011_res <- aggregate(p224r63_2011, fact=10)
                                                                     # RStoolbox is now needed: rasterPCA function: Principal Component Analysis for Rasters: calculates R-mode PCA for RasterBricks or RasterStacks and returns a RasterBrick with multiple layers of PCA scores
-p224r63_2011_pca <- rasterPCA(p224r63_2011_res)                     # PCA raster analysis of principal component
-plot(p224r63_2011_pca$map)                                          # plot img linked at the map
-                                                                    # coovariance matrix analysis= how much one component is far from the other 
+p224r63_2011_pca <- rasterPCA(p224r63_2011_res)                     # PCA, raster analysis of principal component
+plot(p224r63_2011_pca$map)                                          # plot image linked to the map
 
-
-
-SONO RIMASTO QUIIIIIIIIIIIIIIIIIIIIIII##############################################################
-
-
-
-cl <- colorRampPalette(c('dark grey','grey','light grey'))(100)     # good color for our graphic analysis
-plot (p224r63_2011_pca$map, col=cl)                                   # in Principal Component analysis we have three component parts= call, model, map with $ we can link imag at the function
-
-summary(p224r63_2011_pca$model)                                     # have a look how much is it the correlation
-                                                                    # we can now see the cumulative proportion= in this case is huge correlate 99.83 
+                                                                    # coovariance matrix analysis= how much one component is far from another component
+cl <- colorRampPalette(c('dark grey','grey','light grey'))(100)     # grey gradation for our graphic analysis
+plot (p224r63_2011_pca$map, col=cl)                                 # in a principal component analysis: we have three components = call, model and map with $ we can link component at the model
+                                                                    # summary function: summary is a generic function used to produce result summaries of the results of various model fitting functions. The function invokes particular methods which depend on the class of the first argument
+summary(p224r63_2011_pca$model)                                    
+                                                                    # have a look how much is it the correlation amoung components
+                                                                    # we can now see the cumulative proportion and standard deviation of our principals component. In this case there is a huge correlation = 0.98 
                                                                     
 pairs(p224r63_2011)                                                 # with function pairs we can see the correlation between the two PCs in a graphic matrix
-                                                                    # B1,B2,B3 are very correlate so the rs analysis put them in one PC
-plotRGB(p224r63_2011_pca$map, r=1, g=2, b=3, stretch="Lin")
+                                                                    # B1,B2,B3 are very correlate so the rs analysis putting them almost in a single PC
+plotRGB(p224r63_2011_pca$map, r=1, g=2, b=3, stretch="Lin")         # plotting in RGB plot space
 
-p224r63_1988_res <- aggregate(p224r63_1988, fact=10)
+p224r63_1988_res <- aggregate(p224r63_1988, fact=10)                # same PCA and remote sensing analysis, but with the 1988 image
 p224r63_1988_pca <- rasterPCA(p224r63_1988_res) 
 plot(p224r63_1988_pca$map, col=cl)                                  # we want decrease the number of variances for a 10 factor 
 
-summary(p224r63_1988_pca$model)                                     # 99.56% of correlation in 1988 image too
+summary(p224r63_1988_pca$model)                                     # model function: Automatically selects and then provides an analysis of a linear model
                                                                 
-pairs(p224r63_1988)                                                 # seeing it in a graphic matric with pairs we see less correlation comparising at 2011 but very high the same!! 
-                                                                    # questa cosa sarà troppo importante per vedere i cambiamenti in matematico modo
+pairs(p224r63_1988)                                                 # seeing it in a graphic matric with pairs we see less correlation comparising at 2011 but the correlation amoung variables is high as well
+                                                                    # very good matematic and statistical analysis to have evidance in environmnental changes
 difpca <- p224r63_2011_pca$map - p224r63_1988_pca$map
 plot(difpca)                                                        # differences amoung components
-plot(difpca$PC1)                                                    #the PC1 have the 99% of the component
+plot(difpca$PC1)                                                    # PCA correlation is very high in 1988 image 0.82
                                                                     
-cldif <- colorRampPalette(c('blue','black','yellow'))(100)          #final plot:
-plot(difpca$PC1,col=cldif)                                          #difpca linked with pc1 
-                                                                    #with this function we can see the highest dvi ration between dvi of 2011 and 1988
+cldif <- colorRampPalette(c('blue','black','yellow'))(100)          # final plots, plotting the dvi difference
+plot(difpca$PC1,col=cldif)                                          # differance between components.
+                                                                    # with this function we can see best dvi differences between dvi of 2011 and 1988
 
 plot(difpca$PC1)
 
