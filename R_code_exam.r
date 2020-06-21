@@ -715,6 +715,47 @@ plot(difpca$PC1)
 ############################################################################################################################
 ############################################################################################################################
 
+# 9. R_code_ecosystem's_reflectance.r
+
+# R_code_radiance
+
+library(raster) 
+                                                                       # raster function in raster packages: Create a RasterLayer object: Methods to create a RasterLayer object. RasterLayer objects can be created from scratch, a file, an Extent object, a matrix, an 'image' object, or from a Raster*, Spatial*, im (spatstat) asc, kasc (adehabitat*), grf (geoR) or kde object. In many cases, e.g. when a RasterLayer is created from a file, it does (initially) not contain any cell (pixel) values in (RAM) memory, it only has the parameters that describe the RasterLayer. You can access cell-values with getValues, extract and related functions. You can assign new values with setValues and with replacement
+toy <- raster(ncol=2, nrow=2, xmn=1, xmx=2, ymn=1, ymx=2)              # create a new raster dataset: you have to specify ncollumns, number of rows, x and y minimum and maximum value
+values(toy) <- c(1.13,1.44,1.55,3.4)                                   
+
+plot(toy)                                                              # digits function: Return the digits that make up an integer. Takes an integer or vector of integers and returns a vector, list, or matrix of the individual digits (decimal) that make up that number
+text(toy, digits=2)                                                    # text function: text draws the strings given in the vector labels at the coordinates given by x and y. y may be missing since xy.coords(x, y) is used for construction of the coordinates. Put the informations in the pixel
+                                                                       # stretching the values for toy dataset
+toy2bits <- stretch(toy,minv=0,maxv=3)                                 # 2bits= 2^2 informations = numbers. we can traslate the informations (radiance) in bits informations and the opposite (traslating not integer numbers, in integer numbers)into my dataset
+                                                                       # storage.mode function: Retrieve or set storage mode for eSets. These generic functions report or change the storage mode in a dataset
+storage.mode(toy2bits[]) = "integer"                                   # the way to storage our informations = integer
+
+plot(toy2bits)
+text(toy2bits, digits=2)                                               # plot the new frame with text on the pixels
+
+toy4bits <- stretch(toy,minv=0,maxv=15)                                # we can change the information from 2bits to 4bits= 16 integers 2^4
+storage.mode(toy4bits[]) = "integer"
+                                                                       # storage and plot the new informations
+plot(toy4bits)    
+text(toy4bits, digits=2)
+                                                                       # passing from 4 bits to 8 bits, 2^8= 256 integers                              
+toy8bits <- stretch(toy,minv=0,maxv=255)
+storage.mode(toy8bits[]) = "integer"
+
+plot(toy8bits)
+text(toy8bits, digits=2)                
+                                                                       # par multiframe of 1 row and 4 columns, where i can plot all the 4 examples made in the R_code_reflectance                 
+par(mfrow=c(1,4))  
+
+plot(toy)
+text(toy, digits=2)
+plot(toy2bits)
+text(toy2bits, digits=2)
+plot(toy4bits)
+text(toy4bits, digits=2)
+plot(toy8bits)
+text(toy8bits, digits=2)
 
 #############################################################################################################################
 #############################################################################################################################
