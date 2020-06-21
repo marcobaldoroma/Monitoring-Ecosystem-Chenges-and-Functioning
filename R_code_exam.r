@@ -1175,13 +1175,12 @@ setwd("C:/lab/")
 library(raster)
 library(ncdf4)                                                        # required to read our data format ".nc"
 
-snow <- raster( "c_gls_SCE500_202005180000_CEURO_MODIS_V1.0.1.nc")
+snow <- raster( "c_gls_SCE_202005260000_NHEMI_VIIRS_V1.0.1.nc")
 
 cl <- colorRampPalette(c('darkblue','blue','light blue'))(100)        # colorRamp with the meanest colours
-
 plot(snow, col=cl)
-                                     # making a crop of our images i.g. italy 
-ext <- c(0, 20, 35, 50)              # this is the extent in which we want to zoom on
+                                     # making a crop of our image i.g. Italy 
+ext <- c(0, 20, 35, 50)              # this is the extent(polygon) in which we want to zoom on
                                      # extent function: Objects of class Extent are used to define the spatial extent (extremes) of objects of the BasicRaster and Raster* classes. we have to say 1' the image vector and 2' the extent 
 zoom(snow, ext=ext)                  # zoom function: Zoom in on a map (plot) by providing a new extent, by default this is done by clicking twice on the map
                                      # but we can also cutting the image with crop function 
@@ -1207,7 +1206,7 @@ zoom(snow, ext=drawExtent())         # drawExtent: Create an Extent object by dr
 
 setwd("C:/lab/")
 library(spatstat)
-inp <- read.table("dati_plot55_LAST3.csv", sep=";", head=T)                 # import data, ";" is the separator of dataset col. and header is true (first line is the header of the dataframe)
+inp <- read.table("dati_plot55_LAST3.csv", sep=";", head=T)                 # import dataset/ data table of excel, ";" is the separator of dataset col. and header is true (first line is the header of the dataframe)
 head(inp)                                                                   # look the head of dataset
 attach(inp)                                                                 # attach the dataset inp
                                                                             # estimate canopy cover
@@ -1215,10 +1214,10 @@ plot(X,Y)                                                                   # XY
 summary(inp)                                                                # let's see the minumum and maximum of X and Y, in order to give an extent to spatstat
 inppp <- ppp(x=X, y=Y, c(716000,718000),c(4859000,4861000))                 # range of min and max of X and Y, assign the coordinates to spatstat
                                                                             # give information about the variable: lables
-names(inp)                                                                  # names of the variables 
-marks(inppp) <- Canopy.cov                                                  # mark the variable with coordinates
-                                                                            # Smooth function:  is an implementation of running median smoothers (algorithm proposed by Tukey).
-canopy <- Smooth(inppp)                                                     # visualize the data were they are not been measured in pixel
+names(inp)                                                                  # names of the variables: Canopy.cov (cover)
+marks(inppp) <- Canopy.cov                                                  # marks function: Marks of a Point Pattern: extract or change the marks attached to a point pattern dataset.mark the variable with coordinates
+                                                                            # Smooth function(spatstat): spatial smoothing of data: generic function to perform spatial smoothing of spatial data. Is an implementation of running median smoothers (algorithm proposed by Tukey) DOI: 10.17485/ijst/2016/v9i28/97354
+canopy <- Smooth(inppp)                                                     # visualize the objects where they are not been measured in pixels
                                                                             # list validation distance of value from the line that record the values: means measured the amount of error
 plot(canopy)                                                                # density of the vegetation
 points(inppp, col="green")                                                  # adding points recorded on the map
@@ -1229,11 +1228,11 @@ lichs <- Smooth(inppp)                                                      # sa
 plot(lichs)
 points(inppp)                                                               # no congruence with canopy cover and lichens
 
-par(mfrow=c(1,2))                                                           # par plot function to have a look both canopy and lichens density distribution
+par(mfrow=c(1,2))                                                           # par plot function to have a look of both canopy and lichens density distribution
 plot(canopy)
 points(inppp)                                                               # point refered at the inppp coordinates on canopy density graph
 plot(lichs)
-points(inppp)
+points(inppp)                                                              
 
 par(mfrow=c(1,3))
 plot(canopy)
@@ -1262,61 +1261,61 @@ points(inp.psam.ppp)                                                       # sol
 
 # Species Distrubution Modelling
 
-install.packages("sdm")     # install our packages very useful for ecology and where we can find our dataset of species distribution.
+install.packages("sdm")     # install.packages sdm: Species Distribution Modelling. Description: An extensible framework for developing species distribution models using individual and community-based approaches, generate ensembles of models, evaluate the models, and predict species potential distributions in space and time. For more information, please check the following paper: Naimi, B., Araujo, M.B. (2016) <doi:10.1111/ecog.01881>. our packages very useful for ecology and where we can find our dataset of species distribution
 # install.packages("rgdal")
 library(sdm)
-library(raster)            # library to read the raster and to make use the raster dataset # raster packages are dependent from sp packages, you can solve the problem with " library( rgdal, "dependencies=T"
-library(rgdal)             # geodata astract library # use to import the packs of the species data spatial distrubution for this project
+library(raster)             # library to read the raster files and to make use the raster dataset # raster packages are dependent from sp packages, you can solve the problem with " library( rgdal, "dependencies=T")
+library(rgdal)              # geodata astract library # use to import the packs of the species data spatial distrubution for this project
 
 # species :  we are looking for a certain species
 file <- system.file("external/species.shp", package="sdm")   # automatically importation of the external folder, insiede the folder external there is the species
-                                                             # system.file function need to import the file into the sdm package
-species <- shapefile(file)                                   # we can use the graphical part of the file using shapefile func., this type of files are very used today for graphical and mapping dataset
+#d <- read.sdm(file)                                         # system.file function: Find Names of R System Files. Finds the full file names of files in packages etc. Needed to import the file from the sdm package
+species <- shapefile(file)                                   # shapefile raster function: read or write a shapefile: we can use the graphical part of the file using shapefile func., this type of files are very used today for graphical and mapping dataset
 
 species                                                      # looking at the estent and features that are the points in this case
 species$Occurrence                                           # let's see the occurence of species, present-absent model (200 features)
 plot(species)
 
-plot(species[species$Occurrence == 1,],col='blue',pch=16)   # making a condition inside the "[]" and to make it we need "==" command, we decided only the presence occurences = 1
+plot(species[species$Occurrence == 1,],col='blue',pch=16)    # making a condition inside the "[]" and to make it we need "==" command, we decided only the presence occurences = 1
 
-points(species[species$Occurrence == 0,],col='red',pch=16)  # making the oppost condition= absence with red points (blue points are blue)
+points(species[species$Occurrence == 0,],col='red',pch=16)   # making the oppost condition= absence with red points (blue points are blue)
 
 # environmental variables
-path <- system.file("external", package="sdm")             # making the path inside the external using the same function of before system.file. the folder is called external 
+path <- system.file("external", package="sdm")               # making the path inside the external using the same function of before system.file. the folder is called external 
 
-lst <- list.files(path=path,pattern='asc$',full.names = T) # the extention of the file in this case is "asc" (other extention may be tif or png, ect), dollar can be avoided, but to be sure to carry out all data
-lst   # have a look of files into the list, into smd pkgs there is external folder, into external there are species and ecological and environmental variables
+lst <- list.files(path=path,pattern='asc$',full.names = T)   # the extention of the file in this case is "asc" (other extention may be tif or png, ect), dollar can be avoided, but to be sure to carry out all data
+lst                                                          # have a look of files into the list, into smd pkgs there is external folder, into external there are species and ecological and environmental variables
 
-preds <- stack(lst)                   # we are making a stack of dataset, elevation, temperature, precipitation, vegetation
+preds <- stack(lst)                                          # we are making a stack of dataset, elevation, temperature, precipitation, vegetation
 
 cl <- colorRampPalette(c('blue','orange','red','yellow')) (100)
-plot(preds, col=cl)                  # we can analyze the predictor informations  graphically, we fond that many occorences are at the bottom of the valley, in case of vegetation presence because Brachipodium rupestre love small elevation and grasslands
+plot(preds, col=cl)                                          # we can analyze the predictor informations  graphically, we fond that many occorences are at the bottom of the valley, in case of vegetation presence because Brachipodium rupestre love small elevation and grasslands
 
 plot(preds$elevation, col=cl)
 points(species[species$Occurrence == 1,], pch=16)
 
 plot(preds$temperature, col=cl)
-points(species[species$Occurrence == 1,], pch=16)  # Brachipodium rupestre love high temperature and low elevation
+points(species[species$Occurrence == 1,], pch=16)            # Brachipodium rupestre love high temperature and low elevation
 
-plot(preds$precipitation, col=cl)                  # Brachipodium rupestre love medium to high precipitation, in the case medium precipitation
+plot(preds$precipitation, col=cl)                            # Brachipodium rupestre love medium to high precipitation, in the case medium precipitation
 points(species[species$Occurrence == 1,], pch=16)
 
-plot(preds$vegetation, col=cl)                     # vegetation index is giving from the red-nir index, Brachipodium rupestre love high ammount vegetation or not. this analysis is called exploration analysis. Brachipodium rupestre love medium vegetation
+plot(preds$vegetation, col=cl)                               # vegetation index is giving from the red-nir index, Brachipodium rupestre love high ammount vegetation or not. this analysis is called exploration analysis. Brachipodium rupestre love medium vegetation
 points(species[species$Occurrence == 1,], pch=16)
 
-                                                   # making the model thanks all this information. one is train = species the other argument of the model is predictors= preds.
-
-d <- sdmData(train=species, predictors=preds)      # class = sdmData, n speci= 1, number or record 200, type of data= presence-absent, plot, abbundance of species but we are looking only prec. absen. is good for the velocity of the sampling efforce.
-d                                                  # there is a negative correlation of linear model between species occ. and elevation. In general we use a logistic model that reppresent better ecological functions
+                                                             # making the model thanks all this information. one is train = species the other argument of the model is predictors= preds.
+ 
+d <- sdmData(train=species, predictors=preds)                # class = sdmData, n speci= 1, number or record 200, type of data= presence-absent, plot, abbundance of species but we are looking only prec. absen. is good for the velocity of the sampling efforce.
+d                                                            # there is a negative correlation of linear model between species occ. and elevation. In general we use a logistic model that reppresent better ecological functions
 
 m1 <- sdm(Occurrence ~ elevation + precipitation + temperature + vegetation, data=d, methods='glm') # occurence, ~ is equal symble, y~a+bx in this case x is negative related with y in case of elevation. model: y= a+ b elev. + c + temperature + d precipitation + e vegetation, for all the variable we are using a different curve.
-                                                   # finally the methods of our model (glm) : generalised linear model is the model that we are going to use.
-p1 <- predict(m1, newdata=preds)                   # final prediction, related at our predictors used
+                                                             # finally the methods of our model (glm) : generalised linear model is the model that we are going to use.
+p1 <- predict(m1, newdata=preds)                             # final prediction, related at our predictors used
 
 plot(p1, col=cl)
 points(species[species$Occurrence == 1,], pch=16)  
 
-s1 <- stack(preds, p1)                            # stacking all the predictors together with the final layer added
+s1 <- stack(preds, p1)                                       # stacking all the predictors together with the final layer added
 plot(s1, col=cl)
 
 
@@ -1324,6 +1323,8 @@ plot(s1, col=cl)
 #############################################################################################################################
 
 # 17. R_code_myproject_exam.r
+
+
 
 
 
