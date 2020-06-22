@@ -238,7 +238,7 @@ covids <- ppp(lon, lat, c(-180,180), c(-90,90))                        # "c" is 
 d <- density(covids)                                                   # create a variable names d = density
                                                                        # density function: compute a kernel smoothed intensity function from a point pattern
 plot (d)                                                               # plot this density map
-
+                                                                       # points function: Add Points to a Plot
 points(covids)                                                         # add points at the density map plot
 
 #################################################### second part
@@ -954,7 +954,10 @@ clad <- brick ("cladonia_stellaris_calaita.JPG")
 
 # first blue, second green, third red
 plotRGB(clad, 1,2,3, stretch = "lin")
-
+#plotRGB(clad, 4,2,3, stretch = "lin")
+#plotRGB(clad, 3,2,1, stretch = "lin")
+#plotRGB(clad, 1,3,2, stretch = "lin")
+#plotRGB(clad, 2,3,1, stretch = "lin")
 # the goal is to apply standard deviation to the principal component analysis of the clad image
 # we have to decide our moving window, to calculate the SD and report the SD on our pixel. "1" is to set the value of the moving window and it doesn't influence the calculation.
 window <- matrix(1, nrow= 3, ncol= 3)
@@ -1267,57 +1270,54 @@ library(sdm)
 library(raster)             # library to read the raster files and to make use the raster dataset # raster packages are dependent from sp packages, you can solve the problem with " library( rgdal, "dependencies=T")
 library(rgdal)              # geodata astract library # use to import the packs of the species data spatial distrubution for this project
 
-# species :  we are looking for a certain species
-file <- system.file("external/species.shp", package="sdm")   # automatically importation of the external folder, insiede the folder external there is the species
-#d <- read.sdm(file)                                         # system.file function: Find Names of R System Files. Finds the full file names of files in packages etc. Needed to import the file from the sdm package
+# species :  we are looking for a species present-absence model (Brachypodium rupestre)
+file <- system.file("external/species.shp", package="sdm")   # the location of the species data, automatically importation of the external folder, insiede the folder external there is the species
+                                                             # system.file function: Find Names of R System Files. Finds the full file names of files in packages etc. Needed to import the file from the sdm package
 species <- shapefile(file)                                   # shapefile raster function: read or write a shapefile: we can use the graphical part of the file using shapefile func., this type of files are very used today for graphical and mapping dataset
-
+                                                             
 species                                                      # looking at the estent and features that are the points in this case
 species$Occurrence                                           # let's see the occurence of species, present-absent model (200 features)
 plot(species)
 
-plot(species[species$Occurrence == 1,],col='blue',pch=16)    # making a condition inside the "[]" and to make it we need "==" command, we decided only the presence occurences = 1
-
+plot(species[species$Occurrence == 1,],col='blue',pch=16)    # making a condition inside the "[]" and to make it we need "==" command, we decided to show only the presence occurences = 1
+                                                             # point function: plots points on a map or plot previuosly processed
 points(species[species$Occurrence == 0,],col='red',pch=16)   # making the oppost condition= absence with red points (blue points are blue)
 
-# environmental variables
+# path to the folder contains the data
 path <- system.file("external", package="sdm")               # making the path inside the external using the same function of before system.file. the folder is called external 
 
-lst <- list.files(path=path,pattern='asc$',full.names = T)   # the extention of the file in this case is "asc" (other extention may be tif or png, ect), dollar can be avoided, but to be sure to carry out all data
-lst                                                          # have a look of files into the list, into smd pkgs there is external folder, into external there are species and ecological and environmental variables
+lst <- list.files(path=path,pattern='asc$',full.names = T)   # creating a list of objects. the extention of the files needed in this case is "asc" (other extention may be tif or png, ect), dollar can be avoided, but to be sure to carry out all data
+lst                                                          # have a look of files into the list, into smd pkgs there is external folder, into external there are species distribution + ecological and environmental variables
 
-preds <- stack(lst)                                          # we are making a stack of dataset, elevation, temperature, precipitation, vegetation
+preds <- stack(lst)                                          # making a raster objec (stack function). We are making a stack of dataset, elevation, temperature, precipitation, vegetation
 
 cl <- colorRampPalette(c('blue','orange','red','yellow')) (100)
-plot(preds, col=cl)                                          # we can analyze the predictor informations  graphically, we fond that many occorences are at the bottom of the valley, in case of vegetation presence because Brachipodium rupestre love small elevation and grasslands
+plot(preds, col=cl)                                          # we can analyze the predictor informations  graphically, we found that many occorences are at the bottom of the valley, in case of vegetation presence, because Brachypodium rupestre love small elevation and grasslands
+#par(mfrow=c(2,2))                                           # ecologicic factors influencing the species distribution, ecological analysis
+plot(preds$elevation, col=cl)                                
+points(species[species$Occurrence == 1,], pch=16)            # plot species occurrence with elevetion map
 
-plot(preds$elevation, col=cl)
-points(species[species$Occurrence == 1,], pch=16)
+plot(preds$temperature, col=cl)                              # plot species occurrence with temperature map
+points(species[species$Occurrence == 1,], pch=16)            # Brachypodium rupestre love high temperature and low elevation
 
-plot(preds$temperature, col=cl)
-points(species[species$Occurrence == 1,], pch=16)            # Brachipodium rupestre love high temperature and low elevation
-
-plot(preds$precipitation, col=cl)                            # Brachipodium rupestre love medium to high precipitation, in the case medium precipitation
-points(species[species$Occurrence == 1,], pch=16)
-
-plot(preds$vegetation, col=cl)                               # vegetation index is giving from the red-nir index, Brachipodium rupestre love high ammount vegetation or not. this analysis is called exploration analysis. Brachipodium rupestre love medium vegetation
-points(species[species$Occurrence == 1,], pch=16)
-
-                                                             # making the model thanks all this information. one is train = species the other argument of the model is predictors= preds.
+plot(preds$precipitation, col=cl)                            # Brachypodium rupestre love medium to high precipitation, in the case medium precipitation
+points(species[species$Occurrence == 1,], pch=16)            # plot species occurrence with precipitation map
+                     
+plot(preds$vegetation, col=cl)                               # vegetation index is gave from the NDVI theory, Brachipodium rupestre love high ammount vegetation or not? This analysis is called exploration analysis. Brachipodium rupestre love medium vegetation
+points(species[species$Occurrence == 1,], pch=16)            # plot species occurrence with vegetation map
+                                                             # making the model thanks all this information. One is train = species the other argument of the model is predictors= preds.
  
-d <- sdmData(train=species, predictors=preds)                # class = sdmData, n speci= 1, number or record 200, type of data= presence-absent, plot, abbundance of species but we are looking only prec. absen. is good for the velocity of the sampling efforce.
+d <- sdmData(train=species, predictors=preds)                # sdmData function: creating sdm Data object: Creates a sdmdata objects that holds species (single or multiple) and explanatory variates. In addition, more information such as spatial coordinates, time, grouping variables, and metadata (e.g., author, date, reference, etc.) can be included. class = sdmData, n species= 1, number or record 200, type of data= presence-absent, plot, abundance of species but we are looking only prec. absen. is good for the velocity of the sampling efforce.
 d                                                            # there is a negative correlation of linear model between species occ. and elevation. In general we use a logistic model that reppresent better ecological functions
-
-m1 <- sdm(Occurrence ~ elevation + precipitation + temperature + vegetation, data=d, methods='glm') # occurence, ~ is equal symble, y~a+bx in this case x is negative related with y in case of elevation. model: y= a+ b elev. + c + temperature + d precipitation + e vegetation, for all the variable we are using a different curve.
+                                                             # sdm function: Fit and evaluate species distribution modelsmodel: Fits sdm for single or multiple species using single or multiple methods specified by a user in methods argument, and evaluates their performance
+m1 <- sdm(Occurrence ~ elevation + precipitation + temperature + vegetation, data=d, methods='glm') # occurence, ~ symble is like an =, y~a+bx in this case x is negative related with y in case of elevation. model: y= a+ b elev. + c + temperature + d precipitation + e vegetation, for all the variable we are using a different curve.
                                                              # finally the methods of our model (glm) : generalised linear model is the model that we are going to use.
 p1 <- predict(m1, newdata=preds)                             # final prediction, related at our predictors used
-
-plot(p1, col=cl)
+                                                             # predict function: model predictions: predict is a generic function for predictions from the results of various model fitting functions. The function invokes particular methods which depend on the class of the first argument
+plot(p1, col=cl)                                             # plotting the prediction model
 points(species[species$Occurrence == 1,], pch=16)  
 
-s1 <- stack(preds, p1)                                       # stacking all the predictors together with the final layer added
-plot(s1, col=cl)
-
+s1 <- stack(preds, p1)                                       # stacking all the variables maps + prediction model of species presence 
 
 #############################################################################################################################
 #############################################################################################################################
