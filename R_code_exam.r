@@ -1324,9 +1324,50 @@ s1 <- stack(preds, p1)                                       # stacking all the 
 
 # 17. R_code_myproject_exam.r
 
+setwd("C:/upsp/")
+
+library(raster)
+library(rgdal)
+library(RStoolbox)
+library(rasterdiv)
+library(rasterVis)
+library(ggplot2)
+library(ncdf4)                                                        # required to read our data format ".nc"
+library(spatstat)
+library (sf)  
 
 
 
+rlist <- list.files(pattern="snow")
+import <- lapply(rlist, raster)
+snow.multitemp <- stack(import)
+plot(snow.multitemp$snow2010r, snow.multitemp$snow2020r)
+abline(0,1) # most of the value under the curve
+plot(snow.multitemp$snow2000r, snow.multitemp$snow2020r) 
+abline(0,1,col="red")
+
+# 14. R_code_crop_image.r
+
+setwd("C:/lab/")
+library(raster)
+library(ncdf4)                                                        # required to read our data format ".nc"
+
+snow <- raster( "c_gls_SCE_202005260000_NHEMI_VIIRS_V1.0.1.nc")
+
+cl <- colorRampPalette(c('darkblue','blue','light blue'))(100)        # colorRamp with the meanest colours
+plot(snow, col=cl)
+                                     # making a crop of our image i.g. Italy 
+ext <- c(0, 20, 35, 50)              # this is the extent(polygon) in which we want to zoom on
+                                     # extent function: Objects of class Extent are used to define the spatial extent (extremes) of objects of the BasicRaster and Raster* classes. we have to say 1' the image vector and 2' the extent 
+zoom(snow, ext=ext)                  # zoom function: Zoom in on a map (plot) by providing a new extent, by default this is done by clicking twice on the map
+                                     # but we can also cutting the image with crop function 
+                                     # in this case the extent is direct related at the previous one
+                                     # this is very useful to crop the area of interest
+snowitaly <- crop(snow, ext)         # crop function: crop returns a geographic subset of an object as specified by an Extent object (or object from which an extent object can be extracted/created). If x is a Raster* object, the Extent is aligned to x. Areas included in y but outside the extent of x are ignored (see extend if you want a larger area)
+plot(snowitaly, col=cl)             
+                                     # you can drow one specific area in other way. drowing the extent                       
+                                     # to give a geometry for example a rectangle # () this command to say we are working in the image as a vector 
+zoom(snow, ext=drawExtent())         # drawExtent: Create an Extent object by drawing on a map, click on two points of a plot (map) to obtain an object of class Extent ('bounding box'). draw and zoom can be done with zoom and drawExtent function
 
 #############################################################################################################################
 #############################################################################################################################
