@@ -1322,6 +1322,25 @@ s1 <- stack(preds, p1)                                       # stacking all the 
 #############################################################################################################################
 #############################################################################################################################
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # 17. R_code_myproject_exam.r
 
 setwd("C:/upsp/")
@@ -1336,15 +1355,75 @@ library(ncdf4)                                                        # required
 library(spatstat)
 library (sf)  
 
+setwd("C:/upsp/DMP")
+
+# stack images dmp
+rlistdmp <- list.files(pattern="DMP")
+import <- lapply(rlistdmp, brick)
+dmp.multitemp <- stack(import)
+cl <- colorRampPalette(c('yellow','light green','dark green'))(100)
+plot(dmp.multitemp, col=cl)    
+
+#dmpitaly <- crop(dmp.multitemp, ext)         # crop function: crop returns a geographic subset of an object as specified by an Extent object (or object from which an extent object can be extracted/created). If x is a Raster* object, the Extent is aligned to x. Areas included in y but outside the extent of x are ignored (see extend if you want a larger area)
+#plot(dmpitaly, col=cl) 
+
+#level plot dmp
+#par(mfrow=c(2,1))
+dmp2014 <- brick("c_gls_DMP300-RT5_QL_201406100000_GLOBE_PROBAV_V1.0.1.TIFF")
+levelplot(dmp2014)
+dmp2018 <- brick("c_gls_DMP300-RT5_QL_201806100000_GLOBE_PROBAV_V1.0.1.TIFF")
+levelplot(dmp2018)
+# just to have a look how much the dry matter production change in north emisphere in two weeks in summer time
+dmp2019 <- brick("c_gls_DMP300-RT5_QL_201905310000_GLOBE_PROBAV_V1.0.1.TIFF")
+levelplot(dmp2019)
 
 
-rlist <- list.files(pattern="snow")
-import <- lapply(rlist, raster)
-snow.multitemp <- stack(import)
+### multivariate analysis of PCA
 plot(snow.multitemp$snow2010r, snow.multitemp$snow2020r)
 abline(0,1) # most of the value under the curve
 plot(snow.multitemp$snow2000r, snow.multitemp$snow2020r) 
 abline(0,1,col="red")
+
+#
+
+
+
+#drop images
+dmp2019 <- brick("c_gls_DMP300-RT5_QL_201905310000_GLOBE_PROBAV_V1.0.1.TIFF")
+ext <- c(0, 20, 35, 50)
+zoom(dmp2019, ext=ext)
+zoom(dmp2019, ext=drawExtent()) 
+
+# drop and stack images
+rlistdmp <- list.files(pattern="DMP")
+import <- lapply(rlistdmp, brick)
+dmp.multitemp <- stack(import)
+#cl <- colorRampPalette(c('yellow','light green','dark green'))(100)
+#plot(dmp.multitemp, col=cl) 
+levelplot(dmp.multitemp)
+
+ext <- c(0, 20, 35, 50)
+zoom(import, ext=ext)
+zoom(dmp2019, ext=drawExtent())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # 14. R_code_crop_image.r
 
@@ -1369,6 +1448,127 @@ plot(snowitaly, col=cl)
                                      # to give a geometry for example a rectangle # () this command to say we are working in the image as a vector 
 zoom(snow, ext=drawExtent())         # drawExtent: Create an Extent object by drawing on a map, click on two points of a plot (map) to obtain an object of class Extent ('bounding box'). draw and zoom can be done with zoom and drawExtent function
 
+# 12. R_code_snow.r
+
+# R_code_snow.r 
+
+# setwd("~/lab/") #linux
+# setwd("/Users/utente/lab") #mac
+setwd("C:/lab/") 
+                                                                      # ncdf4 packages: returns a string that is the version number of the ncdf4 package: Interface to Unidata netCDF Format Data Files
+install.packages("ncdf4")                                             # new library to read a different format data files
+library(ncdf4)                                                        
+library(raster)
+
+snowmay <- raster("c_gls_SCE_202005260000_NHEMI_VIIRS_V1.0.1.NC")     # giving the name for visualization process, raster function to import a rasterlayer
+cl <- colorRampPalette(c('darkblue','blue','light blue'))(100)        # we make a colorramppalette for snow changes blue to white
+
+# Exercise: plot snow cover with the cl palette
+plot(snowmay,col=cl)  
+
+                                                                      # import snow data # for several layers all together in one time 
+                                                                      # he aggregates and clumped several pixels to make the images less heavy
+                                                                      # you can create a new folder i.e. snow # needed to stack multitemporal images in few command with lapply and stack functions
+                                                                      # slow manner to import dataset
+                                                                      # new working directory setwd("C:/lab/snow")
+# setwd("~/lab/snow") #linux
+# setwd("/Users/utente/lab/snow") #mac
+
+setwd("C:/lab/snow") # windows                                        # we want to show the multitemporal scale (20years) of snow cover in a specific geografic area
+
+snow2000 <- raster("snow2000r.tif")                                   # import all the temporal images raster layer of interest
+snow2005 <- raster("snow2005r.tif")
+snow2010 <- raster("snow2010r.tif")
+snow2015 <- raster("snow2015r.tif")
+snow2020 <- raster("snow2020r.tif")
+
+par(mfrow=c(2,3))                                                     # we want plot all images together we used a multiframe par function
+plot(snow2000, col=cl)
+plot(snow2005, col=cl)
+plot(snow2010, col=cl)
+plot(snow2015, col=cl)
+plot(snow2020, col=cl)
+
+                                                                      # import the images set in faster way
+                                                                      # lapply function: you can repet the same fuction for the whole set (i.g. raster func.): Apply a Function over a List or Vector, lapply returns a list of the same length as X, each element of which is the result of applying FUN to the corresponding element of X
+                                                                      # you can list files of the all folder. i.e. snow_2000, snow_2005, ..... snow_2020
+                                                                      # create a list of files, list.file function: List the Files in a Directory/Folder. you must say the pattern at the console where it can keep the files
+rlist <- list.files(pattern="snow")                                   # lapply function repet the raster fuction to import the interest layer of the all set snow images
+rlist                                               
+import <- lapply(rlist, raster)                                       # we import the layer (raster func.) for all the single files (images) with the function lapply
+                                                                      # this work procedure is call stack or raster stack
+                                                                      # stack function: stack of all the dataset that we import: Stack or Unstack Vectors from a Data Frame or List: stacking vectors concatenates multiple vectors into a single vector along with a factor indicating where each observation originated. Unstacking reverses this operation
+snow.multitemp <- stack(import)                                       # we give the proper name at the vector (snow multitemp, because we are analysing snow cover in a multitemporal scale)
+ 
+plot(snow.multitemp, col=cl)                                          # in ecology as well as in science is important to make several analysis all together at the same time with much powerful information range and in faster way.
+                                                                      # less codes and commands, less time involved, same result
+#########################################################################################################################################
+# make a prediction of snow cover, making a graph with time(x) and snow cover %(y)
+# with a regression functions we can fit our set to predict snow cover for the next 5 years using the trend of the last 20 years
+# Big Data structure of complex data, we want see how make the importation of data.
+# lets look at the function "prediction"
+# let make a prediction of snow cover with a simple line code
+                                                                      # prediction is a R code already prepared and added in the working directory folder (snow)
+source("prediction.r")                                                # with source function you can select a file like a R script and it will work by themself for all my analysis!!!!
+                                 
+############################################################ what there are inside the prediction function that we created?
+# require(raster)
+# require(rgdal)
+# define the extent
+# ext <- c(-180, 180, -90, 90)
+# extension <- crop(snow.multitemp, ext)   
+# make a time variable (to be used in regression)
+# time <- 1:nlayers(snow.multitemp)
+# run the regression
+# fun <- function(x) {if (is.na(x[1])){ NA } else {lm(x ~ time)$coefficients[2] }} 
+# predicted.snow.2025 <- calc(extension, fun) # time consuming: make a pause!
+# predicted.snow.2025.norm <- predicted.snow.2025*255/53.90828
+
+##################### day second
+                                                                       # Read R Code from a File, a Connection or Expressions
+setwd("C:/lab/snow/")                                                  # set working directory with snow folder
+
+library(raster)                                                        # to make our work with lapply function
+
+# Exercise: import all of the snow cover images all together (snow cover elaborated layer)
+rlist <- list.files(pattern="snow")
+rlist
+import <- lapply(rlist, raster)                                        # https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/lapply
+                                                                       # we import the layer for all the single files with the raster fuction repet for the whole set thanks at the lapply fuction
+                                                                       # this way of work is call stack or raster stack
+                                                                       # stack of all the dataset that we import 
+snow.multitemp <- stack(import)                                        # we give the proper name at the vector (snow multitemp, because we are analysing snow cover in a temporal scale
+                                                                       # stack do a job similar at par, but faster
+cl <- colorRampPalette(c('darkblue','blue','light blue'))(100)         # we make a colorramppalette for snow changes blue to white
+plot(snow.multitemp, col=cl)                                           # it is important to make several analysis all together at the same time with much powerful information range and in faster way.
+
+
+load("R_code_snow.r.RData")                                            # load preview work/script
+
+prediction <- raster("predicted.2025.norm.tif")
+plot(prediction, col=cl)
+
+# the idea is to make a regretion model to understand the future snow cover in continuity with the trend until today
+# export the output
+# you made the calculation and you want to send the output to a collegue, you can use writeRaster func.
+
+writeRaster(prediction, "final.tif")  # is good func for transform images in tif, It create new data 1. we import data (5images), 2. we stack all that ims and added prediction, 3. with writeRaster
+# writeRaster is the oppost of Raster function!! that import data into R. at the opp. writeRaster you can export the image from R to your PC folder.
+# final stack (to see if the extent of the image is different)
+# https://gdal.org/ to have a look in which format will work my function
+
+
+final.stack <- stack(snow.multitemp, prediction)   # we are going to stack the all multitemp+ prediction of snow cover
+plot(final.stack, col=cl)
+# export the R graph for a thesis in pdf or png format
+
+pdf("my_final_exciting_graph.pdf")
+plot(final.stack, col=cl)
+dev.off()
+
+png("my_final_exciting_graph.png")
+plot(final.stack, col=cl)
+dev.off()
 #############################################################################################################################
 #############################################################################################################################
 
