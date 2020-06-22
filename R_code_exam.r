@@ -1355,56 +1355,114 @@ library(ncdf4)                                                        # required
 library(spatstat)
 library (sf)  
 
-setwd("C:/upsp/DMP")
+setwd("C:/upsp/GDMP")
 
-# stack images dmp
-rlistdmp <- list.files(pattern="DMP")
+# stack images gdmp
+rlistdmp <- list.files(pattern="GDMP")
 import <- lapply(rlistdmp, brick)
-dmp.multitemp <- stack(import)
+gdmp.multitemp <- stack(import)
+
+# levelplot stacked images
+levelplot(dmp.multitemp)
+# stack plot global dmp images
 cl <- colorRampPalette(c('yellow','light green','dark green'))(100)
 plot(dmp.multitemp, col=cl)    
-
-#dmpitaly <- crop(dmp.multitemp, ext)         # crop function: crop returns a geographic subset of an object as specified by an Extent object (or object from which an extent object can be extracted/created). If x is a Raster* object, the Extent is aligned to x. Areas included in y but outside the extent of x are ignored (see extend if you want a larger area)
-#plot(dmpitaly, col=cl) 
 
 #level plot dmp
 #par(mfrow=c(2,1))
 dmp2014 <- brick("c_gls_DMP300-RT5_QL_201406100000_GLOBE_PROBAV_V1.0.1.TIFF")
 levelplot(dmp2014)
 dmp2018 <- brick("c_gls_DMP300-RT5_QL_201806100000_GLOBE_PROBAV_V1.0.1.TIFF")
-levelplot(dmp2018)
+levelplot(dmp2018) # middle of jun
 # just to have a look how much the dry matter production change in north emisphere in two weeks in summer time
 dmp2019 <- brick("c_gls_DMP300-RT5_QL_201905310000_GLOBE_PROBAV_V1.0.1.TIFF")
-levelplot(dmp2019)
+levelplot(dmp2019) # end of may
 
+# zooming on the middles of Western Gaths
+#ext <- c(73, 78, 12, 16)   # coordinates W-E, S-N
+#dmpwg <- crop(import, ext)         # crop function: crop returns a geographic subset of an object as specified by an Extent object (or object from which an extent object can be extracted/created). If x is a Raster* object, the Extent is aligned to x. Areas included in y but outside the extent of x are ignored (see extend if you want a larger area)
+#dmpwg.multitemp <- stack(dmpwg)
+#plot(dmpwg.multitemp, col=cl) 
+
+
+#zoom(dmp.multitemp, ext=ext)
+#zoom(dmp.multitemp, ext=drawExtent())
+
+# create a dataset of tiff files for cropping and plotting them together
+dmp2019 <- brick("c_gls_DMP300-RT5_QL_201905310000_GLOBE_PROBAV_V1.0.1.TIFF")
+ext <- c(73, 78, 10, 15)
+dmpwg2019 <- crop(dmp2019, ext)
+cl <- colorRampPalette(c('yellow','light green','dark green'))(100)
+plot(dmpwg2019)
+#zoom(dmpwg2019, ext=drawExtent())
+
+#2018
+dmp2018 <- brick("c_gls_DMP300-RT5_QL_201806100000_GLOBE_PROBAV_V1.0.1.TIFF")
+ext <- c(73, 78, 10, 15)
+dmpwg2018 <- crop(dmp2018, ext)
+plot(dmpwg2018)
+#zoom(dmpwg2018, ext=drawExtent())
+
+#2017
+dmp2017 <- brick("c_gls_DMP300-RT5_QL_201706100000_GLOBE_PROBAV_V1.0.1.TIFF")
+ext <- c(73, 78, 10, 15)
+dmpwg2017 <- crop(dmp2017, ext)
+plot(dmpwg2017)
+#zoom(dmpwg2017, ext=drawExtent())
+
+#2016
+dmp2016 <- brick("c_gls_DMP300-RT5_QL_201606100000_GLOBE_PROBAV_V1.0.1.TIFF")
+ext <- c(73, 78, 10, 15)
+dmpwg2016 <- crop(dmp2016, ext)
+plot(dmpwg2016)
+#zoom(dmpwg2016, ext=drawExtent())
+
+#2015
+dmp2015 <- brick("c_gls_DMP300-RT5_QL_201506100000_GLOBE_PROBAV_V1.0.1.TIFF")
+ext <- c(73, 78, 10, 15)
+dmpwg2015 <- crop(dmp2015, ext)
+plot(dmpwg2015)
+#zoom(dmpwg2015, ext=drawExtent())
+
+#2014
+dmp2014 <- brick("c_gls_DMP300-RT5_QL_201406100000_GLOBE_PROBAV_V1.0.1.TIFF")
+ext <- c(73, 78, 10, 15)
+dmpwg2014 <- crop(dmp2014, ext)
+plot(dmpwg2014)
+#zoom(dmpwg2014, ext=drawExtent())
+
+setwd("C:/")
+rlistdmpwg <- list.files(pattern="WGDMP")
+ext <- c(73, 78, 10, 15)
+import2 <- lapply(rlistdmpwg, zoom(dmp.multitemp, ext=ext) )
+dmpwg.multitemp <- stack(import2)
+
+setwd("C:/upsp/DMP/WGDMP")
+rlistdmpwg <- list.files(pattern="WGDMP")
+ext <- c(73, 78, 10, 15)
+import2 <- lapply(rlistdmpwg, brick )
+wgdmp.multitemp <- stack(import2)
 
 ### multivariate analysis of PCA
-plot(snow.multitemp$snow2010r, snow.multitemp$snow2020r)
+{plot(snow.multitemp$snow2010r, snow.multitemp$snow2020r)
 abline(0,1) # most of the value under the curve
 plot(snow.multitemp$snow2000r, snow.multitemp$snow2020r) 
-abline(0,1,col="red")
+abline(0,1,col="red")}
 
-#
+
 
 
 
 #drop images
-dmp2019 <- brick("c_gls_DMP300-RT5_QL_201905310000_GLOBE_PROBAV_V1.0.1.TIFF")
-ext <- c(0, 20, 35, 50)
-zoom(dmp2019, ext=ext)
-zoom(dmp2019, ext=drawExtent()) 
+#dmp2019 <- brick("c_gls_DMP300-RT5_QL_201905310000_GLOBE_PROBAV_V1.0.1.TIFF")
+#ext <- c(0, 20, 35, 50)
+#dmpitaly <- crop(dmp.multitemp, ext)
+#zoom(dmp2019, ext=ext)
+#zoom(dmp2019, ext=drawExtent()) 
 
 # drop and stack images
-rlistdmp <- list.files(pattern="DMP")
-import <- lapply(rlistdmp, brick)
-dmp.multitemp <- stack(import)
-#cl <- colorRampPalette(c('yellow','light green','dark green'))(100)
-#plot(dmp.multitemp, col=cl) 
-levelplot(dmp.multitemp)
 
-ext <- c(0, 20, 35, 50)
-zoom(import, ext=ext)
-zoom(dmp2019, ext=drawExtent())
+
 
 
 
