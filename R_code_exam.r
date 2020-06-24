@@ -1131,7 +1131,7 @@ setwd("C:/lab/NO2/")
 # R_code_no2.r
 library(raster)
 
-setwd("C:/lab/no2/")
+setwd("C:/lab/NO2/")
 # create RasterStack
 rlist <- list.files(pattern="EN")                      # create a list of files. EN = environmental NOxs
 import <- lapply(rlist, raster)                        # using lapply to apply the interested function in a multifiles list of images multitemporal scaled
@@ -1202,9 +1202,9 @@ zoom(snow, ext=drawExtent())         # drawExtent: Create an Extent object by dr
 
 # R_code_interpolation.r
 # interpolation field data
-# Interpolation of the data thanks spatstat library and species distribution modelling to understand the position and structure of the forest 
-# Another nice analysis is about diameter and height of the forest
-# Interpolation: spatstat library
+# interpolation of the data thanks spatstat library and species distribution modelling to understand the position and structure of the forest 
+# another nice analysis is about diameter and height of the forest
+# interpolation: spatstat library
 # library(dbmss): Distance-Based Measures of Spatial Structures: simple computation of spatial statistic functions of distance to characterize the spa-tial structures of mapped objects, following Marcon, Trais-sac, Puech, and Lang (2015) <doi:10.18637/jss.v067.c03>.
 
 setwd("C:/lab/")
@@ -1262,7 +1262,7 @@ points(inp.psam.ppp)                                                       # sol
 
 # 16. R_code_sdm.r
 
-# Species Distrubution Modelling
+# Species Distrubution Model and Prediction 
 
 install.packages("sdm")     # install.packages sdm: Species Distribution Modelling. Description: An extensible framework for developing species distribution models using individual and community-based approaches, generate ensembles of models, evaluate the models, and predict species potential distributions in space and time. For more information, please check the following paper: Naimi, B., Araujo, M.B. (2016) <doi:10.1111/ecog.01881>. our packages very useful for ecology and where we can find our dataset of species distribution
 # install.packages("rgdal")
@@ -1270,8 +1270,8 @@ library(sdm)
 library(raster)             # library to read the raster files and to make use the raster dataset # raster packages are dependent from sp packages, you can solve the problem with " library( rgdal, "dependencies=T")
 library(rgdal)              # geodata astract library # use to import the packs of the species data spatial distrubution for this project
 
-# species :  we are looking for a species present-absence model (Brachypodium rupestre)
-file <- system.file("external/species.shp", package="sdm")   # the location of the species data, automatically importation of the external folder, insiede the folder external there is the species
+                                                             # species :  we are looking for a species present-absence model dataset (Brachypodium rupestre)
+file <- system.file("external/species.shp", package="sdm")   # the location of the species dataset, automatically importation of the external folder, insiede the folder external there is the species dataset
                                                              # system.file function: Find Names of R System Files. Finds the full file names of files in packages etc. Needed to import the file from the sdm package
 species <- shapefile(file)                                   # shapefile raster function: read or write a shapefile: we can use the graphical part of the file using shapefile func., this type of files are very used today for graphical and mapping dataset
                                                              
@@ -1289,6 +1289,7 @@ path <- system.file("external", package="sdm")               # making the path i
 lst <- list.files(path=path,pattern='asc$',full.names = T)   # creating a list of objects. the extention of the files needed in this case is "asc" (other extention may be tif or png, ect), dollar can be avoided, but to be sure to carry out all data
 lst                                                          # have a look of files into the list, into smd pkgs there is external folder, into external there are species distribution + ecological and environmental variables
 
+# predictors for the prediction model of species distribution
 preds <- stack(lst)                                          # making a raster objec (stack function). We are making a stack of dataset, elevation, temperature, precipitation, vegetation
 
 cl <- colorRampPalette(c('blue','orange','red','yellow')) (100)
@@ -1306,7 +1307,7 @@ points(species[species$Occurrence == 1,], pch=16)            # plot species occu
 plot(preds$vegetation, col=cl)                               # vegetation index is gave from the NDVI theory, Brachipodium rupestre love high ammount vegetation or not? This analysis is called exploration analysis. Brachipodium rupestre love medium vegetation
 points(species[species$Occurrence == 1,], pch=16)            # plot species occurrence with vegetation map
                                                              # making the model thanks all this information. One is train = species the other argument of the model is predictors= preds.
- 
+# prediction model species distribution
 d <- sdmData(train=species, predictors=preds)                # sdmData function: creating sdm Data object: Creates a sdmdata objects that holds species (single or multiple) and explanatory variates. In addition, more information such as spatial coordinates, time, grouping variables, and metadata (e.g., author, date, reference, etc.) can be included. class = sdmData, n species= 1, number or record 200, type of data= presence-absent, plot, abundance of species but we are looking only prec. absen. is good for the velocity of the sampling efforce.
 d                                                            # there is a negative correlation of linear model between species occ. and elevation. In general we use a logistic model that reppresent better ecological functions
                                                              # sdm function: Fit and evaluate species distribution modelsmodel: Fits sdm for single or multiple species using single or multiple methods specified by a user in methods argument, and evaluates their performance
@@ -1343,10 +1344,10 @@ s1 <- stack(preds, p1)                                       # stacking all the 
 
 # 17. R_code_myproject_exam.r
 
-setwd("C:/upsp/")
+setwd("D:/upsp/")
 
 library(raster)
-library(rgdal)
+library(rgdal)    ##library(gdalUtils) to traslate file format
 library(RStoolbox)
 library(rasterdiv)
 library(rasterVis)
@@ -1355,7 +1356,7 @@ library(ncdf4)                                                        # required
 library(spatstat)
 library (sf)  
 
-setwd("C:/upsp/GDMP")
+setwd("D:/upsp/GDMP")
 
 # stack images gdmp
 rlistdmp <- list.files(pattern="GDMP")
@@ -1431,25 +1432,52 @@ dmpwg2014 <- crop(dmp2014, ext)
 plot(dmpwg2014)
 #zoom(dmpwg2014, ext=drawExtent())
 
-setwd("C:/")
+
+                                             #try to import with stack the cropped images
+#setwd("D:/upsp/WGDMP")
 rlistdmpwg <- list.files(pattern="WGDMP")
 ext <- c(73, 78, 10, 15)
 import2 <- lapply(rlistdmpwg, zoom(dmp.multitemp, ext=ext) )
 dmpwg.multitemp <- stack(import2)
 
-setwd("C:/upsp/DMP/WGDMP")
+#setwd("C:/upsp/DMP/WGDMP")
 rlistdmpwg <- list.files(pattern="WGDMP")
-ext <- c(73, 78, 10, 15)
-import2 <- lapply(rlistdmpwg, brick )
+#ext <- c(73, 78, 10, 15)
+import2 <- lapply(rlistdmpwg, brick)
 wgdmp.multitemp <- stack(import2)
 
-### multivariate analysis of PCA
+
+                                              ### multivariate analysis of PCA
 {plot(snow.multitemp$snow2010r, snow.multitemp$snow2020r)
 abline(0,1) # most of the value under the curve
 plot(snow.multitemp$snow2000r, snow.multitemp$snow2020r) 
 abline(0,1,col="red")}
 
+# Import WGDMP and levelplot images 
+library(raster)
+library(RStoolbox)
+library(rasterdiv)
+library(rasterVis)
 
+setwd("D:/upsp/WGDMP")
+
+dmpwg2014 <- brick("wgdmp2014.TIFF") 
+levelplot(dmpwg2014)
+
+dmpwg2015 <- brick("wgdmp2015.TIFF") 
+levelplot(dmpwg2015)
+
+dmpwg2016 <- brick("wgdmp2016.TIFF") 
+levelplot(dmpwg2016)
+
+dmpwg2017 <- brick("wgdmp2017.TIFF") 
+levelplot(dmpwg2017)
+
+dmpwg2018 <- brick("wgdmp2018.TIFF") 
+levelplot(dmpwg2018)
+
+dmpwg2019 <- brick("wgdmp2019.TIFF") 
+levelplot(dmpwg2019)
 
 
 
@@ -1629,9 +1657,6 @@ plot(final.stack, col=cl)
 dev.off()
 #############################################################################################################################
 #############################################################################################################################
-
-
-
 
 
 
