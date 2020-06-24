@@ -1022,7 +1022,7 @@ plot(snowmay,col=cl)
 # setwd("~/lab/snow") #linux
 # setwd("/Users/utente/lab/snow") #mac
 
-setwd("C:/lab/snow") # windows                                        # we want to show the multitemporal scale (20years) of snow cover in a specific geografic area
+setwd("C:/lab/snow") # windows                                        # we want to show the multitemporal scale (20years) of snow cover
 
 snow2000 <- raster("snow2000r.tif")                                   # import all the temporal images raster layer of interest
 snow2005 <- raster("snow2005r.tif")
@@ -1043,7 +1043,7 @@ plot(snow2020, col=cl)
                                                                       # create a list of files, list.file function: List the Files in a Directory/Folder. you must say the pattern at the console where it can keep the files
 rlist <- list.files(pattern="snow")                                   # lapply function repet the raster fuction to import the interest layer of the all set snow images
 rlist                                               
-import <- lapply(rlist, raster)                                       # we import the layer (raster func.) for all the single files (images) with the function lapply
+irlimport <- lapply(rlist, raster)                                       # we import the layer (raster func.) for all the single files (images) with the function lapply
                                                                       # this work procedure is call stack or raster stack
                                                                       # stack function: stack of all the dataset that we import: Stack or Unstack Vectors from a Data Frame or List: stacking vectors concatenates multiple vectors into a single vector along with a factor indicating where each observation originated. Unstacking reverses this operation
 snow.multitemp <- stack(import)                                       # we give the proper name at the vector (snow multitemp, because we are analysing snow cover in a multitemporal scale)
@@ -1073,6 +1073,8 @@ source("prediction.r")                                                # with sou
 # predicted.snow.2025.norm <- predicted.snow.2025*255/53.90828
 
 ##################### day second
+
+load("R_code_snow.r.RData")                                            # load preview work/script
                                                                        # Read R Code from a File, a Connection or Expressions
 setwd("C:/lab/snow/")                                                  # set working directory with snow folder
 
@@ -1090,8 +1092,6 @@ snow.multitemp <- stack(import)                                        # we give
 cl <- colorRampPalette(c('darkblue','blue','light blue'))(100)         # we make a colorramppalette for snow changes blue to white
 plot(snow.multitemp, col=cl)                                           # it is important to make several analysis all together at the same time with much powerful information range and in faster way.
 
-
-load("R_code_snow.r.RData")                                            # load preview work/script
 
 prediction <- raster("predicted.2025.norm.tif")
 plot(prediction, col=cl)
