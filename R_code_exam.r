@@ -1494,8 +1494,13 @@ levelplot(dmpwg2019)
 
 
 
+setwd("C:/lab/faPAR")
 
 
+rlistdmpwg <- list.files(pattern="faPAR")
+#ext <- c(73, 78, 10, 15)
+import <- lapply(rlistdmpwg, brick)
+faPAR.multitemp <- stack(import)
 
 
 
