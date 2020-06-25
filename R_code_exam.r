@@ -1360,11 +1360,30 @@ setwd("D:/upsp/GDMP")
 
 # stack images gdmp
 rlistdmp <- list.files(pattern="GDMP")
+rlistdmp
 import <- lapply(rlistdmp, brick)
 gdmp.multitemp <- stack(import)
 
+gdmp2014 <- raster("c_gls_DMP300-RT5_QL_201406100000_GLOBE_PROBAV_V1.0.1.TIFF")                                   # import all the temporal images raster layer of interest
+gdmp2015 <- raster("c_gls_DMP300-RT5_QL_201506100000_GLOBE_PROBAV_V1.0.1.TIFF")  
+gdmp2016 <- raster("c_gls_DMP300-RT5_QL_201606100000_GLOBE_PROBAV_V1.0.1.TIFF")  
+gdmp2017 <- raster("c_gls_DMP300-RT5_QL_201706100000_GLOBE_PROBAV_V1.0.1.TIFF")  
+gdmp2018 <- raster("c_gls_DMP300-RT5_QL_201806100000_GLOBE_PROBAV_V1.0.1.TIFF")  
+gdmp2019 <- raster("c_gls_DMP300-RT5_QL_201905310000_GLOBE_PROBAV_V1.0.1.TIFF")  
+
+par(mfrow=c(2,3)) 
+cl <- colorRampPalette(c('yellow','light green','dark green'))(100)                         # we want plot all images together we used a multiframe par function
+plot(gdmp2014, col=cl)
+plot(gdmp2015, col=cl)
+plot(gdmp2016, col=cl)
+plot(gdmp2017, col=cl)
+plot(gdmp2018, col=cl)
+plot(gdmp2019, col=cl)
+
 # levelplot stacked images
-levelplot(dmp.multitemp)
+par(fmrow=c(1,2))
+levelplot(gdmp2018)
+levelplot(gdmp2019)
 # stack plot global dmp images
 cl <- colorRampPalette(c('yellow','light green','dark green'))(100)
 plot(dmp.multitemp, col=cl)    
