@@ -1356,13 +1356,59 @@ library(ncdf4)                                                        # required
 library(spatstat)
 library (sf)  
 
-setwd("D:/upsp/GDMP")
+##########################LAI
+setwd("D:/upsp/LAI")
 
-# stack images gdmp
-rlistdmp <- list.files(pattern="GDMP")
+# stack and dropfd images lai
+rlistlai <- list.files(pattern="LAI")  #  LAI global
+rlistlai
+import <- lapply(rlistlai, brick) #raster
+lai.multitemp <- stack(import)
+#fare il crop
+ext <- c(73, 78, 10, 15)
+#import2 <- lapply(rlistdmp, zoom(gdmp.multitemp, ext=ext) ) # funziona ma su una sola immagine
+x <- crop(gdmp.multitemp, ext)
+plot(x)
+
+#######################################DMP
+## same procedure but on the dry matter production
+setwd("D:/upsp/DMP300")
+
+rlistdmp <- list.files(pattern="DMP300") 
 rlistdmp
-import <- lapply(rlistdmp, brick)
-gdmp.multitemp <- stack(import)
+import <- lapply(rlistdmp, brick) #raster
+dmp.multitemp <- stack(import)
+plot(dmp.multitemp)
+ext <- c(73, 78, 10, 15)
+x <- crop(dmp.multitemp, ext)
+plot(x)
+
+##################################faPAR
+setwd("D:/upsp/faPAR")
+
+rlistfapar <- list.files(pattern="faPAR") 
+rlistfapar
+import <- lapply(rlistfapar, raster) #raster
+fapar.multitemp <- stack(import)
+plot(fapar.multitemp)
+ext <- c(73, 78, 10, 15)
+x <- crop(fapar.multitemp, ext)
+plot(x)
+
+##########################NDVI
+setwd("D:/upsp/NDVI")
+
+rlistndvi <- list.files(pattern="NDVI") 
+rlistndvi
+import <- lapply(rlistndvi, brick) #raster
+ndvi.multitemp <- stack(import)
+ndvi.multitemp1 <- reclassify(ndvi.multitemp, cbind(253:255, NA), right=TRUE)
+plot(ndvi.multitemp1)
+ext <- c(73, 78, 10, 15)
+x <- crop(ndvi.multitemp, ext)
+plot(x)
+
+
 
 gdmp2014 <- raster("c_gls_DMP300-RT5_QL_201406100000_GLOBE_PROBAV_V1.0.1.TIFF")                                   # import all the temporal images raster layer of interest
 gdmp2015 <- raster("c_gls_DMP300-RT5_QL_201506100000_GLOBE_PROBAV_V1.0.1.TIFF")  
