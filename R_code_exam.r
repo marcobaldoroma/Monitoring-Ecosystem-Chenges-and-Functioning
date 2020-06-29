@@ -1402,7 +1402,7 @@ rlistndvi <- list.files(pattern="NDVI")
 rlistndvi
 import <- lapply(rlistndvi, brick) #raster
 ndvi.multitemp <- stack(import)
-ndvi.multitemp1 <- reclassify(ndvi.multitemp, cbind(253:255, NA), right=TRUE)
+#ndvi.multitemp1 <- reclassify(ndvi.multitemp, cbind(253:255, NA), right=TRUE)
 plot(ndvi.multitemp1)
 ext <- c(73, 78, 10, 15)
 x <- crop(ndvi.multitemp, ext)
