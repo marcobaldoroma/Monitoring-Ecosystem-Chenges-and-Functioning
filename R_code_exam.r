@@ -1036,14 +1036,13 @@ plot(snow2005, col=cl)
 plot(snow2010, col=cl)
 plot(snow2015, col=cl)
 plot(snow2020, col=cl)
-
                                                                       # import the images set in faster way
                                                                       # lapply function: you can repet the same fuction for the whole set (i.g. raster func.): Apply a Function over a List or Vector, lapply returns a list of the same length as X, each element of which is the result of applying FUN to the corresponding element of X
                                                                       # you can list files of the all folder. i.e. snow_2000, snow_2005, ..... snow_2020
                                                                       # create a list of files, list.file function: List the Files in a Directory/Folder. you must say the pattern at the console where it can keep the files
 rlist <- list.files(pattern="snow")                                   # lapply function repet the raster fuction to import the interest layer of the all set snow images
 rlist                                               
-irlimport <- lapply(rlist, raster)                                       # we import the layer (raster func.) for all the single files (images) with the function lapply
+irlimport <- lapply(rlist, raster)                                    # we import the layer (raster func.) for all the single files (images) with the function lapply
                                                                       # this work procedure is call stack or raster stack
                                                                       # stack function: stack of all the dataset that we import: Stack or Unstack Vectors from a Data Frame or List: stacking vectors concatenates multiple vectors into a single vector along with a factor indicating where each observation originated. Unstacking reverses this operation
 snow.multitemp <- stack(import)                                       # we give the proper name at the vector (snow multitemp, because we are analysing snow cover in a multitemporal scale)
@@ -1092,7 +1091,6 @@ snow.multitemp <- stack(import)                                        # we give
 cl <- colorRampPalette(c('darkblue','blue','light blue'))(100)         # we make a colorramppalette for snow changes blue to white
 plot(snow.multitemp, col=cl)                                           # it is important to make several analysis all together at the same time with much powerful information range and in faster way.
 
-
 prediction <- raster("predicted.2025.norm.tif")
 plot(prediction, col=cl)
 
@@ -1104,7 +1102,6 @@ writeRaster(prediction, "final.tif")  # is good func for transform images in tif
 # writeRaster is the oppost of Raster function!! that import data into R. at the opp. writeRaster you can export the image from R to your PC folder.
 # final stack (to see if the extent of the image is different)
 # https://gdal.org/ to have a look in which format will work my function
-
 
 final.stack <- stack(snow.multitemp, prediction)   # we are going to stack the all multitemp+ prediction of snow cover
 plot(final.stack, col=cl)
