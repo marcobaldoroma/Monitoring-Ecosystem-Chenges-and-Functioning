@@ -1334,6 +1334,36 @@ s1 <- stack(preds, p1)                                       # stacking all the 
 
 
 
+setwd("D:/upsp/")
+
+play <- brick("2020-01-22_B04,B03,B02_M_[75.90042114218525,11.478435891898835,76.01170349081805,11.529707148953666].jpeg")  
+
+
+play <- brick("2020-01-22_B04,B03,B02_M_[75.90042114218525,11.478435891898835,76.01170349081805,11.529707148953666].jpeg")  
+plot(play)
+
+play2 <- brick("MSC_091220022356_18125_09471166BP07_1R_br.jpg")  
+ plot(play2)
+
+ cln <- colorRampPalette(c('dark green','green','brown','yellow'))(100)
+ plot(play, col=cln)
+ plotRGB (play, r=3, g=2, b=1, stretch="Lin")
+ names(play)
+
+plotRGB (play, r=2, g=3, b=1, stretch="Lin")
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
