@@ -1042,7 +1042,7 @@ plot(snow2020, col=cl)
                                                                       # create a list of files, list.file function: List the Files in a Directory/Folder. you must say the pattern at the console where it can keep the files
 rlist <- list.files(pattern="snow")                                   # lapply function repet the raster fuction to import the interest layer of the all set snow images
 rlist                                               
-irlimport <- lapply(rlist, raster)                                    # we import the layer (raster func.) for all the single files (images) with the function lapply
+import <- lapply(rlist, raster)                                       # we import the layer (raster func.) for all the single files (images) with the function lapply
                                                                       # this work procedure is call stack or raster stack
                                                                       # stack function: stack of all the dataset that we import: Stack or Unstack Vectors from a Data Frame or List: stacking vectors concatenates multiple vectors into a single vector along with a factor indicating where each observation originated. Unstacking reverses this operation
 snow.multitemp <- stack(import)                                       # we give the proper name at the vector (snow multitemp, because we are analysing snow cover in a multitemporal scale)
@@ -1122,8 +1122,6 @@ dev.off()
 
 # R_code_monitoring_air_pollution_no2.r
 # create a new folder to make lapply and stack dataset for this new set of images relating at the NO2 concentration evolution before and during the covid pandemic
-
-setwd("C:/lab/NO2/")  
 
 # R_code_no2.r
 library(raster)
