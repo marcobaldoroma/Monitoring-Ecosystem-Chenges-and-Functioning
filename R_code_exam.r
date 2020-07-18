@@ -1440,7 +1440,7 @@ gdmp2015 <- raster("c_gls_DMP300-RT5_QL_201506100000_GLOBE_PROBAV_V1.0.1.TIFF")
 gdmp2016 <- raster("c_gls_DMP300-RT5_QL_201606100000_GLOBE_PROBAV_V1.0.1.TIFF")  
 gdmp2017 <- raster("c_gls_DMP300-RT5_QL_201706100000_GLOBE_PROBAV_V1.0.1.TIFF")  
 gdmp2018 <- raster("c_gls_DMP300-RT5_QL_201806100000_GLOBE_PROBAV_V1.0.1.TIFF")  
-gdmp2019 <- raster("c_gls_DMP300-RT5_QL_201905310000_GLOBE_PROBAV_V1.0.1.TIFF")  
+gdmp2019 <- raster("c_gls_DMP300-RT5_QL_201906100000_GLOBE_PROBAV_V1.0.1.TIFF")  
 
 par(mfrow=c(2,3)) 
 cl <- colorRampPalette(c('yellow','light green','dark green'))(100)                         # we want plot all images together we used a multiframe par function
