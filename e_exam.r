@@ -199,17 +199,7 @@ boxplot(albedobox, outline=F, horizontal=T, axes=T, names=c("Albedo 2010", "Albe
 # satellite data day by day for the month of October
 
 library(MODISTools)
-VI <- mt_subset(product = "MOD13Q1",
-                band = "250m_16_days_NDVI",
-                lat = 37,
-                lon = -2,
-                start = "2019-10-01",
-                end = "2019-10-31",
-                km_lr = 100,
-                km_ab = 100,
-                site_name = "testsite",
-                internal = TRUE,
-                progress = FALSE)
+VI <- mt_subset(product = "MOD13Q1", band = "250m_16_days_NDVI", lat = 37, lon = -2, start = "2019-10-01", end = "2019-10-31", km_lr = 100, km_ab = 100, site_name = "testsite", internal = TRUE, progress = FALSE)
 
 V2 <- mt_subset(product = "MOD13Q1",
                 band = "250m_16_days_NDVI",
