@@ -1,6 +1,6 @@
 ## R_code_MyProject_exam.r elisa
 
-# R code for exam project
+# R code for exam project 2020-04-11_B11,B8A,B04_M_75.54995727539062,12.50310167832272,75.71688079833987,12.579712583010991
 
 #library(rgdal)
 #library(gdalUtils)
