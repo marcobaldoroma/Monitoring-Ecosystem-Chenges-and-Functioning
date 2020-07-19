@@ -71,7 +71,7 @@ install.packages("GGally")                       # the 'GGally' extends 'ggplot2
 library(sp)
 library(GGally)
 
-data(meuse)                                      # load a data set. There is a dataset available named meuse in sp
+data(meuse)                                      # load a data set. There is a dataset available named meuse in sp packages
 
                                                  # attach sp function: The database is attached to the R search path. This means that the database is searched by R when evaluating a variable, so objects in the database can be accessed by simply giving their names. Attach function to fix the data set in R environment for the plot analysis
 attach(meuse)
@@ -204,7 +204,7 @@ library(ggplot2)                                            # required ggplot2
 data(mpg)
 head(mpg)                                                   # ggplot function: ggplot() initializes a ggplot object. It can be used to declare the input data frame for a graphic and to specify the set of plot aesthetics intended to be common throughout all subsequent layers unless specifically overridden
                                                             # key component: data, aesthetic map, geometry. ggplot function
-ggplot(mpg, aes(x=displ, y=hwy)) + geom_point()             # ggplot funct., aesthetic mapping x= displ(engine displacement, in litres) y= hwy (highway miles per gallon), geometry of the graph= points
+ggplot(mpg, aes(x=displ, y=hwy)) + geom_point()             # ggplot function applied at the dataset mpg incorporate in ggplot2 packages, aesthetic mapping x= displ(engine displacement, in litres) y= hwy (highway miles per gallon), geometry of the graph= points
                                                             # plot with points data rappresentation
 ggplot(mpg, aes(x=displ, y=hwy)) + geom_line()              # plot with lines data rappresentation
                                                             # plot with poligones data rappresentation
@@ -799,7 +799,7 @@ faPAR10                                                      # have a look on th
                                                              # writeRaster function in raster pkgs: Write raster data to a file. Write an entire Raster* object to a file, using one of the many supported formats. See writeValues for writing in chunks (e.g. by row)
 writeRaster(copNDVI, "copNDVI.tif")                          # write the data copNDVI in .tif, 5.3MB
 
-faPAR <- stretch(faPAR10,minv=0,maxv=250)                    # faPAR10 in bits from 0 to 0.93. Change from 0 to 255
+faPAR <- stretch(faPAR10,minv=0,maxv=250)                    # faPAR10 in bits from 0 to 0.93. Changed from 0 to 255 in 0:250
 
 writeRaster (faPAR, "faPAR.tif")
 faPAR
