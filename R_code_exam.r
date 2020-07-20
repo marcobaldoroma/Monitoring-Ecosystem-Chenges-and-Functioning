@@ -78,7 +78,7 @@ attach(meuse)
 
                                                  # Exercise: see the names of the variables. Second plot cadmium versus zinc
                                                  # There are two ways to look the names of the variables:
-names(meuse)                                     # names functions to get or set the names of an object. Names is a generic accessor function, and names<- is a generic replacement function. The default methods get and set the "names" attribute of a vector (including a list) or pairlist
+names(meuse)                                     # 'names' functions to get or set the names of an object. Names is a generic accessor function, and names<- is a generic replacement function. The default methods get and set the "names" attribute of a vector (including a list) or pairlist
 head(meuse)
 
 meuse                                            # to see all the variables
@@ -114,10 +114,10 @@ ggpairs(meuse[,3:6])
 # install this two packages for spatial analysis "raster" "rgdal"
 ## R code for spatial analysis and views of data set
 
-install.packages("raster")                                # raster package: reading, writing, manipulating, analyzing and modeling of gridded spa-tial data. The package implements basic and high-level functions. Process-ing of very large files is supported. There is a also support for vector data operations such as in-tersections
-install.packages("rgdal")                                 # rgdal package: provides bindings to the 'Geospatial' Data Abstraction Library ('GDAL') and access to projection/transformation operations from the 'PROJ' library. Use is made of classes defined in the 'sp' package. Raster and vector map data can be imported into R, and raster and vector 'sp' objects exported
-                                                          # to call the required libraries (sp, raster, rgdal)
-library(sp)
+install.packages("raster")                                # raster package: reading, writing, manipulating, analyzing and modeling of gridded spa-tial data. The package implements basic and high-level functions. Process-ing of very large files is supported. There is a also support for vector data operations such as intersections
+install.packages("rgdal")                                 # rgdal package: provides bindings to the 'Geospatial' Data Abstraction Library ('GDAL') and access to projection/transformation operations from the 'PROJ' library.
+                                                          # to call the required libraries (raster, rgdal)
+#library(sp)                                              # It will be call by raster library as well.
 library(raster)
 library(rgdal)                                            # to load the data set meuse
 
@@ -135,7 +135,7 @@ spplot(meuse, "zinc")                                     # simple plot graphs p
                                                           # Exercise: plot the spatial amount of copper using simple plot
 spplot(meuse, "copper")
 
-                                                          # main function: add a label at the graphic
+                                                          # main function: add a main label at the graphic
 spplot(meuse, "copper", main= "Copper concentration ")
                                                           # just to have a points size directly proportionated at the concentration (variable or object of our analysis) we can use the sp bubble function
                                                           # bubble function: create a bubble plot of spatial data, with options for bicolour residual plots (xyplot wrapper)
@@ -356,13 +356,13 @@ ordispider (multivar, type, col=1:4, label = T)                          # we us
 
 setwd ("C:/lab/")                                                        # install.packages ("raster")
 
-install.packages("RStoolbox")                                            # packages to make our analysis described into the professor's book. 
+install.packages("RStoolbox")                                            # packages to make our analysis, also described into the professor's book. 
                                                                          # RStoolbox packages: Tools for Remote Sensing Data Analysis: description: Toolbox for remote sensing image processing and analysis such as calculating spectral indices, principal component transformation, unsupervised and supervised classification or fractional cover analysis
 library (raster) 
 library (RStoolbox)                                                      # to be faster in the installation of pkgs: install.packages(c("raster", "RStoolbox")
 
                                                                          # load image "p224r63_2011_masked.grd" from the lab folder
-p224r63_2011 <- brick ("p224r63_2011_masked.grd")                        # brick RStoolbox function: Create a RasterBrick object: a RasterBrick is a multi-layer raster object. They are typically created from a multi-layer (band) file; but they can also exist entirely in memory. They are similar to a RasterStack (that can be created with stack), but processing time should be shorter when using a RasterBrick. Yet they are less flexible as they can only point to a single file. A RasterBrick can be created from RasterLayer objects, from a RasterStack, or from a (multi-layer) file. The can also be created from SpatialPixels*, SpatialGrid*, and Extent objects, and from a three-dimensional array
+p224r63_2011 <- brick ("p224r63_2011_masked.grd")                        # brick RStoolbox function: Create a RasterBrick object: a RasterBrick is a multilayer raster object. They are typically created from a multilayer (band) file; but they can also exist entirely in memory. They are similar to a RasterStack (that can be created with stack), but processing time should be shorter when using a RasterBrick. Yet they are less flexible as they can only point to a single file. A RasterBrick can be created from RasterLayer objects, from a RasterStack, or from a (multi-layer) file. The can also be created from SpatialPixels*, SpatialGrid*, and Extent objects, and from a three-dimensional array
 plot(p224r63_2011)
 
 #landsat resolution of 30m (each pixel)...B1 blu, B2 green, B3 red, B4 NIR ecc
