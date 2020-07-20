@@ -113,9 +113,9 @@ plot(dmp.up)
 # correlation analysis of my images with ggpairs func. # require (GGally) 
 ggpairs(dmp.up)
 
-# raster PCA to analyze all the DMP.UP images in one single component
+# raster PCA to analyze all the DMP.UP images data set to modelling all those objects in one single component(object)
 dmpPCA <- rasterPCA(dmp.up)
-summary(dmpPCA$model)     # PC1 model describes 93.7%
+summary(dmpPCA$model)                                                          # PC1 model describes 93.7%
 plot(dmpPCA$map)      
 
 # High Dry Matter Production areas(pixels) enounce that the DMP is higher in general where It was higher also in the previesly years (where the forest cover is higher and well preserved)
@@ -134,20 +134,20 @@ plot(dmp2017.up, main="UP.2017")
 plot(dmp2018.up, main="UP.2018")
 plot(dmpPCA$map$PC1, main="PC1")  # best predictor
 
-# Differences in dry matter productivity in UP.
-plot(dmp2014.up, dmp2019.up, xlab="DMP.UP 2014", ylab="DMP.UP 2019", main="Trend of DMP.UP")
-abline(0,1,col="red") # to understand better the cloud point distribution we use ab 45° line that divides in 2 equal parts the cartesian plane
+# Differences in dry matter productivity in Uppangala forest. We use a simple linear model and fit those model with abline function
+plot(dmp2014.up, dmp2019.up, xlab="DMP.UP 2014", ylab="DMP.UP 2019", main="Trend of DMP.UP", col='blue')
+abline(0,1,col="red",lwd=4) # to understand better fit the lm or the points cloud distribution we use ab 45° line that divides in 2 equal parts the cartesian plane.
 
-# Another check on DMP trend in UP. Differenzial among pixels. Histogram of the differential.
+# Another check on DMP trend in UP. is calculate the difference among pixels values of DMP and put the graphically and in an histogram (resulted from the difference pixels analysis)
 dif_dmp.up <- dmp2019.up - dmp2014.up
 cl <- colorRampPalette(c("orange","white","light green","dark green")) (100)
 par(mfrow=c(1,2))
 plot(dif_dmp.up, col= cl, main="DMP.UP Differences")
-hist(dif_dmp.up, main="histogram")
+hist(dif_dmp.up, col="lightblue", main="histogram", breaks="10")
 
 # to detect the DMP trend year by year using boxplot function
 DMP <- stack(dmp2014.up, dmp2015.up, dmp2016.up, dmp2017.up, dmp2018.up, dmp2019.up)
-boxplot(DMP,outline=F, horizontal=T, axes=T, names=c("DMP.UP 2014", "DMP.UP 2015", "DMP.UP 2016","DMP.UP 2017","DMP.UP 2018","DMP.UP 2019"), main="Boxplot DMP.UP")       # cancel the outliners 
+boxplot(DMP,outline=F, horizontal=T, axes=T, names=c("DMP.UP 2014", "DMP.UP 2015", "DMP.UP 2016","DMP.UP 2017","DMP.UP 2018","DMP.UP 2019"), main="Boxplot DMP.UP", col="gold")       # cancel the outliners 
 
 
 
@@ -155,6 +155,8 @@ boxplot(DMP,outline=F, horizontal=T, axes=T, names=c("DMP.UP 2014", "DMP.UP 2015
 # we want have a comparison with the trend result of previusly analysis (DMP in TIFF format)
 # keeping back the stack of the code's top (DMP300)
 # Importation of raster layer only of Jan. images
+
+setwd("D:/exam/DMP300")
 
 dmp3002014 <- raster("c_gls_DMP300-RT5_201401100000_GLOBE_PROBAV_V1.0.1.NC")            
 dmp3002016 <- raster("c_gls_DMP300-RT5_201601100000_GLOBE_PROBAV_V1.0.1.NC")  
@@ -176,7 +178,7 @@ dmp3002020.up <- crop(dmp3002020, ext)
 
 
 # Differences in dry matter productivity in UP.
-plot(dmp3002014.up, dmp3002020.up, xlab="DMP.UP 2014", ylab="DMP.UP 2020", main="Trend of DMP.UP")
+plot(dmp3002014.up, dmp3002020.up, xlab="DMP.UP 2014", ylab="DMP.UP 2020", main="Trend of DMP.UP", col="blue")
 abline(0,1,col="red") # to understand better the cloud point distribution we use ab 45° line that divides in 2 equal parts the cartesian plane
 
 # Another check on DMP trend in UP.
@@ -185,6 +187,7 @@ cl <- colorRampPalette(c("orange","white","light green","dark green")) (100)
 par(mfrow=c(1,2))
 plot(dif_dmp.up2, col= cl, main="DMP.UP Differences")
 hist(dif_dmp.up2, main="histogram")
+
 
 # to detect the DMP trend year by year
 DMP <- stack(dmp3002014.up, dmp3002016.up, dmp3002018.up, dmp3002020.up)
