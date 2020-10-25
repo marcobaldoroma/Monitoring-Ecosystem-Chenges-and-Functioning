@@ -12,9 +12,7 @@ snowmay <- raster("c_gls_SCE_202005260000_NHEMI_VIIRS_V1.0.1.NC")     #giving th
 cl <- colorRampPalette(c('darkblue','blue','light blue'))(100)        # we make a colorramppalette for snow changes blue to white
 
 # Exercise: plot snow cover with the cl palette
-plot(snowmay,col=cl)  
-
-                                                                      ##### import snow data # for several layers all together in one time 
+plot(snowmay,col=cl)                                                  ##### import snow data # for several layers all together in one time 
                                                                       # he aggregates and clumped several pixel to make the images less heavy
                                                                       # you can create a new folder i.e. Snow
                                                                       # Slow manner to import set
