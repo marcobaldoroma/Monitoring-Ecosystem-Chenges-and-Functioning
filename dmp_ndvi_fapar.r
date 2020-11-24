@@ -1,3 +1,14 @@
+library(GGally)
+library(rgdal)
+library(gdalUtils) #to transform the file format
+library(raster)
+library(RStoolbox)
+library(ncdf4)
+#install.packages("sf")
+library(sf) 
+
+setwd ("D:/toy/")
+
 dmp <- raster ("rasterDMP.tif")
 ndvi <- raster ("rasterNDVI.tif")
 fapar <- raster ("rasterFAPAR.tif")
@@ -46,6 +57,6 @@ faPARp <- extract(fapar.up,pts)
 # the line is calculated by reducing the distance between the points (x;y) in the graph
 # phothosythesis vs biomass
 model2 <- lm(dmp.up ~ ndvi.up) # R = 0.4 because in conifer forest biomass is high and phothosynthesis but not that high. p = 2 ^-16 two variables are related each other
-plot(faPAR10p, copNDVIp)
+plot(faPAR10p, NDVIp)
 abline(model2, col="red")
 
