@@ -9,7 +9,7 @@ install.packages("rasterdiv")                                                   
 library(rasterdiv)
 install.packages("rasterVis")                                                          # raster visualisation
 library (rasterVis)                                                                    ## Loading required package:  raster 
-library(ratser)                                                                        ## Loading required package:  sp
+library(raster)                                                                        ## Loading required package:  sp
                                                                                        ## Loading required package:  lattice
                                                                                        ## Loading required package:  latticeExtra
 
