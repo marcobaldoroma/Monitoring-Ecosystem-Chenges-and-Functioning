@@ -39,7 +39,7 @@ labs(x="Longitude",y="Latitude", fill="")+
 # ggtitle("NDVI")
 
                                                                                         ## deforestation project
-setwd("C:/lab/")
+setwd("D:/lab/")
 defor1 <- brick("defor1_.jpg")                                                          #to import images and link them with bands
 defor2 <- brick("defor2_.jpg")                                                          # band1: NIR, defor1_.1# band2: red, defor1_.2# band3: green
 
