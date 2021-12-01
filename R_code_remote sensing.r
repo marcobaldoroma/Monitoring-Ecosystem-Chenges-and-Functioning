@@ -14,13 +14,14 @@ p224r63_2011 <- brick ("p224r63_2011_masked.grd")
 plot(p224r63_2011)
 
 #landsat resolution of 30m (each pixel)...B1 blu, B2 green, B3 red, B4 NIR ecc
+
 # B1: blue
 # B2: green
 # B3: red
 # B4: near infrared (nir) 
-# B5: medium infrared
-# B6: thermal infrared
-# B7: medium infrared
+# B5: medium infrared (swir1)
+# B6: medium infrared (swir2)
+# B7: thermal infrared
 
 ls()
 
